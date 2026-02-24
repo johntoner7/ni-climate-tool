@@ -1,0 +1,477 @@
+{
+  "metadata": {
+    "description": "UK nations GHG emissions comparison, indexed to 1990=100",
+    "baseline_year": 1990,
+    "unit_absolute": "kt CO2e",
+    "unit_indexed": "Index (1990=100)",
+    "gwp": "AR5",
+    "source": "NAEI Devolved Administration GHG Inventories",
+    "nations": [
+      "Northern Ireland",
+      "England",
+      "Scotland",
+      "Wales"
+    ],
+    "years_available": [
+      "1990",
+      "1995",
+      "1998",
+      "1999",
+      "2000",
+      "2001",
+      "2002",
+      "2003",
+      "2004",
+      "2005",
+      "2006",
+      "2007",
+      "2008",
+      "2009",
+      "2010",
+      "2011",
+      "2012",
+      "2013",
+      "2014",
+      "2015",
+      "2016",
+      "2017",
+      "2018",
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023"
+    ],
+    "note": "Indexed values express each nation's emissions relative to their own 1990 baseline. A value of 50 means 50% of 1990 emissions. NI's slower reduction trajectory is visible as a higher index value in later years."
+  },
+  "summary": [
+    {
+      "nation": "England",
+      "1990_kt": 631305.8,
+      "2023_kt": 284763.7,
+      "latest_year": 2023,
+      "reduction_kt": 346542.1,
+      "pct_reduction": 54.9
+    },
+    {
+      "nation": "Scotland",
+      "1990_kt": 81193.0,
+      "2023_kt": 39574.2,
+      "latest_year": 2023,
+      "reduction_kt": 41618.8,
+      "pct_reduction": 51.3
+    },
+    {
+      "nation": "Wales",
+      "1990_kt": 55504.4,
+      "2023_kt": 34084.3,
+      "latest_year": 2023,
+      "reduction_kt": 21420.1,
+      "pct_reduction": 38.6
+    },
+    {
+      "nation": "Northern Ireland",
+      "1990_kt": 26564.6,
+      "2023_kt": 18212.2,
+      "latest_year": 2023,
+      "reduction_kt": 8352.4,
+      "pct_reduction": 31.4
+    }
+  ],
+  "by_year_indexed": [
+    {
+      "year": 1990,
+      "Northern Ireland": 100.0,
+      "England": 100.0,
+      "Scotland": 100.0,
+      "Wales": 100.0
+    },
+    {
+      "year": 1995,
+      "Northern Ireland": 100.26,
+      "England": 91.88,
+      "Scotland": 99.07,
+      "Wales": 94.75
+    },
+    {
+      "year": 1998,
+      "Northern Ireland": 99.01,
+      "England": 90.3,
+      "Scotland": 99.74,
+      "Wales": 97.39
+    },
+    {
+      "year": 1999,
+      "Northern Ireland": 100.43,
+      "England": 86.24,
+      "Scotland": 96.13,
+      "Wales": 99.1
+    },
+    {
+      "year": 2000,
+      "Northern Ireland": 98.72,
+      "England": 86.0,
+      "Scotland": 98.16,
+      "Wales": 100.5
+    },
+    {
+      "year": 2001,
+      "Northern Ireland": 100.1,
+      "England": 86.84,
+      "Scotland": 96.95,
+      "Wales": 95.5
+    },
+    {
+      "year": 2002,
+      "Northern Ireland": 91.92,
+      "England": 85.48,
+      "Scotland": 92.11,
+      "Wales": 84.69
+    },
+    {
+      "year": 2003,
+      "Northern Ireland": 92.24,
+      "England": 86.21,
+      "Scotland": 92.21,
+      "Wales": 88.26
+    },
+    {
+      "year": 2004,
+      "Northern Ireland": 91.92,
+      "England": 85.54,
+      "Scotland": 88.94,
+      "Wales": 94.49
+    },
+    {
+      "year": 2005,
+      "Northern Ireland": 95.6,
+      "England": 84.71,
+      "Scotland": 86.68,
+      "Wales": 91.84
+    },
+    {
+      "year": 2006,
+      "Northern Ireland": 96.99,
+      "England": 83.32,
+      "Scotland": 89.46,
+      "Wales": 93.98
+    },
+    {
+      "year": 2007,
+      "Northern Ireland": 92.77,
+      "England": 82.53,
+      "Scotland": 84.3,
+      "Wales": 88.61
+    },
+    {
+      "year": 2008,
+      "Northern Ireland": 91.8,
+      "England": 79.44,
+      "Scotland": 81.63,
+      "Wales": 91.51
+    },
+    {
+      "year": 2009,
+      "Northern Ireland": 84.54,
+      "England": 72.54,
+      "Scotland": 76.01,
+      "Wales": 79.09
+    },
+    {
+      "year": 2010,
+      "Northern Ireland": 86.76,
+      "England": 73.74,
+      "Scotland": 79.89,
+      "Wales": 84.79
+    },
+    {
+      "year": 2011,
+      "Northern Ireland": 83.08,
+      "England": 68.62,
+      "Scotland": 71.0,
+      "Wales": 79.65
+    },
+    {
+      "year": 2012,
+      "Northern Ireland": 84.0,
+      "England": 70.99,
+      "Scotland": 71.1,
+      "Wales": 82.81
+    },
+    {
+      "year": 2013,
+      "Northern Ireland": 84.7,
+      "England": 68.4,
+      "Scotland": 68.97,
+      "Wales": 92.0
+    },
+    {
+      "year": 2014,
+      "Northern Ireland": 81.49,
+      "England": 63.09,
+      "Scotland": 64.13,
+      "Wales": 83.77
+    },
+    {
+      "year": 2015,
+      "Northern Ireland": 82.98,
+      "England": 59.85,
+      "Scotland": 63.03,
+      "Wales": 83.31
+    },
+    {
+      "year": 2016,
+      "Northern Ireland": 83.64,
+      "England": 56.06,
+      "Scotland": 57.17,
+      "Wales": 86.8
+    },
+    {
+      "year": 2017,
+      "Northern Ireland": 81.17,
+      "England": 55.38,
+      "Scotland": 56.2,
+      "Wales": 75.46
+    },
+    {
+      "year": 2018,
+      "Northern Ireland": 79.18,
+      "England": 54.74,
+      "Scotland": 57.41,
+      "Wales": 69.19
+    },
+    {
+      "year": 2019,
+      "Northern Ireland": 77.46,
+      "England": 52.29,
+      "Scotland": 55.93,
+      "Wales": 69.52
+    },
+    {
+      "year": 2020,
+      "Northern Ireland": 74.77,
+      "England": 47.69,
+      "Scotland": 49.67,
+      "Wales": 61.16
+    },
+    {
+      "year": 2021,
+      "Northern Ireland": 77.42,
+      "England": 49.82,
+      "Scotland": 50.06,
+      "Wales": 64.75
+    },
+    {
+      "year": 2022,
+      "Northern Ireland": 73.81,
+      "England": 47.39,
+      "Scotland": 49.69,
+      "Wales": 65.61
+    },
+    {
+      "year": 2023,
+      "Northern Ireland": 68.56,
+      "England": 45.11,
+      "Scotland": 48.74,
+      "Wales": 61.41
+    }
+  ],
+  "by_year_absolute": [
+    {
+      "year": 1990,
+      "Northern Ireland": 26564.6,
+      "England": 631305.8,
+      "Scotland": 81193.0,
+      "Wales": 55504.4
+    },
+    {
+      "year": 1995,
+      "Northern Ireland": 26634.9,
+      "England": 580030.1,
+      "Scotland": 80437.3,
+      "Wales": 52587.7
+    },
+    {
+      "year": 1998,
+      "Northern Ireland": 26302.5,
+      "England": 570040.8,
+      "Scotland": 80985.8,
+      "Wales": 54055.1
+    },
+    {
+      "year": 1999,
+      "Northern Ireland": 26677.6,
+      "England": 544463.0,
+      "Scotland": 78054.2,
+      "Wales": 55004.5
+    },
+    {
+      "year": 2000,
+      "Northern Ireland": 26225.5,
+      "England": 542903.1,
+      "Scotland": 79696.3,
+      "Wales": 55780.2
+    },
+    {
+      "year": 2001,
+      "Northern Ireland": 26592.1,
+      "England": 548253.4,
+      "Scotland": 78716.6,
+      "Wales": 53005.3
+    },
+    {
+      "year": 2002,
+      "Northern Ireland": 24419.1,
+      "England": 539630.6,
+      "Scotland": 74783.2,
+      "Wales": 47009.3
+    },
+    {
+      "year": 2003,
+      "Northern Ireland": 24502.5,
+      "England": 544280.0,
+      "Scotland": 74871.3,
+      "Wales": 48988.0
+    },
+    {
+      "year": 2004,
+      "Northern Ireland": 24419.0,
+      "England": 540023.2,
+      "Scotland": 72216.2,
+      "Wales": 52446.3
+    },
+    {
+      "year": 2005,
+      "Northern Ireland": 25395.5,
+      "England": 534759.2,
+      "Scotland": 70379.3,
+      "Wales": 50973.1
+    },
+    {
+      "year": 2006,
+      "Northern Ireland": 25764.4,
+      "England": 525992.6,
+      "Scotland": 72632.3,
+      "Wales": 52160.9
+    },
+    {
+      "year": 2007,
+      "Northern Ireland": 24645.2,
+      "England": 521018.9,
+      "Scotland": 68445.0,
+      "Wales": 49180.8
+    },
+    {
+      "year": 2008,
+      "Northern Ireland": 24385.2,
+      "England": 501524.2,
+      "Scotland": 66274.9,
+      "Wales": 50790.5
+    },
+    {
+      "year": 2009,
+      "Northern Ireland": 22458.3,
+      "England": 457940.6,
+      "Scotland": 61716.1,
+      "Wales": 43899.9
+    },
+    {
+      "year": 2010,
+      "Northern Ireland": 23047.3,
+      "England": 465510.1,
+      "Scotland": 64866.5,
+      "Wales": 47060.4
+    },
+    {
+      "year": 2011,
+      "Northern Ireland": 22070.9,
+      "England": 433200.7,
+      "Scotland": 57650.1,
+      "Wales": 44208.7
+    },
+    {
+      "year": 2012,
+      "Northern Ireland": 22315.0,
+      "England": 448177.3,
+      "Scotland": 57725.4,
+      "Wales": 45965.0
+    },
+    {
+      "year": 2013,
+      "Northern Ireland": 22499.4,
+      "England": 431828.1,
+      "Scotland": 55997.3,
+      "Wales": 51064.2
+    },
+    {
+      "year": 2014,
+      "Northern Ireland": 21647.1,
+      "England": 398280.3,
+      "Scotland": 52071.2,
+      "Wales": 46496.7
+    },
+    {
+      "year": 2015,
+      "Northern Ireland": 22042.2,
+      "England": 377810.0,
+      "Scotland": 51180.0,
+      "Wales": 46240.1
+    },
+    {
+      "year": 2016,
+      "Northern Ireland": 22218.2,
+      "England": 353900.0,
+      "Scotland": 46417.0,
+      "Wales": 48177.0
+    },
+    {
+      "year": 2017,
+      "Northern Ireland": 21562.6,
+      "England": 349640.1,
+      "Scotland": 45629.8,
+      "Wales": 41882.3
+    },
+    {
+      "year": 2018,
+      "Northern Ireland": 21033.4,
+      "England": 345571.4,
+      "Scotland": 46610.0,
+      "Wales": 38405.2
+    },
+    {
+      "year": 2019,
+      "Northern Ireland": 20577.0,
+      "England": 330108.9,
+      "Scotland": 45412.5,
+      "Wales": 38584.0
+    },
+    {
+      "year": 2020,
+      "Northern Ireland": 19863.2,
+      "England": 301045.7,
+      "Scotland": 40332.4,
+      "Wales": 33946.7
+    },
+    {
+      "year": 2021,
+      "Northern Ireland": 20565.5,
+      "England": 314545.0,
+      "Scotland": 40645.5,
+      "Wales": 35941.8
+    },
+    {
+      "year": 2022,
+      "Northern Ireland": 19606.3,
+      "England": 299195.3,
+      "Scotland": 40348.3,
+      "Wales": 36418.3
+    },
+    {
+      "year": 2023,
+      "Northern Ireland": 18212.2,
+      "England": 284763.7,
+      "Scotland": 39574.2,
+      "Wales": 34084.3
+    }
+  ]
+}

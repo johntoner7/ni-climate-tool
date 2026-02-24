@@ -1,0 +1,1405 @@
+{
+  "metadata": {
+    "region": "Northern Ireland",
+    "unit": "kt CO2e",
+    "gwp": "AR5",
+    "source": "NAEI Devolved Administration GHG Inventories by Source",
+    "source_file": "Northern Ireland By Source-Table 1.csv",
+    "years_available": [
+      "1990",
+      "1995",
+      "1998",
+      "1999",
+      "2000",
+      "2001",
+      "2002",
+      "2003",
+      "2004",
+      "2005",
+      "2006",
+      "2007",
+      "2008",
+      "2009",
+      "2010",
+      "2011",
+      "2012",
+      "2013",
+      "2014",
+      "2015",
+      "2016",
+      "2017",
+      "2018",
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023"
+    ],
+    "year_range": "1990-2023",
+    "note": "Annual data available from 2000. Pre-2000 data points: 1990 (baseline), 1995, 1998, 1999. LULUCF and Fuel Supply are in supplementary_sectors and included in total.",
+    "sectors_in_chart_data": [
+      "Agriculture",
+      "Waste",
+      "Buildings",
+      "Transport",
+      "Electricity",
+      "Industry"
+    ]
+  },
+  "sector_summary": [
+    {
+      "sector": "Agriculture",
+      "1990_kt": 5198.7,
+      "2023_kt": 5615.2,
+      "pct_change": 8.0
+    },
+    {
+      "sector": "Waste",
+      "1990_kt": 1956.3,
+      "2023_kt": 763.4,
+      "pct_change": -61.0
+    },
+    {
+      "sector": "Buildings",
+      "1990_kt": 4420.8,
+      "2023_kt": 2521.1,
+      "pct_change": -43.0
+    },
+    {
+      "sector": "Transport",
+      "1990_kt": 3728.4,
+      "2023_kt": 3907.9,
+      "pct_change": 4.8
+    },
+    {
+      "sector": "Electricity",
+      "1990_kt": 5307.3,
+      "2023_kt": 2124.1,
+      "pct_change": -60.0
+    },
+    {
+      "sector": "Industry",
+      "1990_kt": 3310.5,
+      "2023_kt": 1127.3,
+      "pct_change": -65.9
+    },
+    {
+      "sector": "TOTAL",
+      "1990_kt": 26564.6,
+      "2023_kt": 18212.2,
+      "pct_change": -31.4
+    }
+  ],
+  "by_year": [
+    {
+      "year": 1990,
+      "Agriculture": 5198.7,
+      "Waste": 1956.3,
+      "Buildings": 4420.8,
+      "Transport": 3728.4,
+      "Electricity": 5307.3,
+      "Industry": 3310.5,
+      "total": 26564.6
+    },
+    {
+      "year": 1995,
+      "Agriculture": 5656.5,
+      "Waste": 2140.6,
+      "Buildings": 3449.9,
+      "Transport": 3700.9,
+      "Electricity": 6528.5,
+      "Industry": 2737.9,
+      "total": 26634.9
+    },
+    {
+      "year": 1998,
+      "Agriculture": 5808.5,
+      "Waste": 2268.8,
+      "Buildings": 3330.8,
+      "Transport": 3893.4,
+      "Electricity": 6184.9,
+      "Industry": 2566.9,
+      "total": 26302.5
+    },
+    {
+      "year": 1999,
+      "Agriculture": 5742.0,
+      "Waste": 2285.9,
+      "Buildings": 3390.1,
+      "Transport": 4051.7,
+      "Electricity": 6280.3,
+      "Industry": 2708.2,
+      "total": 26677.6
+    },
+    {
+      "year": 2000,
+      "Agriculture": 5573.8,
+      "Waste": 2287.5,
+      "Buildings": 3340.9,
+      "Transport": 4180.1,
+      "Electricity": 6334.4,
+      "Industry": 2321.3,
+      "total": 26225.5
+    },
+    {
+      "year": 2001,
+      "Agriculture": 5573.5,
+      "Waste": 2270.8,
+      "Buildings": 3402.1,
+      "Transport": 4246.3,
+      "Electricity": 6648.2,
+      "Industry": 2275.8,
+      "total": 26592.1
+    },
+    {
+      "year": 2002,
+      "Agriculture": 5558.1,
+      "Waste": 2287.7,
+      "Buildings": 3370.5,
+      "Transport": 4430.5,
+      "Electricity": 5217.4,
+      "Industry": 1393.7,
+      "total": 24419.1
+    },
+    {
+      "year": 2003,
+      "Agriculture": 5600.6,
+      "Waste": 2281.6,
+      "Buildings": 3410.3,
+      "Transport": 4609.4,
+      "Electricity": 5025.3,
+      "Industry": 1446.3,
+      "total": 24502.5
+    },
+    {
+      "year": 2004,
+      "Agriculture": 5586.1,
+      "Waste": 2264.3,
+      "Buildings": 3372.1,
+      "Transport": 4656.1,
+      "Electricity": 4876.3,
+      "Industry": 1532.4,
+      "total": 24419.0
+    },
+    {
+      "year": 2005,
+      "Agriculture": 5659.1,
+      "Waste": 2240.3,
+      "Buildings": 3198.7,
+      "Transport": 4754.8,
+      "Electricity": 5399.0,
+      "Industry": 2000.1,
+      "total": 25395.5
+    },
+    {
+      "year": 2006,
+      "Agriculture": 5547.8,
+      "Waste": 2205.7,
+      "Buildings": 3389.5,
+      "Transport": 4788.7,
+      "Electricity": 5728.6,
+      "Industry": 1956.2,
+      "total": 25764.4
+    },
+    {
+      "year": 2007,
+      "Agriculture": 5476.9,
+      "Waste": 2166.3,
+      "Buildings": 3222.2,
+      "Transport": 4907.7,
+      "Electricity": 4652.1,
+      "Industry": 2045.3,
+      "total": 24645.2
+    },
+    {
+      "year": 2008,
+      "Agriculture": 5353.9,
+      "Waste": 2113.0,
+      "Buildings": 3408.2,
+      "Transport": 4767.2,
+      "Electricity": 4838.8,
+      "Industry": 1720.9,
+      "total": 24385.2
+    },
+    {
+      "year": 2009,
+      "Agriculture": 5316.1,
+      "Waste": 1873.2,
+      "Buildings": 3413.4,
+      "Transport": 4778.7,
+      "Electricity": 3685.9,
+      "Industry": 1148.3,
+      "total": 22458.3
+    },
+    {
+      "year": 2010,
+      "Agriculture": 5414.9,
+      "Waste": 1526.3,
+      "Buildings": 3879.1,
+      "Transport": 4666.6,
+      "Electricity": 3939.2,
+      "Industry": 1357.8,
+      "total": 23047.3
+    },
+    {
+      "year": 2011,
+      "Agriculture": 5394.5,
+      "Waste": 1454.0,
+      "Buildings": 3303.0,
+      "Transport": 4517.5,
+      "Electricity": 3727.7,
+      "Industry": 1426.4,
+      "total": 22070.9
+    },
+    {
+      "year": 2012,
+      "Agriculture": 5516.2,
+      "Waste": 1361.4,
+      "Buildings": 3370.2,
+      "Transport": 4462.4,
+      "Electricity": 3857.0,
+      "Industry": 1356.6,
+      "total": 22315.0
+    },
+    {
+      "year": 2013,
+      "Agriculture": 5490.7,
+      "Waste": 1239.0,
+      "Buildings": 3624.8,
+      "Transport": 4461.7,
+      "Electricity": 4056.3,
+      "Industry": 1430.4,
+      "total": 22499.4
+    },
+    {
+      "year": 2014,
+      "Agriculture": 5492.6,
+      "Waste": 847.0,
+      "Buildings": 3327.6,
+      "Transport": 4390.0,
+      "Electricity": 3816.1,
+      "Industry": 1576.4,
+      "total": 21647.1
+    },
+    {
+      "year": 2015,
+      "Agriculture": 5654.0,
+      "Waste": 953.4,
+      "Buildings": 3420.1,
+      "Transport": 4403.3,
+      "Electricity": 3815.5,
+      "Industry": 1596.8,
+      "total": 22042.2
+    },
+    {
+      "year": 2016,
+      "Agriculture": 5720.0,
+      "Waste": 895.2,
+      "Buildings": 3461.7,
+      "Transport": 4531.0,
+      "Electricity": 4007.4,
+      "Industry": 1392.7,
+      "total": 22218.2
+    },
+    {
+      "year": 2017,
+      "Agriculture": 5774.5,
+      "Waste": 809.1,
+      "Buildings": 3360.2,
+      "Transport": 4568.7,
+      "Electricity": 3418.8,
+      "Industry": 1448.4,
+      "total": 21562.6
+    },
+    {
+      "year": 2018,
+      "Agriculture": 5645.7,
+      "Waste": 889.6,
+      "Buildings": 3531.6,
+      "Transport": 4515.4,
+      "Electricity": 2904.8,
+      "Industry": 1372.6,
+      "total": 21033.4
+    },
+    {
+      "year": 2019,
+      "Agriculture": 5645.5,
+      "Waste": 869.3,
+      "Buildings": 3426.1,
+      "Transport": 4390.0,
+      "Electricity": 2773.0,
+      "Industry": 1334.3,
+      "total": 20577.0
+    },
+    {
+      "year": 2020,
+      "Agriculture": 5684.0,
+      "Waste": 845.6,
+      "Buildings": 3556.0,
+      "Transport": 3525.6,
+      "Electricity": 2863.2,
+      "Industry": 1213.7,
+      "total": 19863.2
+    },
+    {
+      "year": 2021,
+      "Agriculture": 5860.7,
+      "Waste": 832.9,
+      "Buildings": 3538.8,
+      "Transport": 3828.8,
+      "Electricity": 3077.5,
+      "Industry": 1245.7,
+      "total": 20565.5
+    },
+    {
+      "year": 2022,
+      "Agriculture": 5708.7,
+      "Waste": 788.4,
+      "Buildings": 2877.8,
+      "Transport": 3919.3,
+      "Electricity": 2983.3,
+      "Industry": 1179.7,
+      "total": 19606.3
+    },
+    {
+      "year": 2023,
+      "Agriculture": 5615.2,
+      "Waste": 763.4,
+      "Buildings": 2521.1,
+      "Transport": 3907.9,
+      "Electricity": 2124.1,
+      "Industry": 1127.3,
+      "total": 18212.2
+    }
+  ],
+  "by_sector": {
+    "Agriculture": [
+      {
+        "year": 1990,
+        "value": 5198.7
+      },
+      {
+        "year": 1995,
+        "value": 5656.5
+      },
+      {
+        "year": 1998,
+        "value": 5808.5
+      },
+      {
+        "year": 1999,
+        "value": 5742.0
+      },
+      {
+        "year": 2000,
+        "value": 5573.8
+      },
+      {
+        "year": 2001,
+        "value": 5573.5
+      },
+      {
+        "year": 2002,
+        "value": 5558.1
+      },
+      {
+        "year": 2003,
+        "value": 5600.6
+      },
+      {
+        "year": 2004,
+        "value": 5586.1
+      },
+      {
+        "year": 2005,
+        "value": 5659.1
+      },
+      {
+        "year": 2006,
+        "value": 5547.8
+      },
+      {
+        "year": 2007,
+        "value": 5476.9
+      },
+      {
+        "year": 2008,
+        "value": 5353.9
+      },
+      {
+        "year": 2009,
+        "value": 5316.1
+      },
+      {
+        "year": 2010,
+        "value": 5414.9
+      },
+      {
+        "year": 2011,
+        "value": 5394.5
+      },
+      {
+        "year": 2012,
+        "value": 5516.2
+      },
+      {
+        "year": 2013,
+        "value": 5490.7
+      },
+      {
+        "year": 2014,
+        "value": 5492.6
+      },
+      {
+        "year": 2015,
+        "value": 5654.0
+      },
+      {
+        "year": 2016,
+        "value": 5720.0
+      },
+      {
+        "year": 2017,
+        "value": 5774.5
+      },
+      {
+        "year": 2018,
+        "value": 5645.7
+      },
+      {
+        "year": 2019,
+        "value": 5645.5
+      },
+      {
+        "year": 2020,
+        "value": 5684.0
+      },
+      {
+        "year": 2021,
+        "value": 5860.7
+      },
+      {
+        "year": 2022,
+        "value": 5708.7
+      },
+      {
+        "year": 2023,
+        "value": 5615.2
+      }
+    ],
+    "Waste": [
+      {
+        "year": 1990,
+        "value": 1956.3
+      },
+      {
+        "year": 1995,
+        "value": 2140.6
+      },
+      {
+        "year": 1998,
+        "value": 2268.8
+      },
+      {
+        "year": 1999,
+        "value": 2285.9
+      },
+      {
+        "year": 2000,
+        "value": 2287.5
+      },
+      {
+        "year": 2001,
+        "value": 2270.8
+      },
+      {
+        "year": 2002,
+        "value": 2287.7
+      },
+      {
+        "year": 2003,
+        "value": 2281.6
+      },
+      {
+        "year": 2004,
+        "value": 2264.3
+      },
+      {
+        "year": 2005,
+        "value": 2240.3
+      },
+      {
+        "year": 2006,
+        "value": 2205.7
+      },
+      {
+        "year": 2007,
+        "value": 2166.3
+      },
+      {
+        "year": 2008,
+        "value": 2113.0
+      },
+      {
+        "year": 2009,
+        "value": 1873.2
+      },
+      {
+        "year": 2010,
+        "value": 1526.3
+      },
+      {
+        "year": 2011,
+        "value": 1454.0
+      },
+      {
+        "year": 2012,
+        "value": 1361.4
+      },
+      {
+        "year": 2013,
+        "value": 1239.0
+      },
+      {
+        "year": 2014,
+        "value": 847.0
+      },
+      {
+        "year": 2015,
+        "value": 953.4
+      },
+      {
+        "year": 2016,
+        "value": 895.2
+      },
+      {
+        "year": 2017,
+        "value": 809.1
+      },
+      {
+        "year": 2018,
+        "value": 889.6
+      },
+      {
+        "year": 2019,
+        "value": 869.3
+      },
+      {
+        "year": 2020,
+        "value": 845.6
+      },
+      {
+        "year": 2021,
+        "value": 832.9
+      },
+      {
+        "year": 2022,
+        "value": 788.4
+      },
+      {
+        "year": 2023,
+        "value": 763.4
+      }
+    ],
+    "Buildings": [
+      {
+        "year": 1990,
+        "value": 4420.8
+      },
+      {
+        "year": 1995,
+        "value": 3449.9
+      },
+      {
+        "year": 1998,
+        "value": 3330.8
+      },
+      {
+        "year": 1999,
+        "value": 3390.1
+      },
+      {
+        "year": 2000,
+        "value": 3340.9
+      },
+      {
+        "year": 2001,
+        "value": 3402.1
+      },
+      {
+        "year": 2002,
+        "value": 3370.5
+      },
+      {
+        "year": 2003,
+        "value": 3410.3
+      },
+      {
+        "year": 2004,
+        "value": 3372.1
+      },
+      {
+        "year": 2005,
+        "value": 3198.7
+      },
+      {
+        "year": 2006,
+        "value": 3389.5
+      },
+      {
+        "year": 2007,
+        "value": 3222.2
+      },
+      {
+        "year": 2008,
+        "value": 3408.2
+      },
+      {
+        "year": 2009,
+        "value": 3413.4
+      },
+      {
+        "year": 2010,
+        "value": 3879.1
+      },
+      {
+        "year": 2011,
+        "value": 3303.0
+      },
+      {
+        "year": 2012,
+        "value": 3370.2
+      },
+      {
+        "year": 2013,
+        "value": 3624.8
+      },
+      {
+        "year": 2014,
+        "value": 3327.6
+      },
+      {
+        "year": 2015,
+        "value": 3420.1
+      },
+      {
+        "year": 2016,
+        "value": 3461.7
+      },
+      {
+        "year": 2017,
+        "value": 3360.2
+      },
+      {
+        "year": 2018,
+        "value": 3531.6
+      },
+      {
+        "year": 2019,
+        "value": 3426.1
+      },
+      {
+        "year": 2020,
+        "value": 3556.0
+      },
+      {
+        "year": 2021,
+        "value": 3538.8
+      },
+      {
+        "year": 2022,
+        "value": 2877.8
+      },
+      {
+        "year": 2023,
+        "value": 2521.1
+      }
+    ],
+    "Transport": [
+      {
+        "year": 1990,
+        "value": 3728.4
+      },
+      {
+        "year": 1995,
+        "value": 3700.9
+      },
+      {
+        "year": 1998,
+        "value": 3893.4
+      },
+      {
+        "year": 1999,
+        "value": 4051.7
+      },
+      {
+        "year": 2000,
+        "value": 4180.1
+      },
+      {
+        "year": 2001,
+        "value": 4246.3
+      },
+      {
+        "year": 2002,
+        "value": 4430.5
+      },
+      {
+        "year": 2003,
+        "value": 4609.4
+      },
+      {
+        "year": 2004,
+        "value": 4656.1
+      },
+      {
+        "year": 2005,
+        "value": 4754.8
+      },
+      {
+        "year": 2006,
+        "value": 4788.7
+      },
+      {
+        "year": 2007,
+        "value": 4907.7
+      },
+      {
+        "year": 2008,
+        "value": 4767.2
+      },
+      {
+        "year": 2009,
+        "value": 4778.7
+      },
+      {
+        "year": 2010,
+        "value": 4666.6
+      },
+      {
+        "year": 2011,
+        "value": 4517.5
+      },
+      {
+        "year": 2012,
+        "value": 4462.4
+      },
+      {
+        "year": 2013,
+        "value": 4461.7
+      },
+      {
+        "year": 2014,
+        "value": 4390.0
+      },
+      {
+        "year": 2015,
+        "value": 4403.3
+      },
+      {
+        "year": 2016,
+        "value": 4531.0
+      },
+      {
+        "year": 2017,
+        "value": 4568.7
+      },
+      {
+        "year": 2018,
+        "value": 4515.4
+      },
+      {
+        "year": 2019,
+        "value": 4390.0
+      },
+      {
+        "year": 2020,
+        "value": 3525.6
+      },
+      {
+        "year": 2021,
+        "value": 3828.8
+      },
+      {
+        "year": 2022,
+        "value": 3919.3
+      },
+      {
+        "year": 2023,
+        "value": 3907.9
+      }
+    ],
+    "Electricity": [
+      {
+        "year": 1990,
+        "value": 5307.3
+      },
+      {
+        "year": 1995,
+        "value": 6528.5
+      },
+      {
+        "year": 1998,
+        "value": 6184.9
+      },
+      {
+        "year": 1999,
+        "value": 6280.3
+      },
+      {
+        "year": 2000,
+        "value": 6334.4
+      },
+      {
+        "year": 2001,
+        "value": 6648.2
+      },
+      {
+        "year": 2002,
+        "value": 5217.4
+      },
+      {
+        "year": 2003,
+        "value": 5025.3
+      },
+      {
+        "year": 2004,
+        "value": 4876.3
+      },
+      {
+        "year": 2005,
+        "value": 5399.0
+      },
+      {
+        "year": 2006,
+        "value": 5728.6
+      },
+      {
+        "year": 2007,
+        "value": 4652.1
+      },
+      {
+        "year": 2008,
+        "value": 4838.8
+      },
+      {
+        "year": 2009,
+        "value": 3685.9
+      },
+      {
+        "year": 2010,
+        "value": 3939.2
+      },
+      {
+        "year": 2011,
+        "value": 3727.7
+      },
+      {
+        "year": 2012,
+        "value": 3857.0
+      },
+      {
+        "year": 2013,
+        "value": 4056.3
+      },
+      {
+        "year": 2014,
+        "value": 3816.1
+      },
+      {
+        "year": 2015,
+        "value": 3815.5
+      },
+      {
+        "year": 2016,
+        "value": 4007.4
+      },
+      {
+        "year": 2017,
+        "value": 3418.8
+      },
+      {
+        "year": 2018,
+        "value": 2904.8
+      },
+      {
+        "year": 2019,
+        "value": 2773.0
+      },
+      {
+        "year": 2020,
+        "value": 2863.2
+      },
+      {
+        "year": 2021,
+        "value": 3077.5
+      },
+      {
+        "year": 2022,
+        "value": 2983.3
+      },
+      {
+        "year": 2023,
+        "value": 2124.1
+      }
+    ],
+    "Industry": [
+      {
+        "year": 1990,
+        "value": 3310.5
+      },
+      {
+        "year": 1995,
+        "value": 2737.9
+      },
+      {
+        "year": 1998,
+        "value": 2566.9
+      },
+      {
+        "year": 1999,
+        "value": 2708.2
+      },
+      {
+        "year": 2000,
+        "value": 2321.3
+      },
+      {
+        "year": 2001,
+        "value": 2275.8
+      },
+      {
+        "year": 2002,
+        "value": 1393.7
+      },
+      {
+        "year": 2003,
+        "value": 1446.3
+      },
+      {
+        "year": 2004,
+        "value": 1532.4
+      },
+      {
+        "year": 2005,
+        "value": 2000.1
+      },
+      {
+        "year": 2006,
+        "value": 1956.2
+      },
+      {
+        "year": 2007,
+        "value": 2045.3
+      },
+      {
+        "year": 2008,
+        "value": 1720.9
+      },
+      {
+        "year": 2009,
+        "value": 1148.3
+      },
+      {
+        "year": 2010,
+        "value": 1357.8
+      },
+      {
+        "year": 2011,
+        "value": 1426.4
+      },
+      {
+        "year": 2012,
+        "value": 1356.6
+      },
+      {
+        "year": 2013,
+        "value": 1430.4
+      },
+      {
+        "year": 2014,
+        "value": 1576.4
+      },
+      {
+        "year": 2015,
+        "value": 1596.8
+      },
+      {
+        "year": 2016,
+        "value": 1392.7
+      },
+      {
+        "year": 2017,
+        "value": 1448.4
+      },
+      {
+        "year": 2018,
+        "value": 1372.6
+      },
+      {
+        "year": 2019,
+        "value": 1334.3
+      },
+      {
+        "year": 2020,
+        "value": 1213.7
+      },
+      {
+        "year": 2021,
+        "value": 1245.7
+      },
+      {
+        "year": 2022,
+        "value": 1179.7
+      },
+      {
+        "year": 2023,
+        "value": 1127.3
+      }
+    ],
+    "Total": [
+      {
+        "year": 1990,
+        "value": 26564.6
+      },
+      {
+        "year": 1995,
+        "value": 26634.9
+      },
+      {
+        "year": 1998,
+        "value": 26302.5
+      },
+      {
+        "year": 1999,
+        "value": 26677.6
+      },
+      {
+        "year": 2000,
+        "value": 26225.5
+      },
+      {
+        "year": 2001,
+        "value": 26592.1
+      },
+      {
+        "year": 2002,
+        "value": 24419.1
+      },
+      {
+        "year": 2003,
+        "value": 24502.5
+      },
+      {
+        "year": 2004,
+        "value": 24419.0
+      },
+      {
+        "year": 2005,
+        "value": 25395.5
+      },
+      {
+        "year": 2006,
+        "value": 25764.4
+      },
+      {
+        "year": 2007,
+        "value": 24645.2
+      },
+      {
+        "year": 2008,
+        "value": 24385.2
+      },
+      {
+        "year": 2009,
+        "value": 22458.3
+      },
+      {
+        "year": 2010,
+        "value": 23047.3
+      },
+      {
+        "year": 2011,
+        "value": 22070.9
+      },
+      {
+        "year": 2012,
+        "value": 22315.0
+      },
+      {
+        "year": 2013,
+        "value": 22499.4
+      },
+      {
+        "year": 2014,
+        "value": 21647.1
+      },
+      {
+        "year": 2015,
+        "value": 22042.2
+      },
+      {
+        "year": 2016,
+        "value": 22218.2
+      },
+      {
+        "year": 2017,
+        "value": 21562.6
+      },
+      {
+        "year": 2018,
+        "value": 21033.4
+      },
+      {
+        "year": 2019,
+        "value": 20577.0
+      },
+      {
+        "year": 2020,
+        "value": 19863.2
+      },
+      {
+        "year": 2021,
+        "value": 20565.5
+      },
+      {
+        "year": 2022,
+        "value": 19606.3
+      },
+      {
+        "year": 2023,
+        "value": 18212.2
+      }
+    ]
+  },
+  "supplementary_sectors": {
+    "Fuel supply": [
+      {
+        "year": 1990,
+        "value": 0.0
+      },
+      {
+        "year": 1995,
+        "value": 0.1
+      },
+      {
+        "year": 1998,
+        "value": 0.1
+      },
+      {
+        "year": 1999,
+        "value": 0.4
+      },
+      {
+        "year": 2000,
+        "value": 0.4
+      },
+      {
+        "year": 2001,
+        "value": 0.5
+      },
+      {
+        "year": 2002,
+        "value": 0.5
+      },
+      {
+        "year": 2003,
+        "value": 0.7
+      },
+      {
+        "year": 2004,
+        "value": 0.7
+      },
+      {
+        "year": 2005,
+        "value": 0.7
+      },
+      {
+        "year": 2006,
+        "value": 0.6
+      },
+      {
+        "year": 2007,
+        "value": 2.7
+      },
+      {
+        "year": 2008,
+        "value": 1.5
+      },
+      {
+        "year": 2009,
+        "value": 1.1
+      },
+      {
+        "year": 2010,
+        "value": 1.7
+      },
+      {
+        "year": 2011,
+        "value": 1.1
+      },
+      {
+        "year": 2012,
+        "value": 1.4
+      },
+      {
+        "year": 2013,
+        "value": 1.6
+      },
+      {
+        "year": 2014,
+        "value": 1.2
+      },
+      {
+        "year": 2015,
+        "value": 1.4
+      },
+      {
+        "year": 2016,
+        "value": 3.1
+      },
+      {
+        "year": 2017,
+        "value": 2.8
+      },
+      {
+        "year": 2018,
+        "value": 4.0
+      },
+      {
+        "year": 2019,
+        "value": 3.7
+      },
+      {
+        "year": 2020,
+        "value": 4.2
+      },
+      {
+        "year": 2021,
+        "value": 5.5
+      },
+      {
+        "year": 2022,
+        "value": 3.9
+      },
+      {
+        "year": 2023,
+        "value": 4.3
+      }
+    ],
+    "LULUCF": [
+      {
+        "year": 1990,
+        "value": 2642.5
+      },
+      {
+        "year": 1995,
+        "value": 2420.5
+      },
+      {
+        "year": 1998,
+        "value": 2249.2
+      },
+      {
+        "year": 1999,
+        "value": 2219.0
+      },
+      {
+        "year": 2000,
+        "value": 2187.0
+      },
+      {
+        "year": 2001,
+        "value": 2175.0
+      },
+      {
+        "year": 2002,
+        "value": 2160.8
+      },
+      {
+        "year": 2003,
+        "value": 2128.4
+      },
+      {
+        "year": 2004,
+        "value": 2131.1
+      },
+      {
+        "year": 2005,
+        "value": 2142.8
+      },
+      {
+        "year": 2006,
+        "value": 2147.4
+      },
+      {
+        "year": 2007,
+        "value": 2172.0
+      },
+      {
+        "year": 2008,
+        "value": 2181.7
+      },
+      {
+        "year": 2009,
+        "value": 2241.6
+      },
+      {
+        "year": 2010,
+        "value": 2261.6
+      },
+      {
+        "year": 2011,
+        "value": 2246.8
+      },
+      {
+        "year": 2012,
+        "value": 2389.9
+      },
+      {
+        "year": 2013,
+        "value": 2194.9
+      },
+      {
+        "year": 2014,
+        "value": 2196.2
+      },
+      {
+        "year": 2015,
+        "value": 2197.7
+      },
+      {
+        "year": 2016,
+        "value": 2207.0
+      },
+      {
+        "year": 2017,
+        "value": 2180.2
+      },
+      {
+        "year": 2018,
+        "value": 2169.7
+      },
+      {
+        "year": 2019,
+        "value": 2135.1
+      },
+      {
+        "year": 2020,
+        "value": 2171.0
+      },
+      {
+        "year": 2021,
+        "value": 2175.5
+      },
+      {
+        "year": 2022,
+        "value": 2145.1
+      },
+      {
+        "year": 2023,
+        "value": 2148.9
+      }
+    ]
+  }
+}

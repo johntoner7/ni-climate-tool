@@ -1,0 +1,1262 @@
+{
+  "metadata": {
+    "source": "NAEI NI GHG Inventory (AR5). Projections derived from linear trend on 2018-2023 actuals.",
+    "unit": "kt CO2e",
+    "gwp": "AR5",
+    "baseline_1990_kt": 26564.6,
+    "target_2030_kt": 13813.6,
+    "target_basis": "48% reduction on 1990 NAEI AR5 baseline (NI Climate Change Act 2022)",
+    "total_projected_2030_kt": 14426.0,
+    "gap_kt": 612.4,
+    "projection_method": "Total: linear interpolation to documented 2030 endpoint. Sectors: linear regression on 2018-2023 trend."
+  },
+  "sector_changes_since_1990": {
+    "Agriculture": "+8.0%",
+    "Waste": "-61.0%",
+    "Buildings": "-43.0%",
+    "Transport": "+4.8%",
+    "Electricity": "-60.0%",
+    "Industry": "-65.9%"
+  },
+  "chart3_total": [
+    {
+      "year": 1990,
+      "actual": 26564.6,
+      "projected": null
+    },
+    {
+      "year": 1995,
+      "actual": 26634.9,
+      "projected": null
+    },
+    {
+      "year": 1998,
+      "actual": 26302.5,
+      "projected": null
+    },
+    {
+      "year": 1999,
+      "actual": 26677.6,
+      "projected": null
+    },
+    {
+      "year": 2000,
+      "actual": 26225.5,
+      "projected": null
+    },
+    {
+      "year": 2001,
+      "actual": 26592.1,
+      "projected": null
+    },
+    {
+      "year": 2002,
+      "actual": 24419.1,
+      "projected": null
+    },
+    {
+      "year": 2003,
+      "actual": 24502.5,
+      "projected": null
+    },
+    {
+      "year": 2004,
+      "actual": 24419.0,
+      "projected": null
+    },
+    {
+      "year": 2005,
+      "actual": 25395.5,
+      "projected": null
+    },
+    {
+      "year": 2006,
+      "actual": 25764.4,
+      "projected": null
+    },
+    {
+      "year": 2007,
+      "actual": 24645.2,
+      "projected": null
+    },
+    {
+      "year": 2008,
+      "actual": 24385.2,
+      "projected": null
+    },
+    {
+      "year": 2009,
+      "actual": 22458.3,
+      "projected": null
+    },
+    {
+      "year": 2010,
+      "actual": 23047.3,
+      "projected": null
+    },
+    {
+      "year": 2011,
+      "actual": 22070.9,
+      "projected": null
+    },
+    {
+      "year": 2012,
+      "actual": 22315.0,
+      "projected": null
+    },
+    {
+      "year": 2013,
+      "actual": 22499.4,
+      "projected": null
+    },
+    {
+      "year": 2014,
+      "actual": 21647.1,
+      "projected": null
+    },
+    {
+      "year": 2015,
+      "actual": 22042.2,
+      "projected": null
+    },
+    {
+      "year": 2016,
+      "actual": 22218.2,
+      "projected": null
+    },
+    {
+      "year": 2017,
+      "actual": 21562.6,
+      "projected": null
+    },
+    {
+      "year": 2018,
+      "actual": 21033.4,
+      "projected": null
+    },
+    {
+      "year": 2019,
+      "actual": 20577.0,
+      "projected": null
+    },
+    {
+      "year": 2020,
+      "actual": 19863.2,
+      "projected": null
+    },
+    {
+      "year": 2021,
+      "actual": 20565.5,
+      "projected": null
+    },
+    {
+      "year": 2022,
+      "actual": 19606.3,
+      "projected": null
+    },
+    {
+      "year": 2023,
+      "actual": 18212.2,
+      "projected": 18212.2
+    },
+    {
+      "year": 2024,
+      "actual": null,
+      "projected": 17671.3
+    },
+    {
+      "year": 2025,
+      "actual": null,
+      "projected": 17130.4
+    },
+    {
+      "year": 2026,
+      "actual": null,
+      "projected": 16589.5
+    },
+    {
+      "year": 2027,
+      "actual": null,
+      "projected": 16048.7
+    },
+    {
+      "year": 2028,
+      "actual": null,
+      "projected": 15507.8
+    },
+    {
+      "year": 2029,
+      "actual": null,
+      "projected": 14966.9
+    },
+    {
+      "year": 2030,
+      "actual": null,
+      "projected": 14426.0
+    }
+  ],
+  "chart4_sectors": {
+    "Agriculture": [
+      {
+        "year": 1990,
+        "actual": 5198.7,
+        "projected": null
+      },
+      {
+        "year": 1995,
+        "actual": 5656.5,
+        "projected": null
+      },
+      {
+        "year": 1998,
+        "actual": 5808.5,
+        "projected": null
+      },
+      {
+        "year": 1999,
+        "actual": 5742.0,
+        "projected": null
+      },
+      {
+        "year": 2000,
+        "actual": 5573.8,
+        "projected": null
+      },
+      {
+        "year": 2001,
+        "actual": 5573.5,
+        "projected": null
+      },
+      {
+        "year": 2002,
+        "actual": 5558.1,
+        "projected": null
+      },
+      {
+        "year": 2003,
+        "actual": 5600.6,
+        "projected": null
+      },
+      {
+        "year": 2004,
+        "actual": 5586.1,
+        "projected": null
+      },
+      {
+        "year": 2005,
+        "actual": 5659.1,
+        "projected": null
+      },
+      {
+        "year": 2006,
+        "actual": 5547.8,
+        "projected": null
+      },
+      {
+        "year": 2007,
+        "actual": 5476.9,
+        "projected": null
+      },
+      {
+        "year": 2008,
+        "actual": 5353.9,
+        "projected": null
+      },
+      {
+        "year": 2009,
+        "actual": 5316.1,
+        "projected": null
+      },
+      {
+        "year": 2010,
+        "actual": 5414.9,
+        "projected": null
+      },
+      {
+        "year": 2011,
+        "actual": 5394.5,
+        "projected": null
+      },
+      {
+        "year": 2012,
+        "actual": 5516.2,
+        "projected": null
+      },
+      {
+        "year": 2013,
+        "actual": 5490.7,
+        "projected": null
+      },
+      {
+        "year": 2014,
+        "actual": 5492.6,
+        "projected": null
+      },
+      {
+        "year": 2015,
+        "actual": 5654.0,
+        "projected": null
+      },
+      {
+        "year": 2016,
+        "actual": 5720.0,
+        "projected": null
+      },
+      {
+        "year": 2017,
+        "actual": 5774.5,
+        "projected": null
+      },
+      {
+        "year": 2018,
+        "actual": 5645.7,
+        "projected": null
+      },
+      {
+        "year": 2019,
+        "actual": 5645.5,
+        "projected": null
+      },
+      {
+        "year": 2020,
+        "actual": 5684.0,
+        "projected": null
+      },
+      {
+        "year": 2021,
+        "actual": 5860.7,
+        "projected": null
+      },
+      {
+        "year": 2022,
+        "actual": 5708.7,
+        "projected": null
+      },
+      {
+        "year": 2023,
+        "actual": 5615.2,
+        "projected": 5615.2
+      },
+      {
+        "year": 2024,
+        "actual": null,
+        "projected": 5692.0
+      },
+      {
+        "year": 2025,
+        "actual": null,
+        "projected": 5688.5
+      },
+      {
+        "year": 2026,
+        "actual": null,
+        "projected": 5684.9
+      },
+      {
+        "year": 2027,
+        "actual": null,
+        "projected": 5681.3
+      },
+      {
+        "year": 2028,
+        "actual": null,
+        "projected": 5677.7
+      },
+      {
+        "year": 2029,
+        "actual": null,
+        "projected": 5674.1
+      },
+      {
+        "year": 2030,
+        "actual": null,
+        "projected": 5670.5
+      }
+    ],
+    "Waste": [
+      {
+        "year": 1990,
+        "actual": 1956.3,
+        "projected": null
+      },
+      {
+        "year": 1995,
+        "actual": 2140.6,
+        "projected": null
+      },
+      {
+        "year": 1998,
+        "actual": 2268.8,
+        "projected": null
+      },
+      {
+        "year": 1999,
+        "actual": 2285.9,
+        "projected": null
+      },
+      {
+        "year": 2000,
+        "actual": 2287.5,
+        "projected": null
+      },
+      {
+        "year": 2001,
+        "actual": 2270.8,
+        "projected": null
+      },
+      {
+        "year": 2002,
+        "actual": 2287.7,
+        "projected": null
+      },
+      {
+        "year": 2003,
+        "actual": 2281.6,
+        "projected": null
+      },
+      {
+        "year": 2004,
+        "actual": 2264.3,
+        "projected": null
+      },
+      {
+        "year": 2005,
+        "actual": 2240.3,
+        "projected": null
+      },
+      {
+        "year": 2006,
+        "actual": 2205.7,
+        "projected": null
+      },
+      {
+        "year": 2007,
+        "actual": 2166.3,
+        "projected": null
+      },
+      {
+        "year": 2008,
+        "actual": 2113.0,
+        "projected": null
+      },
+      {
+        "year": 2009,
+        "actual": 1873.2,
+        "projected": null
+      },
+      {
+        "year": 2010,
+        "actual": 1526.3,
+        "projected": null
+      },
+      {
+        "year": 2011,
+        "actual": 1454.0,
+        "projected": null
+      },
+      {
+        "year": 2012,
+        "actual": 1361.4,
+        "projected": null
+      },
+      {
+        "year": 2013,
+        "actual": 1239.0,
+        "projected": null
+      },
+      {
+        "year": 2014,
+        "actual": 847.0,
+        "projected": null
+      },
+      {
+        "year": 2015,
+        "actual": 953.4,
+        "projected": null
+      },
+      {
+        "year": 2016,
+        "actual": 895.2,
+        "projected": null
+      },
+      {
+        "year": 2017,
+        "actual": 809.1,
+        "projected": null
+      },
+      {
+        "year": 2018,
+        "actual": 889.6,
+        "projected": null
+      },
+      {
+        "year": 2019,
+        "actual": 869.3,
+        "projected": null
+      },
+      {
+        "year": 2020,
+        "actual": 845.6,
+        "projected": null
+      },
+      {
+        "year": 2021,
+        "actual": 832.9,
+        "projected": null
+      },
+      {
+        "year": 2022,
+        "actual": 788.4,
+        "projected": null
+      },
+      {
+        "year": 2023,
+        "actual": 763.4,
+        "projected": 763.4
+      },
+      {
+        "year": 2024,
+        "actual": null,
+        "projected": 739.2
+      },
+      {
+        "year": 2025,
+        "actual": null,
+        "projected": 712.3
+      },
+      {
+        "year": 2026,
+        "actual": null,
+        "projected": 685.4
+      },
+      {
+        "year": 2027,
+        "actual": null,
+        "projected": 658.5
+      },
+      {
+        "year": 2028,
+        "actual": null,
+        "projected": 631.6
+      },
+      {
+        "year": 2029,
+        "actual": null,
+        "projected": 604.7
+      },
+      {
+        "year": 2030,
+        "actual": null,
+        "projected": 577.8
+      }
+    ],
+    "Buildings": [
+      {
+        "year": 1990,
+        "actual": 4420.8,
+        "projected": null
+      },
+      {
+        "year": 1995,
+        "actual": 3449.9,
+        "projected": null
+      },
+      {
+        "year": 1998,
+        "actual": 3330.8,
+        "projected": null
+      },
+      {
+        "year": 1999,
+        "actual": 3390.1,
+        "projected": null
+      },
+      {
+        "year": 2000,
+        "actual": 3340.9,
+        "projected": null
+      },
+      {
+        "year": 2001,
+        "actual": 3402.1,
+        "projected": null
+      },
+      {
+        "year": 2002,
+        "actual": 3370.5,
+        "projected": null
+      },
+      {
+        "year": 2003,
+        "actual": 3410.3,
+        "projected": null
+      },
+      {
+        "year": 2004,
+        "actual": 3372.1,
+        "projected": null
+      },
+      {
+        "year": 2005,
+        "actual": 3198.7,
+        "projected": null
+      },
+      {
+        "year": 2006,
+        "actual": 3389.5,
+        "projected": null
+      },
+      {
+        "year": 2007,
+        "actual": 3222.2,
+        "projected": null
+      },
+      {
+        "year": 2008,
+        "actual": 3408.2,
+        "projected": null
+      },
+      {
+        "year": 2009,
+        "actual": 3413.4,
+        "projected": null
+      },
+      {
+        "year": 2010,
+        "actual": 3879.1,
+        "projected": null
+      },
+      {
+        "year": 2011,
+        "actual": 3303.0,
+        "projected": null
+      },
+      {
+        "year": 2012,
+        "actual": 3370.2,
+        "projected": null
+      },
+      {
+        "year": 2013,
+        "actual": 3624.8,
+        "projected": null
+      },
+      {
+        "year": 2014,
+        "actual": 3327.6,
+        "projected": null
+      },
+      {
+        "year": 2015,
+        "actual": 3420.1,
+        "projected": null
+      },
+      {
+        "year": 2016,
+        "actual": 3461.7,
+        "projected": null
+      },
+      {
+        "year": 2017,
+        "actual": 3360.2,
+        "projected": null
+      },
+      {
+        "year": 2018,
+        "actual": 3531.6,
+        "projected": null
+      },
+      {
+        "year": 2019,
+        "actual": 3426.1,
+        "projected": null
+      },
+      {
+        "year": 2020,
+        "actual": 3556.0,
+        "projected": null
+      },
+      {
+        "year": 2021,
+        "actual": 3538.8,
+        "projected": null
+      },
+      {
+        "year": 2022,
+        "actual": 2877.8,
+        "projected": null
+      },
+      {
+        "year": 2023,
+        "actual": 2521.1,
+        "projected": 2521.1
+      },
+      {
+        "year": 2024,
+        "actual": null,
+        "projected": 2437.5
+      },
+      {
+        "year": 2025,
+        "actual": null,
+        "projected": 2188.7
+      },
+      {
+        "year": 2026,
+        "actual": null,
+        "projected": 1939.9
+      },
+      {
+        "year": 2027,
+        "actual": null,
+        "projected": 1691.0
+      },
+      {
+        "year": 2028,
+        "actual": null,
+        "projected": 1442.2
+      },
+      {
+        "year": 2029,
+        "actual": null,
+        "projected": 1193.4
+      },
+      {
+        "year": 2030,
+        "actual": null,
+        "projected": 944.6
+      }
+    ],
+    "Transport": [
+      {
+        "year": 1990,
+        "actual": 3728.4,
+        "projected": null
+      },
+      {
+        "year": 1995,
+        "actual": 3700.9,
+        "projected": null
+      },
+      {
+        "year": 1998,
+        "actual": 3893.4,
+        "projected": null
+      },
+      {
+        "year": 1999,
+        "actual": 4051.7,
+        "projected": null
+      },
+      {
+        "year": 2000,
+        "actual": 4180.1,
+        "projected": null
+      },
+      {
+        "year": 2001,
+        "actual": 4246.3,
+        "projected": null
+      },
+      {
+        "year": 2002,
+        "actual": 4430.5,
+        "projected": null
+      },
+      {
+        "year": 2003,
+        "actual": 4609.4,
+        "projected": null
+      },
+      {
+        "year": 2004,
+        "actual": 4656.1,
+        "projected": null
+      },
+      {
+        "year": 2005,
+        "actual": 4754.8,
+        "projected": null
+      },
+      {
+        "year": 2006,
+        "actual": 4788.7,
+        "projected": null
+      },
+      {
+        "year": 2007,
+        "actual": 4907.7,
+        "projected": null
+      },
+      {
+        "year": 2008,
+        "actual": 4767.2,
+        "projected": null
+      },
+      {
+        "year": 2009,
+        "actual": 4778.7,
+        "projected": null
+      },
+      {
+        "year": 2010,
+        "actual": 4666.6,
+        "projected": null
+      },
+      {
+        "year": 2011,
+        "actual": 4517.5,
+        "projected": null
+      },
+      {
+        "year": 2012,
+        "actual": 4462.4,
+        "projected": null
+      },
+      {
+        "year": 2013,
+        "actual": 4461.7,
+        "projected": null
+      },
+      {
+        "year": 2014,
+        "actual": 4390.0,
+        "projected": null
+      },
+      {
+        "year": 2015,
+        "actual": 4403.3,
+        "projected": null
+      },
+      {
+        "year": 2016,
+        "actual": 4531.0,
+        "projected": null
+      },
+      {
+        "year": 2017,
+        "actual": 4568.7,
+        "projected": null
+      },
+      {
+        "year": 2018,
+        "actual": 4515.4,
+        "projected": null
+      },
+      {
+        "year": 2019,
+        "actual": 4390.0,
+        "projected": null
+      },
+      {
+        "year": 2020,
+        "actual": 3525.6,
+        "projected": null
+      },
+      {
+        "year": 2021,
+        "actual": 3828.8,
+        "projected": null
+      },
+      {
+        "year": 2022,
+        "actual": 3919.3,
+        "projected": null
+      },
+      {
+        "year": 2023,
+        "actual": 3907.9,
+        "projected": 3907.9
+      },
+      {
+        "year": 2024,
+        "actual": null,
+        "projected": 3743.2
+      },
+      {
+        "year": 2025,
+        "actual": null,
+        "projected": 3686.1
+      },
+      {
+        "year": 2026,
+        "actual": null,
+        "projected": 3629.1
+      },
+      {
+        "year": 2027,
+        "actual": null,
+        "projected": 3572.0
+      },
+      {
+        "year": 2028,
+        "actual": null,
+        "projected": 3515.0
+      },
+      {
+        "year": 2029,
+        "actual": null,
+        "projected": 3457.9
+      },
+      {
+        "year": 2030,
+        "actual": null,
+        "projected": 3400.9
+      }
+    ],
+    "Electricity": [
+      {
+        "year": 1990,
+        "actual": 5307.3,
+        "projected": null
+      },
+      {
+        "year": 1995,
+        "actual": 6528.5,
+        "projected": null
+      },
+      {
+        "year": 1998,
+        "actual": 6184.9,
+        "projected": null
+      },
+      {
+        "year": 1999,
+        "actual": 6280.3,
+        "projected": null
+      },
+      {
+        "year": 2000,
+        "actual": 6334.4,
+        "projected": null
+      },
+      {
+        "year": 2001,
+        "actual": 6648.2,
+        "projected": null
+      },
+      {
+        "year": 2002,
+        "actual": 5217.4,
+        "projected": null
+      },
+      {
+        "year": 2003,
+        "actual": 5025.3,
+        "projected": null
+      },
+      {
+        "year": 2004,
+        "actual": 4876.3,
+        "projected": null
+      },
+      {
+        "year": 2005,
+        "actual": 5399.0,
+        "projected": null
+      },
+      {
+        "year": 2006,
+        "actual": 5728.6,
+        "projected": null
+      },
+      {
+        "year": 2007,
+        "actual": 4652.1,
+        "projected": null
+      },
+      {
+        "year": 2008,
+        "actual": 4838.8,
+        "projected": null
+      },
+      {
+        "year": 2009,
+        "actual": 3685.9,
+        "projected": null
+      },
+      {
+        "year": 2010,
+        "actual": 3939.2,
+        "projected": null
+      },
+      {
+        "year": 2011,
+        "actual": 3727.7,
+        "projected": null
+      },
+      {
+        "year": 2012,
+        "actual": 3857.0,
+        "projected": null
+      },
+      {
+        "year": 2013,
+        "actual": 4056.3,
+        "projected": null
+      },
+      {
+        "year": 2014,
+        "actual": 3816.1,
+        "projected": null
+      },
+      {
+        "year": 2015,
+        "actual": 3815.5,
+        "projected": null
+      },
+      {
+        "year": 2016,
+        "actual": 4007.4,
+        "projected": null
+      },
+      {
+        "year": 2017,
+        "actual": 3418.8,
+        "projected": null
+      },
+      {
+        "year": 2018,
+        "actual": 2904.8,
+        "projected": null
+      },
+      {
+        "year": 2019,
+        "actual": 2773.0,
+        "projected": null
+      },
+      {
+        "year": 2020,
+        "actual": 2863.2,
+        "projected": null
+      },
+      {
+        "year": 2021,
+        "actual": 3077.5,
+        "projected": null
+      },
+      {
+        "year": 2022,
+        "actual": 2983.3,
+        "projected": null
+      },
+      {
+        "year": 2023,
+        "actual": 2124.1,
+        "projected": 2124.1
+      },
+      {
+        "year": 2024,
+        "actual": null,
+        "projected": 2410.9
+      },
+      {
+        "year": 2025,
+        "actual": null,
+        "projected": 2293.1
+      },
+      {
+        "year": 2026,
+        "actual": null,
+        "projected": 2175.4
+      },
+      {
+        "year": 2027,
+        "actual": null,
+        "projected": 2057.6
+      },
+      {
+        "year": 2028,
+        "actual": null,
+        "projected": 1939.8
+      },
+      {
+        "year": 2029,
+        "actual": null,
+        "projected": 1822.1
+      },
+      {
+        "year": 2030,
+        "actual": null,
+        "projected": 1704.3
+      }
+    ],
+    "Industry": [
+      {
+        "year": 1990,
+        "actual": 3310.5,
+        "projected": null
+      },
+      {
+        "year": 1995,
+        "actual": 2737.9,
+        "projected": null
+      },
+      {
+        "year": 1998,
+        "actual": 2566.9,
+        "projected": null
+      },
+      {
+        "year": 1999,
+        "actual": 2708.2,
+        "projected": null
+      },
+      {
+        "year": 2000,
+        "actual": 2321.3,
+        "projected": null
+      },
+      {
+        "year": 2001,
+        "actual": 2275.8,
+        "projected": null
+      },
+      {
+        "year": 2002,
+        "actual": 1393.7,
+        "projected": null
+      },
+      {
+        "year": 2003,
+        "actual": 1446.3,
+        "projected": null
+      },
+      {
+        "year": 2004,
+        "actual": 1532.4,
+        "projected": null
+      },
+      {
+        "year": 2005,
+        "actual": 2000.1,
+        "projected": null
+      },
+      {
+        "year": 2006,
+        "actual": 1956.2,
+        "projected": null
+      },
+      {
+        "year": 2007,
+        "actual": 2045.3,
+        "projected": null
+      },
+      {
+        "year": 2008,
+        "actual": 1720.9,
+        "projected": null
+      },
+      {
+        "year": 2009,
+        "actual": 1148.3,
+        "projected": null
+      },
+      {
+        "year": 2010,
+        "actual": 1357.8,
+        "projected": null
+      },
+      {
+        "year": 2011,
+        "actual": 1426.4,
+        "projected": null
+      },
+      {
+        "year": 2012,
+        "actual": 1356.6,
+        "projected": null
+      },
+      {
+        "year": 2013,
+        "actual": 1430.4,
+        "projected": null
+      },
+      {
+        "year": 2014,
+        "actual": 1576.4,
+        "projected": null
+      },
+      {
+        "year": 2015,
+        "actual": 1596.8,
+        "projected": null
+      },
+      {
+        "year": 2016,
+        "actual": 1392.7,
+        "projected": null
+      },
+      {
+        "year": 2017,
+        "actual": 1448.4,
+        "projected": null
+      },
+      {
+        "year": 2018,
+        "actual": 1372.6,
+        "projected": null
+      },
+      {
+        "year": 2019,
+        "actual": 1334.3,
+        "projected": null
+      },
+      {
+        "year": 2020,
+        "actual": 1213.7,
+        "projected": null
+      },
+      {
+        "year": 2021,
+        "actual": 1245.7,
+        "projected": null
+      },
+      {
+        "year": 2022,
+        "actual": 1179.7,
+        "projected": null
+      },
+      {
+        "year": 2023,
+        "actual": 1127.3,
+        "projected": 1127.3
+      },
+      {
+        "year": 2024,
+        "actual": null,
+        "projected": 1085.7
+      },
+      {
+        "year": 2025,
+        "actual": null,
+        "projected": 1040.9
+      },
+      {
+        "year": 2026,
+        "actual": null,
+        "projected": 996.1
+      },
+      {
+        "year": 2027,
+        "actual": null,
+        "projected": 951.3
+      },
+      {
+        "year": 2028,
+        "actual": null,
+        "projected": 906.5
+      },
+      {
+        "year": 2029,
+        "actual": null,
+        "projected": 861.7
+      },
+      {
+        "year": 2030,
+        "actual": null,
+        "projected": 816.9
+      }
+    ]
+  }
+}
