@@ -16,7 +16,7 @@ type View = "gwp100" | "gwp20";
 
 // ── GWP-weighted shares as reported by NAEI (View 1, GWP100 AR5) ──
 const V1 = { ch4: 72, n2o: 23, co2: 6 };
-const V1_SUM = V1.ch4 + V1.n2o + V1.co2; // 101 — normalise below
+const V1_SUM = V1.ch4 + V1.n2o + V1.co2; // 101 - normalise below
 
 // Back-calculate raw gas masses from GWP100, then re-weight by GWP20.
 // CH₄ GWP100 = 28 (AR5, no climate-carbon feedback)
@@ -48,14 +48,14 @@ const SHARES: Record<View, { ch4: number; n2o: number; co2: number }> = {
 };
 
 // ── Styling ────────────────────────────────────────────────────────
-// Muted data-journalism palette — avoids bright primaries
+// Muted data-journalism palette - avoids bright primaries
 const COLOURS = {
   ch4: "#b85a30", // muted burnt sienna
   n2o: "#6a8cad", // muted steel blue
   co2: "#c4ccd4", // light warm grey
 } as const;
 
-// Labels text colour — co2 segment is light so needs dark text
+// Labels text colour - co2 segment is light so needs dark text
 const LABEL_TEXT = {
   ch4: "white",
   n2o: "white",

@@ -87,7 +87,7 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             }}
           />
 
-          {/* Gap fill — only shown at step 7+ */}
+          {/* Gap fill - only shown at step 7+ */}
           <Area
             type="monotone"
             dataKey="projected"

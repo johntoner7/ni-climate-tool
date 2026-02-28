@@ -26,7 +26,7 @@ const CHART_HEIGHT = 420;
 const MARGIN_TOP = 10;
 const MARGIN_BOTTOM = 0;
 
-// Converts a data value to its SVG pixel Y — exact because the legend is outside the SVG
+// Converts a data value to its SVG pixel Y - exact because the legend is outside the SVG
 function toPixelY(value: number) {
   const plotHeight = CHART_HEIGHT - MARGIN_TOP - MARGIN_BOTTOM;
   return MARGIN_TOP + ((Y_DOMAIN[1] - value) / (Y_DOMAIN[1] - Y_DOMAIN[0])) * plotHeight;

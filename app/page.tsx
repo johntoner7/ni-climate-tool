@@ -9,7 +9,7 @@ import ScenarioModeller from "@/components/ScenarioModeller";
 import GasCompositionChart from "@/components/charts/GasCompositionChart";
 import { STEPS } from "@/lib/steps";
 
-type ChartId = 1 | 2 | 3 | 4 | 5;
+type ChartId = 1 | 2 | 3 | 4 | 5 | 6;
 
 const CHART_LABELS: Record<ChartId, string> = {
   1: "NI Emissions by Sector, 1990–2023",
@@ -17,6 +17,7 @@ const CHART_LABELS: Record<ChartId, string> = {
   3: "NI Emissions: Actuals & Projection to 2030",
   4: "Sector-level Projections to 2030",
   5: "Agricultural Greenhouse Gas Composition",
+  6: "Scenario Modeller: Agriculture to 2030",
 };
 
 const HERO_STATS = [
@@ -41,7 +42,7 @@ const HERO_STATS = [
   {
     label: "2030 Gap to Close",
     value: "612kt",
-    description: "CO₂e — equivalent to 270,000 cars, permanently",
+    description: "CO₂e - equivalent to 270,000 cars, permanently",
     isHighlight: false,
   },
 ];
@@ -85,15 +86,13 @@ export default function Home() {
       case 2:
         return <NationsLineChart />;
       case 3:
-        return activeStep >= 10 ? (
-          <ScenarioModeller />
-        ) : (
-          <ProjectionChart activeStep={activeStep} />
-        );
+        return <ProjectionChart activeStep={activeStep} />;
       case 4:
         return <SectorGrid activeStep={activeStep} />;
       case 5:
         return <GasCompositionChart className="w-full h-full overflow-y-auto" />;
+      case 6:
+        return <ScenarioModeller />;
     }
   };
 
@@ -104,13 +103,13 @@ export default function Home() {
       <div className="flex flex-col lg:flex-row">
         <StepsColumn />
 
-        <div className="order-1 lg:order-2 w-full lg:w-[65%] sticky top-0 h-[50vh] lg:h-screen flex flex-col px-5 lg:px-16 py-4 lg:py-6 lg:border-l border-gray-100 bg-white overflow-hidden z-10">
+        <div className={`order-1 lg:order-2 w-full lg:w-[65%] sticky top-0 h-[60vh] lg:h-screen flex flex-col justify-center px-5 lg:px-16 py-4 lg:py-6 lg:border-l border-gray-100 bg-white z-10 ${activeChart === 6 ? "overflow-y-auto" : "overflow-hidden"}`}>
           <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-3 lg:mb-4 shrink-0">
             {CHART_LABELS[activeChart]}
           </p>
 
           <div
-            key={`${activeChart}-${activeStep >= 10 ? "scenario" : "base"}`}
+            key={activeChart}
             className="flex-1 min-h-0 flex items-center justify-center chart-fade-in"
           >
             <div className="w-full h-full">{renderChart()}</div>
@@ -139,6 +138,7 @@ export default function Home() {
   );
 }
 
+
 function Hero() {
   return (
     <header className="min-h-screen flex items-center bg-[#FFF9F5] border-b border-[#e8e0d8] px-8 lg:px-16 py-12 lg:py-20 hero-fade-in">
@@ -154,7 +154,7 @@ function Hero() {
               way.
             </h1>
             <p className="text-lg text-[#444444] mt-5 max-w-[480px] leading-relaxed">
-              Almost all of that reduction came from electricity — a UK-wide
+              Almost all of that reduction came from electricity - a UK-wide
               shift that happened to Northern Ireland. The sector Stormont
               controls most directly has increased emissions by 8% over the same
               period.
@@ -225,9 +225,10 @@ function StatCard({
 }
 
 function StepsColumn() {
+  const scrollSteps = STEPS;
   return (
     <div className="order-2 lg:order-1 w-full lg:w-[35%]">
-      {STEPS.map((step) => (
+      {scrollSteps.map((step) => (
         <div
           key={step.id}
           className="step min-h-[75vh] lg:min-h-screen flex items-center px-8 lg:px-12"
@@ -265,6 +266,17 @@ function Footer() {
         Projections use linear regression on 2018–2023 actuals per sector. 2030
         target: 48% reduction from 1990 baseline (NI Climate Change Act 2022).
         DAERA projections not used due to GWP mismatch (AR4 vs AR5).
+      </p>
+      <p className="text-[11px] text-gray-400 leading-relaxed max-w-[60ch] mt-3">
+        <a 
+          href="https://www.flaticon.com/free-icons/cow" 
+          title="cow icons"
+          className="hover:text-gray-600 underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Cow icons created by Kach - Flaticon
+        </a>
       </p>
     </footer>
   );
