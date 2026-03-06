@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 type DataPoint = {
   year: number;
@@ -36,6 +37,7 @@ export default function SectorMiniChart({
   change1990,
   activeStep,
 }: Props) {
+  const isMobile = useIsMobile();
   const [isDark, setIsDark] = useState(false);
   const dimmed = activeStep === 9 && !HIGHLIGHTED_AT_9.has(sector);
 
@@ -70,9 +72,9 @@ export default function SectorMiniChart({
         >
           <XAxis
             dataKey="year"
-            tick={{ fontSize: 9, fill: isDark ? "#9ca3af" : "#6b7280" }}
+            tick={{ fontSize: isMobile ? 10 : 9, fill: isDark ? "#9ca3af" : "#6b7280" }}
             tickLine={false}
-            ticks={[1990, 2000, 2010, 2023, 2030]}
+            ticks={isMobile ? [1990, 2023, 2030] : [1990, 2000, 2010, 2023, 2030]}
           />
           <YAxis hide />
           <Tooltip
