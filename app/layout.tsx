@@ -1,22 +1,28 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { geistSans, geistMono } from "@/lib/fonts";
 import Providers from "@/components/Providers";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const TITLE = "NI Climate Tool";
+const DESCRIPTION =
+  "Northern Ireland has cut greenhouse gas emissions by 31.5% since 1990. Almost none of it was driven by the sectors Stormont controls. An interactive scrollytelling piece.";
 
 export const metadata: Metadata = {
-  title: "NI Climate Arithmetic",
-  description:
-    "Northern Ireland has cut greenhouse gas emissions by 31.5% since 1990. Almost none of it was driven by the sectors Stormont controls. An interactive scrollytelling piece.",
+  title: TITLE,
+  description: DESCRIPTION,
+  metadataBase: new URL("https://ni-climate-tool.vercel.app"),
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    type: "article",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: TITLE }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
@@ -25,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
