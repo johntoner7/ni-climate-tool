@@ -473,5 +473,203 @@
       "Scotland": 39574.2,
       "Wales": 34084.3
     }
+  ],
+  "agriculture_by_year": [
+    {
+      "year": 1990,
+      "Northern Ireland": 5198.7,
+      "England": 34657.4,
+      "Scotland": 8625.4,
+      "Wales": 5919.5
+    },
+    {
+      "year": 1995,
+      "Northern Ireland": 5656.5,
+      "England": 33401.5,
+      "Scotland": 8673.3,
+      "Wales": 5941.5
+    },
+    {
+      "year": 1998,
+      "Northern Ireland": 5808.5,
+      "England": 33634.9,
+      "Scotland": 8824.7,
+      "Wales": 6025.8
+    },
+    {
+      "year": 1999,
+      "Northern Ireland": 5742.0,
+      "England": 33888.1,
+      "Scotland": 8732.0,
+      "Wales": 6178.8
+    },
+    {
+      "year": 2000,
+      "Northern Ireland": 5573.8,
+      "England": 32554.8,
+      "Scotland": 8578.8,
+      "Wales": 5872.8
+    },
+    {
+      "year": 2001,
+      "Northern Ireland": 5573.5,
+      "England": 30737.5,
+      "Scotland": 8355.2,
+      "Wales": 5714.2
+    },
+    {
+      "year": 2002,
+      "Northern Ireland": 5558.1,
+      "England": 30607.6,
+      "Scotland": 8350.6,
+      "Wales": 5555.5
+    },
+    {
+      "year": 2003,
+      "Northern Ireland": 5600.6,
+      "England": 30779.3,
+      "Scotland": 8388.0,
+      "Wales": 5747.0
+    },
+    {
+      "year": 2004,
+      "Northern Ireland": 5586.1,
+      "England": 31395.8,
+      "Scotland": 8444.3,
+      "Wales": 5871.2
+    },
+    {
+      "year": 2005,
+      "Northern Ireland": 5659.1,
+      "England": 31558.8,
+      "Scotland": 8518.9,
+      "Wales": 5701.7
+    },
+    {
+      "year": 2006,
+      "Northern Ireland": 5547.8,
+      "England": 31009.9,
+      "Scotland": 8242.6,
+      "Wales": 5586.0
+    },
+    {
+      "year": 2007,
+      "Northern Ireland": 5476.9,
+      "England": 30787.1,
+      "Scotland": 8322.5,
+      "Wales": 5401.1
+    },
+    {
+      "year": 2008,
+      "Northern Ireland": 5353.9,
+      "England": 31050.4,
+      "Scotland": 8162.6,
+      "Wales": 5131.1
+    },
+    {
+      "year": 2009,
+      "Northern Ireland": 5316.1,
+      "England": 30607.4,
+      "Scotland": 8203.8,
+      "Wales": 5087.7
+    },
+    {
+      "year": 2010,
+      "Northern Ireland": 5414.9,
+      "England": 30846.9,
+      "Scotland": 8157.2,
+      "Wales": 5208.3
+    },
+    {
+      "year": 2011,
+      "Northern Ireland": 5394.5,
+      "England": 30247.9,
+      "Scotland": 8009.9,
+      "Wales": 5167.3
+    },
+    {
+      "year": 2012,
+      "Northern Ireland": 5516.2,
+      "England": 30527.0,
+      "Scotland": 8032.5,
+      "Wales": 5182.2
+    },
+    {
+      "year": 2013,
+      "Northern Ireland": 5490.7,
+      "England": 30482.3,
+      "Scotland": 7890.2,
+      "Wales": 5221.8
+    },
+    {
+      "year": 2014,
+      "Northern Ireland": 5492.6,
+      "England": 30620.9,
+      "Scotland": 7926.5,
+      "Wales": 5394.3
+    },
+    {
+      "year": 2015,
+      "Northern Ireland": 5654.0,
+      "England": 31408.5,
+      "Scotland": 8107.3,
+      "Wales": 5447.3
+    },
+    {
+      "year": 2016,
+      "Northern Ireland": 5720.0,
+      "England": 30842.1,
+      "Scotland": 7966.8,
+      "Wales": 5496.7
+    },
+    {
+      "year": 2017,
+      "Northern Ireland": 5774.5,
+      "England": 30777.5,
+      "Scotland": 7861.0,
+      "Wales": 5532.0
+    },
+    {
+      "year": 2018,
+      "Northern Ireland": 5645.7,
+      "England": 29542.0,
+      "Scotland": 7580.5,
+      "Wales": 5331.0
+    },
+    {
+      "year": 2019,
+      "Northern Ireland": 5645.5,
+      "England": 29922.6,
+      "Scotland": 7685.2,
+      "Wales": 5390.5
+    },
+    {
+      "year": 2020,
+      "Northern Ireland": 5684.0,
+      "England": 28859.9,
+      "Scotland": 7626.1,
+      "Wales": 5251.6
+    },
+    {
+      "year": 2021,
+      "Northern Ireland": 5860.7,
+      "England": 29147.5,
+      "Scotland": 7691.6,
+      "Wales": 5416.9
+    },
+    {
+      "year": 2022,
+      "Northern Ireland": 5708.7,
+      "England": 28395.4,
+      "Scotland": 7511.7,
+      "Wales": 5240.4
+    },
+    {
+      "year": 2023,
+      "Northern Ireland": 5615.2,
+      "England": 28335.2,
+      "Scotland": 7505.3,
+      "Wales": 5158.2
+    }
   ]
 }
