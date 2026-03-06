@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   AreaChart,
   Area,
@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import { niSectorData } from "@/lib/data";
 import ChartTooltip from "./ChartTooltip";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 // Improved color palette with distinct, differentiated hues
 const SECTOR_COLOURS = {
@@ -27,23 +28,8 @@ const SECTOR_COLOURS = {
 const SECTORS = Object.keys(SECTOR_COLOURS) as Array<keyof typeof SECTOR_COLOURS>;
 
 export default function SectorAreaChart({ activeStep }: { activeStep?: number }) {
+  const isMobile = useIsMobile();
   const [hoveredSector, setHoveredSector] = useState<string | null>(null);
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    // Check initial theme
-    const checkDark = () => setIsDark(document.documentElement.classList.contains("dark"));
-    checkDark();
-    
-    // Watch for theme changes
-    const observer = new MutationObserver(checkDark);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    
-    return () => observer.disconnect();
-  }, []);
 
   const highlightedSector: string | null =
     activeStep === 2 ? "Electricity" :
@@ -85,29 +71,31 @@ export default function SectorAreaChart({ activeStep }: { activeStep?: number })
     return null;
   };
   return (
-    <div className="w-full">
+    <div className="w-full h-full flex flex-col justify-center">
       <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">
         kt CO₂e · Source: NAEI
       </p>
-      <ResponsiveContainer width="100%" height={420}>
+      <ResponsiveContainer width="100%" height={isMobile ? 260 : 420}>
           <AreaChart
             data={niSectorData}
-            margin={{ top: 10, right: 110, left: 20, bottom: 0 }}
+            margin={{ top: 10, right: isMobile ? 20 : 110, left: isMobile ? 0 : 20, bottom: 0 }}
           >
-            <CartesianGrid vertical={false} stroke={isDark ? "#374151" : "#e5e7eb"} />
+            <CartesianGrid vertical={false} stroke="#e5e7eb" />
             <XAxis
               dataKey="year"
               tickLine={false}
-              tick={{ fontSize: 12, fill: isDark ? "#9ca3af" : "#6b7280" }}
+              tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
+              ticks={isMobile ? [1990, 2000, 2010, 2023] : undefined}
             />
             <YAxis
               tickLine={false}
-              tick={{ fontSize: 12, fill: isDark ? "#9ca3af" : "#6b7280" }}
+              tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
               tickFormatter={(v) => `${(v / 1000).toFixed(0)}Mt`}
+              width={isMobile ? 28 : undefined}
             />
             <Tooltip content={<CustomTooltip />} />
-            {/* Direct labels on the right using ReferenceLine */}
-            {SECTORS.map((sector) => (
+            {/* Direct labels on the right — desktop only */}
+            {!isMobile && SECTORS.map((sector) => (
               <ReferenceLine
                 key={`label-${sector}`}
                 y={labelYPositions[sector]}
@@ -148,6 +136,17 @@ export default function SectorAreaChart({ activeStep }: { activeStep?: number })
             ))}
           </AreaChart>
         </ResponsiveContainer>
+      {/* Compact legend — mobile only */}
+      {isMobile && (
+        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 px-1">
+          {SECTORS.map((sector) => (
+            <div key={sector} className="flex items-center gap-1">
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SECTOR_COLOURS[sector] }} />
+              <span className="text-[10px] text-gray-500">{sector}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
