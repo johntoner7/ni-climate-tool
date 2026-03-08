@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import nationsData from "@/public/data/nations_comparison.json";
 import ChartTooltip from "./ChartTooltip";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 const NATION_COLOURS: Record<string, string> = {
   "Northern Ireland": "#c1440e",
@@ -21,27 +22,48 @@ const NATION_COLOURS: Record<string, string> = {
   "Wales":            "#8fbc8f",
 };
 
-const Y_DOMAIN: [number, number] = [40, 110];
-const CHART_HEIGHT = 420;
-const MARGIN_TOP = 10;
-const MARGIN_BOTTOM = 0;
+const TOTAL_Y_DOMAIN: [number, number] = [40, 110];
+const AGRI_Y_DOMAIN:  [number, number] = [75, 120];
 
-// Converts a data value to its SVG pixel Y - exact because the legend is outside the SVG
-function toPixelY(value: number) {
-  const plotHeight = CHART_HEIGHT - MARGIN_TOP - MARGIN_BOTTOM;
-  return MARGIN_TOP + ((Y_DOMAIN[1] - value) / (Y_DOMAIN[1] - Y_DOMAIN[0])) * plotHeight;
+const CHART_HEIGHT   = 420;
+const MARGIN_TOP     = 10;
+const MARGIN_BOTTOM  = 0;
+
+// ── Pre-compute agriculture indexed (1990 = 100) ─────────────────────────────
+
+const AGRI_1990: Record<string, number> = {
+  "Northern Ireland": 5198.7,
+  "England":          34657.4,
+  "Scotland":         8625.4,
+  "Wales":            5919.5,
+};
+
+const agricultureIndexed = (
+  nationsData.agriculture_by_year as Array<Record<string, number>>
+).map((row) => ({
+  year:               row.year,
+  "Northern Ireland": parseFloat(((row["Northern Ireland"] / AGRI_1990["Northern Ireland"]) * 100).toFixed(2)),
+  "England":          parseFloat(((row["England"]          / AGRI_1990["England"])          * 100).toFixed(2)),
+  "Scotland":         parseFloat(((row["Scotland"]         / AGRI_1990["Scotland"])         * 100).toFixed(2)),
+  "Wales":            parseFloat(((row["Wales"]            / AGRI_1990["Wales"])            * 100).toFixed(2)),
+}));
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function toPixelY(value: number, domain: [number, number], chartHeight: number) {
+  const plotHeight = chartHeight - MARGIN_TOP - MARGIN_BOTTOM;
+  return MARGIN_TOP + ((domain[1] - value) / (domain[1] - domain[0])) * plotHeight;
 }
 
-export default function NationsLineChart() {
-  const [isDark, setIsDark] = useState(false);
+// ── Component ─────────────────────────────────────────────────────────────────
 
-  useEffect(() => {
-    const checkDark = () => setIsDark(document.documentElement.classList.contains("dark"));
-    checkDark();
-    const observer = new MutationObserver(checkDark);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
-  }, []);
+export default function NationsLineChart() {
+  const isMobile = useIsMobile();
+  const [tab, setTab] = useState<"total" | "agriculture">("agriculture");
+
+  const isAgri   = tab === "agriculture";
+  const chartData = isAgri ? agricultureIndexed : nationsData.by_year_indexed;
+  const yDomain   = isAgri ? AGRI_Y_DOMAIN : TOTAL_Y_DOMAIN;
 
   const CustomTooltip = ({ active, payload, label, coordinate }: any) => {
     if (!active || !payload?.length || coordinate?.y == null) return null;
@@ -51,7 +73,7 @@ export default function NationsLineChart() {
     let closestDist = Infinity;
     for (const p of payload) {
       if (p.value == null) continue;
-      const dist = Math.abs(toPixelY(p.value) - coordinate.y);
+      const dist = Math.abs(toPixelY(p.value, yDomain, isMobile ? 260 : CHART_HEIGHT) - coordinate.y);
       if (dist < closestDist) { closestDist = dist; closest = p; }
     }
 
@@ -69,27 +91,56 @@ export default function NationsLineChart() {
   };
 
   return (
-    <div className="w-full">
-      <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">
-        Index (1990=100) · Source: NAEI
-      </p>
-      <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
+    <div className="w-full h-full flex flex-col justify-center">
+
+      {/* Tab row */}
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-xs text-gray-400 dark:text-gray-500">
+          Index (1990=100) · Source: NAEI
+        </p>
+        <div className="flex gap-1 text-[11px]">
+          <button
+            onClick={() => setTab("total")}
+            className={`px-2.5 py-1 rounded transition-colors ${
+              tab === "total"
+                ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
+                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            }`}
+          >
+            All emissions
+          </button>
+          <button
+            onClick={() => setTab("agriculture")}
+            className={`px-2.5 py-1 rounded transition-colors ${
+              tab === "agriculture"
+                ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
+                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            }`}
+          >
+            Agriculture only
+          </button>
+        </div>
+      </div>
+
+      <ResponsiveContainer width="100%" height={isMobile ? 260 : CHART_HEIGHT}>
         <LineChart
-          data={nationsData.by_year_indexed}
-          margin={{ top: MARGIN_TOP, right: 20, left: 20, bottom: MARGIN_BOTTOM }}
+          data={chartData}
+          margin={{ top: MARGIN_TOP, right: isMobile ? 10 : 20, left: isMobile ? 0 : 20, bottom: MARGIN_BOTTOM }}
         >
-          <CartesianGrid vertical={false} stroke={isDark ? "#374151" : "#e5e7eb"} />
+          <CartesianGrid vertical={false} stroke="#e5e7eb" />
           <XAxis
             dataKey="year"
             tickLine={false}
-            tick={{ fontSize: 12, fill: isDark ? "#9ca3af" : "#6b7280" }}
+            tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
+            ticks={isMobile ? [1990, 2000, 2010, 2023] : undefined}
           />
           <YAxis
             tickLine={false}
-            tick={{ fontSize: 12, fill: isDark ? "#9ca3af" : "#6b7280" }}
+            tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
             tickFormatter={(v) => `${v}`}
-            domain={Y_DOMAIN}
-            label={{
+            domain={yDomain}
+            width={isMobile ? 28 : undefined}
+            label={isMobile ? undefined : {
               value: "Index (1990=100)",
               angle: -90,
               position: "insideLeft",
@@ -116,21 +167,23 @@ export default function NationsLineChart() {
           ))}
         </LineChart>
       </ResponsiveContainer>
-      {/* Legend rendered outside the SVG so it doesn't affect the plot area height */}
-      <div className="flex flex-wrap gap-x-6 gap-y-1 mt-4 justify-center">
+
+      {/* Legend */}
+      <div className={`flex flex-wrap gap-y-1 mt-4 justify-center ${isMobile ? "gap-x-3" : "gap-x-6"}`}>
         {Object.entries(NATION_COLOURS).map(([nation, colour]) => (
           <div key={nation} className="flex items-center gap-1.5">
             <div
-              className="h-0.5 w-5 rounded"
+              className="w-5 rounded"
               style={{
                 backgroundColor: colour,
                 height: nation === "Northern Ireland" ? 3 : 2,
               }}
             />
-            <span className="text-xs text-gray-600 dark:text-gray-300">{nation}</span>
+            <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>{nation}</span>
           </div>
         ))}
       </div>
+
     </div>
   );
 }

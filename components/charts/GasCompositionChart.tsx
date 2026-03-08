@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from "recharts";
 import ChartTooltip from "./ChartTooltip";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 type View = "gwp100" | "gwp20";
 
@@ -19,7 +20,7 @@ const V1 = { ch4: 72, n2o: 23, co2: 6 };
 const V1_SUM = V1.ch4 + V1.n2o + V1.co2; // 101 - normalise below
 
 // Back-calculate raw gas masses from GWP100, then re-weight by GWP20.
-// CH₄ GWP100 = 28 (AR5, no climate-carbon feedback)
+// CH₄ GWP100 = 28, GWP20 = 84 (AR5, no climate-carbon feedback)
 // N₂O GWP100 ≈ GWP20 ≈ 273 (stable across timescales, per spec)
 const rawMass = {
   ch4: V1.ch4 / 28,
@@ -27,7 +28,7 @@ const rawMass = {
   co2: V1.co2 / 1,
 };
 const gwp20w = {
-  ch4: rawMass.ch4 * 80.8,
+  ch4: rawMass.ch4 * 84,
   n2o: rawMass.n2o * 273,
   co2: rawMass.co2 * 1,
 };
@@ -48,7 +49,6 @@ const SHARES: Record<View, { ch4: number; n2o: number; co2: number }> = {
 };
 
 // ── Styling ────────────────────────────────────────────────────────
-// Muted data-journalism palette - avoids bright primaries
 const COLOURS = {
   ch4: "#b85a30", // muted burnt sienna
   n2o: "#6a8cad", // muted steel blue
@@ -106,6 +106,7 @@ export default function GasCompositionChart({
 }: {
   className?: string;
 }) {
+  const isMobile = useIsMobile();
   const [view, setView] = useState<View>("gwp100");
   const s = SHARES[view];
 
@@ -144,7 +145,9 @@ export default function GasCompositionChart({
           <button
             key={v}
             onClick={() => setView(v)}
-            className={`px-3.5 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
+            className={`rounded-full font-medium transition-all duration-200 ${
+              isMobile ? "px-2.5 py-1 text-[11px]" : "px-3.5 py-1 text-xs"
+            } ${
               view === v
                 ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900"
                 : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200"
@@ -187,14 +190,14 @@ export default function GasCompositionChart({
       </ResponsiveContainer>
 
       {/* ── Legend ──────────────────────────────────────────────── */}
-      <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-3">
+      <div className={`flex flex-wrap gap-y-1.5 mt-3 ${isMobile ? "gap-x-3" : "gap-x-5"}`}>
         {(["ch4", "n2o", "co2"] as const).map((k) => (
           <div key={k} className="flex items-center gap-1.5">
             <div
               className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
               style={{ backgroundColor: COLOURS[k] }}
             />
-            <span className="text-xs text-gray-500 dark:text-gray-400">
+            <span className={`text-gray-500 dark:text-gray-400 ${isMobile ? "text-[10px]" : "text-xs"}`}>
               {DISPLAY_LABELS[k]}
             </span>
           </div>

@@ -5,6 +5,7 @@ import SectorAreaChart from "@/components/charts/SectorAreaChart";
 import NationsLineChart from "@/components/charts/NationsLineChart";
 import ProjectionChart from "@/components/charts/ProjectionChart";
 import SectorGrid from "@/components/charts/SectorGrid";
+import AgriculturePathwayChart from "@/components/charts/AgriculturePathwayChart";
 import ScenarioModeller from "@/components/ScenarioModeller";
 import GasCompositionChart from "@/components/charts/GasCompositionChart";
 import { STEPS } from "@/lib/steps";
@@ -13,7 +14,7 @@ import Hero from "@/components/Hero";
 import StepsColumn from "@/components/StepsColumn";
 import Footer from "@/components/Footer";
 
-type ChartId = 1 | 2 | 3 | 4 | 5;
+type ChartId = 1 | 2 | 3 | 4 | 5 | 6;
 
 
 function renderChartForStep(chartId: ChartId, stepId: number) {
@@ -23,6 +24,7 @@ function renderChartForStep(chartId: ChartId, stepId: number) {
     case 3: return <ProjectionChart activeStep={stepId} />;
     case 4: return <SectorGrid activeStep={stepId} />;
     case 5: return <GasCompositionChart className="w-full h-full flex flex-col justify-center items-center overflow-y-auto" />;
+    case 6: return <AgriculturePathwayChart />;
   }
 }
 
@@ -74,6 +76,8 @@ export default function Home() {
         return <ProjectionChart activeStep={activeStep} />;
       case 4:
         return <SectorGrid activeStep={activeStep} />;
+      case 6:
+        return <AgriculturePathwayChart />;
       case 5:
         return <GasCompositionChart className="w-full h-full flex flex-col justify-center items-center overflow-y-auto" />;
     }
@@ -110,12 +114,12 @@ export default function Home() {
                   {para}
                 </p>
               ))}
-              {step.id === TOTAL_STEPS && (
+              {step.cta && (
                 <a
-                  href="#scenario"
+                  href={step.cta}
                   className="mt-5 inline-flex items-center gap-2 text-[12px] font-medium text-[#c1440e] border border-[#c1440e] rounded px-3 py-2 hover:bg-[#c1440e] hover:text-white transition-colors"
                 >
-                  Open scenario modeller ↓
+                  Open the scenario modeller ↓
                 </a>
               )}
             </div>

@@ -29,6 +29,14 @@ export default function StepsColumn({ totalSteps }: { totalSteps?: number }) {
                 {paragraph}
               </p>
             ))}
+            {step.cta && (
+              <a
+                href={step.cta}
+                className="mt-5 inline-flex items-center gap-2 text-[12px] font-medium text-[#c1440e] border border-[#c1440e] rounded px-3 py-2 hover:bg-[#c1440e] hover:text-white transition-colors"
+              >
+                Open the scenario modeller ↓
+              </a>
+            )}
           </div>
         </div>
       ))}

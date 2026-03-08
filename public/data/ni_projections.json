@@ -6,9 +6,11 @@
     "baseline_1990_kt": 26564.6,
     "target_2030_kt": 13813.6,
     "target_basis": "48% reduction on 1990 NAEI AR5 baseline (NI Climate Change Act 2022)",
-    "total_projected_2030_kt": 14426.0,
-    "gap_kt": 612.4,
-    "projection_method": "Total: linear interpolation to documented 2030 endpoint. Sectors: linear regression on 2018-2023 trend."
+    "total_projected_2030_kt": 15547.7,
+    "gap_kt": 1734.1,
+    "projection_2030": 15547.7,
+    "gap": 1734.1,
+    "projection_method": "Total and sectors: linear regression on 2018-2023 actuals, extrapolated to 2030. No official NI total-emissions projection to 2030 exists; the Draft CAP covers only to 2027."
   },
   "sector_changes_since_1990": {
     "Agriculture": "+8.0%",
@@ -162,37 +164,37 @@
     {
       "year": 2024,
       "actual": null,
-      "projected": 17671.3
+      "projected": 17746.1
     },
     {
       "year": 2025,
       "actual": null,
-      "projected": 17130.4
+      "projected": 17279.9
     },
     {
       "year": 2026,
       "actual": null,
-      "projected": 16589.5
+      "projected": 16813.8
     },
     {
       "year": 2027,
       "actual": null,
-      "projected": 16048.7
+      "projected": 16347.6
     },
     {
       "year": 2028,
       "actual": null,
-      "projected": 15507.8
+      "projected": 15881.5
     },
     {
       "year": 2029,
       "actual": null,
-      "projected": 14966.9
+      "projected": 15415.3
     },
     {
       "year": 2030,
       "actual": null,
-      "projected": 14426.0
+      "projected": 15547.7
     }
   ],
   "chart3_agriculture": [
