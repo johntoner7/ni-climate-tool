@@ -126,7 +126,7 @@ export default function ScenarioModeller() {
 
   // ── Chart data ────────────────────────────────────────────────────────────
 
-  const committedProjected2030 = AGRI_BASELINE_2030 - COMMITTED_BASELINE_KT; // = 5394
+  const committedProjected2030 = AGRI_BASELINE_2030 - COMMITTED_BASELINE_KT; // = 5373
 
   const chartData = BASE_DATA.map((point) => {
     if (point.year < 2023) {

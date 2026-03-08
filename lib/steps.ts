@@ -61,7 +61,7 @@ export const STEPS: Step[] = [
   {
     id: 9,
     chart: 6,
-    eyebrow: "THE PLAN THAT ISN'T",
+    eyebrow: "THE DRAFT PLAN",
     copy: "The Climate Change Committee advised that meeting the 2030 target requires a 22% reduction in dairy cattle numbers and 17% in beef cattle, compared to 2020 levels.\n\nThe draft Climate Action Plan takes a different approach. It proposes a 7% reduction in cattle numbers through productivity improvements, including faster slaughter ages and tighter calving intervals, while maintaining output. It does not explain how the remaining gap is closed.",
   },
   {
