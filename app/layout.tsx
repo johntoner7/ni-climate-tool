@@ -3,7 +3,7 @@ import { geistSans, geistMono } from "@/lib/fonts";
 import Providers from "@/components/Providers";
 import "./globals.css";
 
-const TITLE = "NI Climate Tool";
+const TITLE = "Northern Ireland Emissions Gap";
 const DESCRIPTION =
   "Northern Ireland has cut greenhouse gas emissions by 31.5% since 1990. Almost none of it was driven by the sectors Stormont controls. An interactive scrollytelling piece.";
 
