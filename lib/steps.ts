@@ -30,15 +30,15 @@ export const STEPS: Step[] = [
   },
   {
     id: 4,
-    chart: 5,
-    eyebrow: "WHERE AGRICULTURE'S EMISSIONS COME FROM",
-    copy: "The chart shows what drives NI's agricultural emissions. More than half \ncomes from a single source: enteric fermentation, the methane produced in \nthe digestive systems of cattle and sheep.",
-  },
-  {
-    id: 5,
     chart: 2,
     eyebrow: "NORTHERN IRELAND IS THE OUTLIER",
     copy: "Every other UK nation has reduced agricultural emissions since 1990. England has reduced by 18%, Scotland by 13%, and Wales by 13%.\n\nNorthern Ireland is up 8%.\n\nThe other nations faced similar pressures and still reduced.",
+  },
+  {
+    id: 5,
+    chart: 5,
+    eyebrow: "WHERE AGRICULTURE'S EMISSIONS COME FROM",
+    copy: "The chart shows what drives NI's agricultural emissions. More than half \ncomes from a single source: enteric fermentation, the methane produced in \nthe digestive systems of cattle and sheep.",
   },
   {
     id: 6,
@@ -62,7 +62,7 @@ export const STEPS: Step[] = [
     id: 9,
     chart: 6,
     eyebrow: "THE DRAFT PLAN",
-    copy: "The Climate Change Committee advised that meeting the 2030 target requires a 22% reduction in dairy cattle numbers and 17% in beef cattle, compared to 2020 levels.\n\nThe draft Climate Action Plan takes a different approach. It proposes a 7% reduction in cattle numbers through productivity improvements, including faster slaughter ages and tighter calving intervals, while maintaining output. It does not explain how the remaining gap is closed.",
+    copy: "The Climate Change Committee advised that meeting the 2030 target requires a 22% reduction in dairy cattle numbers and 17% in beef cattle, compared to 2020 levels. Those figures come from the Committee's Stretch Ambition sectoral pathway modelling for Northern Ireland, set out in 'The path to a Net Zero Northern Ireland' (2023).\n\nThe draft Climate Action Plan takes a different approach. It proposes a 7% reduction in cattle numbers through productivity improvements, including faster slaughter ages and tighter calving intervals, while maintaining output. It does not explain how the remaining gap is closed.",
   },
   {
     id: 10,
