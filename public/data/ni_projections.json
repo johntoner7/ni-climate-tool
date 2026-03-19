@@ -134,67 +134,80 @@
     {
       "year": 2018,
       "actual": 21033.4,
-      "projected": null
+      "projected": null,
+      "ols": 21140
     },
     {
       "year": 2019,
       "actual": 20577.0,
-      "projected": null
+      "projected": null,
+      "ols": 20674
     },
     {
       "year": 2020,
       "actual": 19863.2,
-      "projected": null
+      "projected": null,
+      "ols": 20208
     },
     {
       "year": 2021,
       "actual": 20565.5,
-      "projected": null
+      "projected": null,
+      "ols": 19742
     },
     {
       "year": 2022,
       "actual": 19606.3,
-      "projected": null
+      "projected": null,
+      "ols": 19276
     },
     {
       "year": 2023,
       "actual": 18212.2,
-      "projected": 18212.2
+      "projected": null,
+      "ols": 18810
     },
     {
       "year": 2024,
       "actual": null,
-      "projected": 17746.1
+      "projected": 18344,
+      "ols": 18344
     },
     {
       "year": 2025,
       "actual": null,
-      "projected": 17279.9
+      "projected": 17878,
+      "ols": 17878
     },
     {
       "year": 2026,
       "actual": null,
-      "projected": 16813.8
+      "projected": 17412,
+      "ols": 17412
     },
     {
       "year": 2027,
       "actual": null,
-      "projected": 16347.6
+      "projected": 16946,
+      "ols": 16946
     },
     {
       "year": 2028,
       "actual": null,
-      "projected": 15881.5
+      "projected": 16480,
+      "ols": 16480
     },
     {
       "year": 2029,
       "actual": null,
-      "projected": 15415.3
+      "projected": 16014,
+      "ols": 16014
     },
     {
       "year": 2030,
       "actual": null,
-      "projected": 15547.7
+      "projected": 15548,
+      "ols": 15548
     }
   ],
   "chart3_agriculture": [

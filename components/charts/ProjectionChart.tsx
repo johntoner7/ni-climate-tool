@@ -12,41 +12,65 @@ import {
   ReferenceLine,
 } from "recharts";
 import projectionsData from "@/public/data/ni_projections.json";
-import ChartTooltip from "./ChartTooltip";
 import { useIsMobile } from "@/lib/useIsMobile";
 
 const TARGET = projectionsData.metadata.target_2030_kt;
 
+const OLS_COLOUR   = "#6b7280";
+const ACTUAL_COLOUR = "#1e3a5f";
+
 export default function ProjectionChart({ activeStep }: { activeStep?: number }) {
   const isMobile = useIsMobile();
-  const showGap = activeStep === undefined || activeStep >= 9;
+  const showGap = activeStep === undefined || activeStep >= 7;
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (!active || !payload?.length) return null;
-    const item = payload.find((p: any) => p.value != null);
-    if (!item) return null;
 
-    const name = item.dataKey === "actual" ? "Actual emissions" : "Projected (current trend)";
+    const actual = payload.find((p: any) => p.dataKey === "actual" && p.value != null);
+    const ols    = payload.find((p: any) => p.dataKey === "ols"    && p.value != null);
+
+    if (!actual && !ols) return null;
+
     return (
-      <ChartTooltip
-        label={label}
-        name={name}
-        value={`${item.value.toLocaleString()} kt`}
-        color="#1e3a5f"
-        indicatorType="line"
-      />
+      <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-600 rounded shadow-lg text-xs min-w-[160px]">
+        <p className="font-semibold text-gray-700 dark:text-gray-200 mb-2">{label}</p>
+        {actual && (
+          <div className="flex items-center gap-2 mb-1.5">
+            <div className="w-5 h-[2px] rounded flex-shrink-0" style={{ backgroundColor: ACTUAL_COLOUR }} />
+            <span className="text-gray-600 dark:text-gray-300">
+              <span className="font-medium">Actual:</span>{" "}
+              {actual.value.toLocaleString()} kt
+            </span>
+          </div>
+        )}
+        {ols && (
+          <div className="flex items-center gap-2">
+            <div
+              className="w-5 flex-shrink-0"
+              style={{
+                height: 1,
+                backgroundImage: `repeating-linear-gradient(to right, ${OLS_COLOUR} 0, ${OLS_COLOUR} 4px, transparent 4px, transparent 7px)`,
+              }}
+            />
+            <span className="text-gray-600 dark:text-gray-300">
+              <span className="font-medium">OLS trend:</span>{" "}
+              {ols.value.toLocaleString()} kt
+            </span>
+          </div>
+        )}
+      </div>
     );
   };
 
   return (
     <div className="w-full h-full flex flex-col justify-center">
       <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">
-        kt CO₂e · Source: NAEI
+        Mt CO₂e · Source: NAEI
       </p>
       <ResponsiveContainer width="100%" height={isMobile ? 260 : 420}>
         <ComposedChart
           data={projectionsData.chart3_total}
-          margin={{ top: 20, right: isMobile ? 15 : 60, left: isMobile ? 0 : 20, bottom: 0 }}
+          margin={{ top: 20, right: isMobile ? 15 : 60, left: isMobile ? 0 : 10, bottom: isMobile ? 0 : 20 }}
         >
           <CartesianGrid vertical={false} stroke="#e5e7eb" />
           <XAxis
@@ -62,7 +86,7 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
             tickFormatter={(v) => `${(v / 1000).toFixed(0)}Mt`}
             domain={[10000, 28000]}
-            width={isMobile ? 28 : undefined}
+            width={isMobile ? 28 : 40}
           />
           <Tooltip content={<CustomTooltip />} />
 
@@ -80,7 +104,20 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             }}
           />
 
-          {/* Gap fill - only shown at step 7+ */}
+          {/* 2023 boundary — separates actuals from projection */}
+          <ReferenceLine
+            x={2023}
+            stroke="#d1d5db"
+            strokeDasharray="3 3"
+            label={isMobile ? undefined : {
+              value: "2023",
+              position: "insideTopRight",
+              fontSize: 10,
+              fill: "#9ca3af",
+            }}
+          />
+
+          {/* Gap fill — only shown at step 7+ */}
           <Area
             type="monotone"
             dataKey="projected"
@@ -97,30 +134,31 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
           <Line
             type="monotone"
             dataKey="actual"
-            stroke="#1e3a5f"
+            stroke={ACTUAL_COLOUR}
             strokeWidth={2.5}
             dot={false}
             connectNulls
             name="actual"
           />
 
-          {/* Trend projection */}
+          {/* OLS trend — regression window (2018–2023) + projection to 2030 */}
           <Line
             type="monotone"
-            dataKey="projected"
-            stroke="#1e3a5f"
-            strokeWidth={2}
-            strokeDasharray="6 4"
+            dataKey="ols"
+            stroke={OLS_COLOUR}
+            strokeWidth={1.5}
+            strokeDasharray="5 4"
             dot={false}
             connectNulls
-            name="projected"
+            name="ols"
           />
         </ComposedChart>
       </ResponsiveContainer>
-      {/* Legend outside the SVG */}
+
+      {/* Legend */}
       <div className={`flex flex-wrap gap-y-1 mt-4 justify-center ${isMobile ? "gap-x-3" : "gap-x-6"}`}>
         <div className="flex items-center gap-1.5">
-          <div className="w-5 rounded" style={{ height: 3, backgroundColor: "#1e3a5f" }} />
+          <div className="w-5 rounded" style={{ height: 3, backgroundColor: ACTUAL_COLOUR }} />
           <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>Actual</span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -128,14 +166,18 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             className="w-5"
             style={{
               height: 2,
-              backgroundImage: "repeating-linear-gradient(to right, #1e3a5f 0, #1e3a5f 6px, transparent 6px, transparent 10px)",
+              backgroundImage: `repeating-linear-gradient(to right, ${OLS_COLOUR} 0, ${OLS_COLOUR} 5px, transparent 5px, transparent 9px)`,
             }}
           />
-          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>{isMobile ? "Projected" : "Projected (current trend)"}</span>
+          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>
+            {isMobile ? "OLS trend" : "Linear trend (OLS, 2018–2030)"}
+          </span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-5 h-3 rounded-sm" style={{ backgroundColor: "#fca5a5", opacity: 0.7 }} />
-          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>{isMobile ? "Gap" : "Gap to 2030 target"}</span>
+          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>
+            {isMobile ? "Gap" : "Gap to 2030 target"}
+          </span>
         </div>
       </div>
     </div>

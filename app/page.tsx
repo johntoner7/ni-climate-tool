@@ -30,7 +30,7 @@ function renderChartForStep(chartId: ChartId, stepId: number) {
 
 
 
-const TOTAL_STEPS = 10;
+const TOTAL_STEPS = 9;
 
 export default function Home() {
   const [activeChart, setActiveChart] = useState<ChartId>(1);

@@ -12,7 +12,6 @@ import {
   ReferenceLine,
 } from "recharts";
 import nationsData from "@/public/data/nations_comparison.json";
-import ChartTooltip from "./ChartTooltip";
 import { useIsMobile } from "@/lib/useIsMobile";
 
 const NATION_COLOURS: Record<string, string> = {
@@ -28,6 +27,7 @@ const AGRI_Y_DOMAIN:  [number, number] = [75, 120];
 const CHART_HEIGHT   = 420;
 const MARGIN_TOP     = 10;
 const MARGIN_BOTTOM  = 0;
+
 
 // ── Pre-compute agriculture indexed (1990 = 100) ─────────────────────────────
 
@@ -48,13 +48,6 @@ const agricultureIndexed = (
   "Wales":            parseFloat(((row["Wales"]            / AGRI_1990["Wales"])            * 100).toFixed(2)),
 }));
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
-function toPixelY(value: number, domain: [number, number], chartHeight: number) {
-  const plotHeight = chartHeight - MARGIN_TOP - MARGIN_BOTTOM;
-  return MARGIN_TOP + ((domain[1] - value) / (domain[1] - domain[0])) * plotHeight;
-}
-
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function NationsLineChart() {
@@ -65,28 +58,28 @@ export default function NationsLineChart() {
   const chartData = isAgri ? agricultureIndexed : nationsData.by_year_indexed;
   const yDomain   = isAgri ? AGRI_Y_DOMAIN : TOTAL_Y_DOMAIN;
 
-  const CustomTooltip = ({ active, payload, label, coordinate }: any) => {
-    if (!active || !payload?.length || coordinate?.y == null) return null;
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (!active || !payload?.length) return null;
 
-    const THRESHOLD = 20;
-    let closest = null;
-    let closestDist = Infinity;
-    for (const p of payload) {
-      if (p.value == null) continue;
-      const dist = Math.abs(toPixelY(p.value, yDomain, isMobile ? 260 : CHART_HEIGHT) - coordinate.y);
-      if (dist < closestDist) { closestDist = dist; closest = p; }
-    }
+    const items = payload
+      .filter((p: any) => p.value != null)
+      .sort((a: any, b: any) => b.value - a.value);
 
-    if (!closest || closestDist > THRESHOLD) return null;
+    if (!items.length) return null;
 
     return (
-      <ChartTooltip
-        label={label}
-        name={closest.name}
-        value={closest.value.toFixed(1)}
-        color={closest.color}
-        indicatorType="circle"
-      />
+      <div className="bg-white dark:bg-gray-800 p-3 border border-gray-300 dark:border-gray-600 rounded shadow-lg min-w-[160px]">
+        <p className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">{label}</p>
+        {items.map((p: any) => (
+          <div key={p.name} className="flex items-center justify-between gap-4 py-0.5">
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: p.color }} />
+              <span className="text-xs text-gray-600 dark:text-gray-300">{p.name}</span>
+            </div>
+            <span className="text-xs font-semibold text-gray-800 dark:text-gray-100 tabular-nums">{p.value.toFixed(1)}</span>
+          </div>
+        ))}
+      </div>
     );
   };
 
@@ -132,7 +125,7 @@ export default function NationsLineChart() {
             dataKey="year"
             tickLine={false}
             tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
-            ticks={isMobile ? [1990, 2000, 2010, 2023] : undefined}
+            ticks={isMobile ? [1990, 2000, 2010, 2023] : [1990, 1995, 2000, 2005, 2010, 2015, 2020, 2023]}
           />
           <YAxis
             tickLine={false}
@@ -183,6 +176,11 @@ export default function NationsLineChart() {
           </div>
         ))}
       </div>
+
+      {/* Caption */}
+      <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 italic leading-relaxed text-center">
+        Each nation starts at 100 in 1990. Above 100: emissions have risen. Below 100: emissions have fallen.
+      </p>
 
     </div>
   );

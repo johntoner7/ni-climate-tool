@@ -85,7 +85,7 @@ export default function SectorAreaChart({ activeStep }: { activeStep?: number })
               dataKey="year"
               tickLine={false}
               tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
-              ticks={isMobile ? [1990, 2000, 2010, 2023] : undefined}
+              ticks={isMobile ? [1990, 2000, 2010, 2023] : [1990, 1995, 2000, 2005, 2010, 2015, 2020, 2023]}
             />
             <YAxis
               tickLine={false}

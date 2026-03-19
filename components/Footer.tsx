@@ -8,7 +8,7 @@ export default function Footer() {
       <p className="text-[11px] text-gray-400 leading-relaxed max-w-[60ch]">
         <span className="text-gray-500 font-medium">Data:</span> National
         Atmospheric Emissions Inventory (NAEI), GWP AR5. All figures in kt CO₂e.
-        Projections use linear regression on 2018–2023 actuals per sector. 2030
+        2030 total projection uses OLS linear regression on 2018–2023 totals; sector projections (Chart 4) apply the same method independently. 2030
         target: 48% reduction from 1990 baseline (NI Climate Change Act 2022).
         DAERA projections not used due to GWP mismatch (AR4 vs AR5).
       </p>

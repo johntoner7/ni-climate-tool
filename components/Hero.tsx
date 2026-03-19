@@ -44,12 +44,12 @@ export default function Hero() {
               Northern Ireland is the only UK nation whose agricultural emissions have grown since 1990.
             </h1>
             <p className="text-lg text-[#444444] mt-5 max-w-[480px] leading-relaxed">
-              On current trends, NI will miss its legally binding 2030 target.
+              On current trends, NI will miss its legally binding 2030 target for reducing emissions.
             </p>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-sm text-[#666666]">
-              Data: DAERA / NISRA NI Greenhouse Gas Inventory 1990–2023
+              Data: NAEI Devolved GHG Inventory 1990–2023
             </p>
             <p className="text-sm text-[#999999]">Scroll to explore ↓</p>
           </div>
