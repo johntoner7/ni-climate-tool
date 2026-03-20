@@ -110,7 +110,7 @@ The Scenario Modeller calculates the combined emissions reduction from up to eig
 
 **Feed additives - dairy and non-dairy cattle (Bovaer)**
 
-The tool uses a 12% enteric methane reduction per animal, applied separately to dairy and non-dairy cattle enteric emission pools (~1,760 kt and ~1,440 kt respectively). DAERA's Draft CAP quantification assumes 20% (Annex A, Table 3.7.4), but that figure does not differentiate by housing system and likely reflects housed/TMR trial conditions. NI cattle spend a significant portion of the year at pasture, where supplement delivery is constrained to twice-daily parlour dosing rather than continuous feed mixing. Muñoz-Tamayo et al. (2024) recorded approximately 5% daily methane reduction under twice-daily grazing delivery — substantially below TMR efficacy. The 12% used here sits between that pastoral lower bound and the housed-system evidence, reflecting NI's partially-housed system. It is conservative relative to DAERA's assumption; scenarios using this tool therefore understate reductions relative to the Draft CAP's own modelling. Maximum adoption is capped at 90% to reflect practical limits of herd-level delivery in pastoral systems.
+The tool uses a 12% enteric methane reduction per animal, applied separately to dairy and non-dairy cattle enteric emission pools (1,098 kt and 2,059 kt respectively; NAEI 2023). DAERA's Draft CAP quantification assumes 20% (Annex A, Table 3.7.4), but that figure does not differentiate by housing system and likely reflects housed/TMR trial conditions. NI cattle spend a significant portion of the year at pasture, where supplement delivery is constrained to twice-daily parlour dosing rather than continuous feed mixing. Muñoz-Tamayo et al. (2024) recorded approximately 5% daily methane reduction under twice-daily grazing delivery — substantially below TMR efficacy. The 12% used here sits between that pastoral lower bound and the housed-system evidence, reflecting NI's partially-housed system. It is conservative relative to DAERA's assumption; scenarios using this tool therefore understate reductions relative to the Draft CAP's own modelling. Maximum adoption is capped at 90% to reflect practical limits of herd-level delivery in pastoral systems.
 
 **Slurry aeration**
 *Source: AFBI (Agri-Food and Biosciences Institute) and Teagasc field trials.*
@@ -125,10 +125,10 @@ A switch from calcium ammonium nitrate (CAN) to protected urea fertiliser is mod
 Modelled at 11 t CO₂e avoided per hectare per year, based on the UK Centre for Ecology and Hydrology's NI-specific analysis for the Draft CAP, which projects 111.8 kt of annual savings from 9,866 ha restored by 2027 (Annex A, Table 3.8.6). This figure represents avoided emissions from degraded peat, not active carbon sequestration. The 10,000 ha slider ceiling reflects the CCC's recommended target for peatland "on the road to recovery" by 2027, not the total restorable area. NI has an estimated 170,000 ha of degraded peatland in total. The Draft CAP itself flags substantial delivery risk: NI was restoring less than 100 ha/year in 2023–2024 and would need to reach approximately 2,750 ha/year by 2025 to meet this target. This intervention is attributed to the LULUCF sector and does not affect the agriculture emission pool directly.
 
 **Cattle herd reduction**
-Applied as a linear function of total cattle enteric fermentation emissions (3,157 kt CO₂e in 2023, approximated as ~3,200 kt; NAEI 2023). A 1% herd reduction yields approximately 32 kt of avoided emissions. This is a conservative treatment: it does not credit associated reductions in manure management emissions, which add a further ~766 kt CO₂e attributable to dairy and non-dairy cattle. The true per-head saving including manure is approximately 24% higher than the slider reflects. A reference marker is displayed at the ~21% threshold, the level at which this single intervention alone closes the adjusted agriculture gap on the enteric-only basis used here.
+Applied as a linear function of total cattle enteric fermentation emissions (3,157 kt CO₂e in 2023; NAEI 2023). A 1% herd reduction yields approximately 32 kt of avoided emissions. This is a conservative treatment: it does not credit associated reductions in manure management emissions, which add a further ~766 kt CO₂e attributable to dairy and non-dairy cattle. The true per-head saving including manure is approximately 24% higher than the slider reflects. A reference marker is displayed at the ~21% threshold, the level at which this single intervention alone closes the adjusted agriculture gap on the enteric-only basis used here.
 
 **Ruminant genetics (toggle)**
-Modelled as a 17 kt reduction, derived from 0.15% annual methane reduction per animal through selective breeding over 7 years to 2030, at 50% national herd uptake, applied to the cattle enteric pool (~3,200 kt).
+Modelled as a 17 kt reduction, derived from 0.15% annual methane reduction per animal through selective breeding over 7 years to 2030, at 50% national herd uptake, applied to the cattle enteric pool (~3,157 kt; NAEI 2023).
 
 **Anaerobic digestion (toggle)**
 Modelled as a 21 kt reduction, derived from diverting an additional 6% of total managed slurry to AD systems at 55% methane capture efficiency, applied to the liquid slurry methane pool (~630 kt). The Draft CAP models a similar scenario using a 50% uptake factor rather than a capture efficiency rate, yielding a slightly lower figure (approximately 19 kt); the tool's 21 kt should be treated as a marginal upper-bound estimate relative to the official quantification. Note: slurry aeration and anaerobic digestion both act on the same slurry methane pool. The model applies AD to the residual pool after slurry aeration is deducted. At maximum combined adoption, the combined figure should be treated as an upper-bound estimate.
@@ -162,7 +162,7 @@ Chart 2 displays agricultural emissions for England, Scotland, Wales, and Northe
 | Statistic | Value | Source / derivation |
 |---|---|---|
 | Agriculture change since 1990 | +8% | NAEI 2023 vs NAEI 1990, NI agriculture sector (AR5): 5,615 kt vs 5,199 kt |
-| Share of NI total emissions | 30.8% | NAEI 2023: 5,615 kt ÷ 18,226 kt total |
+| Share of NI total emissions | 30.8% | NAEI 2023: 5,615 kt ÷ 18,212.2 kt total |
 | UK average agriculture share | ~12% | NAEI UK Devolved Administration Inventories, 2023 (AR5): 46,614 kt agriculture ÷ 384,973 kt total |
 | Cattle in NI | 1.67 million | DAERA Agricultural Census 2023 |
 | 2030 gap (total emissions) | 1,734 kt | OLS projection 15,548 kt minus legal target 13,814 kt |
@@ -184,7 +184,7 @@ Chart 2 displays agricultural emissions for England, Scotland, Wales, and Northe
 
 **Bovaer pasture efficacy.** The 12% enteric methane reduction assumes consistent pasture-system supplement delivery. Efficacy may vary with housing patterns. The model uses a single fixed rate.
 
-**Committed baseline delivery risk.** The 221 kt committed policy baseline is treated as a fixed reduction in the modeller. In practice, the Draft CAP's own sensitivity analysis identifies delivery risk across its quantified policies. If livestock productivity improvements underdeliver, the effective user-adjustable gap would be larger than 883 kt.
+**Committed baseline delivery risk.** The 242 kt committed policy baseline is treated as a fixed reduction in the modeller. In practice, the Draft CAP's own sensitivity analysis identifies delivery risk across its quantified policies. If livestock productivity improvements underdeliver, the effective user-adjustable gap would be larger than 883 kt.
 
 **CCC target is advisory.** The 1,125 kt agriculture gap is calculated against the CCC Stretch Ambition target, which is a recommendation rather than a legal requirement. The rationale for using Stretch Ambition rather than the CCC Balanced Pathway is set out in Section 08. Framing the gap against this target is analytically appropriate but readers should be aware that no statutory sectoral agriculture target exists for Northern Ireland.
 
@@ -196,11 +196,10 @@ Chart 2 displays agricultural emissions for England, Scotland, Wales, and Northe
 
 1. DESNZ / NAEI (2024). *Devolved Administration Greenhouse Gas Inventories 1990–2023.* National Atmospheric Emissions Inventory.
 2. DAERA / NISRA (2024). *Northern Ireland Greenhouse Gas Inventory 1990–2022.* Department of Agriculture, Environment and Rural Affairs.
-3. DAERA (2024). *Draft Northern Ireland Climate Action Plan 2023–2027.* [Table 21; Section 5.4; p. 42; p. 158]
+3. DAERA (2024). *Draft Northern Ireland Climate Action Plan 2023–2027.* Department of Agriculture, Environment and Rural Affairs. [Table 21; Section 5.4; p. 42; p. 158]
 4. Climate Change Committee (2023). *The path to a Net Zero Northern Ireland.* CCC Advice Report.
 5. DAERA (2023). *Agricultural Census 2023.* Northern Ireland cattle population statistics.
 6. UK Peatland Code (v2.0). Carbon accounting methodology for peatland restoration projects. IUCN UK Peatland Programme.
 7. Muñoz-Tamayo, R. et al. (2024). 'The effect of twice daily 3-nitroxypropanol supplementation on enteric methane emissions in grazing dairy cows.' Journal of Dairy Science, 107(11).
-8. DAERA (2024). Draft Northern Ireland Climate Action Plan 2023–2027, p. 158. Department of Agriculture, Environment and Rural Affairs.
-9. Department for Transport (2024). *Vehicle Licensing Statistics, Table VEH0156: Provisional average reported CO₂ emissions for cars registered for the first time, Great Britain and United Kingdom.* GOV.UK. Available at: https://www.gov.uk/government/statistical-data-sets/all-vehicles-veh01
-10. Department for Transport (2024). *Road Traffic Statistics, Table TRA0101: Annual average mileage by vehicle type.* GOV.UK.
+8. Department for Transport (2024). *Vehicle Licensing Statistics, Table VEH0156: Provisional average reported CO₂ emissions for cars registered for the first time, Great Britain and United Kingdom.* GOV.UK. Available at: https://www.gov.uk/government/statistical-data-sets/all-vehicles-veh01
+9. Department for Transport (2024). *Road Traffic Statistics, Table TRA0101: Annual average mileage by vehicle type.* GOV.UK.
