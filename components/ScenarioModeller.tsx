@@ -294,12 +294,12 @@ export default function ScenarioModeller() {
       <div className="mx-auto w-full max-w-[1500px]">
 
         {/* Section header */}
-        <div className="mb-10 lg:mb-14 max-w-2xl">
+        <div className="mb-10 lg:mb-14 w-full">
           <p className="text-xs uppercase tracking-widest text-[#666666] mb-4">
             What would it take
           </p>
           <p className="text-[20px] lg:text-[28px] font-bold text-[#1a1a1a] leading-tight mb-5">
-            Adjust the interventions. Watch the gap.
+            Adjust the interventions. Watch the trajectory change.
           </p>
           <p className="text-[15px] leading-[1.9] text-gray-600">
             Several interventions could credibly reduce agricultural emissions

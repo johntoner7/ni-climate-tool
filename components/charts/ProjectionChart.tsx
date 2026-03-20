@@ -20,25 +20,27 @@ const TARGET = projectionsData.metadata.target_2030_kt;
 const OLS_COLOUR    = "#6b7280";
 const ACTUAL_COLOUR = "#1e3a5f";
 
+type TEntry = { dataKey: string; value: number };
+
+function ProjectionTooltip({ active, payload, label }: { active?: boolean; payload?: readonly TEntry[]; label?: string | number }) {
+  if (!active || !payload?.length) return null;
+  const actual = payload.find((p) => p.dataKey === "actual" && p.value != null);
+  const ols    = payload.find((p) => p.dataKey === "ols"    && p.value != null);
+  if (!actual && !ols) return null;
+  return (
+    <ChartTooltip
+      label={String(label)}
+      items={[
+        ...(actual ? [{ name: "Actual",    value: `${actual.value.toLocaleString()} kt`, color: ACTUAL_COLOUR, indicatorType: "line"   as const }] : []),
+        ...(ols    ? [{ name: "OLS trend", value: `${ols.value.toLocaleString()} kt`,    color: OLS_COLOUR,    indicatorType: "dashed" as const }] : []),
+      ]}
+    />
+  );
+}
+
 export default function ProjectionChart({ activeStep }: { activeStep?: number }) {
   const isMobile = useIsMobile();
   const showGap = activeStep === undefined || activeStep >= 7;
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload?.length) return null;
-    const actual = payload.find((p: any) => p.dataKey === "actual" && p.value != null);
-    const ols    = payload.find((p: any) => p.dataKey === "ols"    && p.value != null);
-    if (!actual && !ols) return null;
-    return (
-      <ChartTooltip
-        label={String(label)}
-        items={[
-          ...(actual ? [{ name: "Actual",    value: `${actual.value.toLocaleString()} kt`, color: ACTUAL_COLOUR, indicatorType: "line"   as const }] : []),
-          ...(ols    ? [{ name: "OLS trend", value: `${ols.value.toLocaleString()} kt`,    color: OLS_COLOUR,    indicatorType: "dashed" as const }] : []),
-        ]}
-      />
-    );
-  };
 
   return (
     <div className="w-full flex flex-col">
@@ -66,7 +68,7 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             domain={[10000, 28000]}
             width={isMobile ? 32 : 40}
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={ProjectionTooltip} />
 
           {/* 2030 target line */}
           <ReferenceLine

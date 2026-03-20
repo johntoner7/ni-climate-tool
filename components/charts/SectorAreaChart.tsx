@@ -18,6 +18,30 @@ import { SECTOR_COLOURS } from "@/lib/constants";
 
 const SECTORS = Object.keys(SECTOR_COLOURS) as Array<keyof typeof SECTOR_COLOURS>;
 
+type SEntry = { name: string; value: number };
+
+function SectorTooltip({ active, payload, label, hoveredSector }: {
+  active?: boolean;
+  payload?: readonly SEntry[];
+  label?: string | number;
+  hoveredSector: string | null;
+}) {
+  if (!active || !payload?.length) return null;
+  const item = hoveredSector
+    ? payload.find((p) => p.name === hoveredSector) ?? payload[0]
+    : payload[0];
+  const color = SECTOR_COLOURS[item.name as keyof typeof SECTOR_COLOURS] ?? "#000";
+  return (
+    <ChartTooltip
+      label={String(label)}
+      name={item.name}
+      value={`${item.value?.toLocaleString() ?? "N/A"} kt`}
+      color={color}
+      indicatorType="circle"
+    />
+  );
+}
+
 export default function SectorAreaChart({ activeStep }: { activeStep?: number }) {
   const isMobile = useIsMobile();
   const [hoveredSector, setHoveredSector] = useState<string | null>(null);
@@ -39,28 +63,6 @@ export default function SectorAreaChart({ activeStep }: { activeStep?: number })
     });
   }
 
-  // Custom tooltip that shows the hovered sector
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length > 0) {
-      // Find the sector that matches our hovered state, or default to first
-      const item = hoveredSector 
-        ? payload.find((p: any) => p.name === hoveredSector) || payload[0]
-        : payload[0];
-      
-      const sectorColor = SECTOR_COLOURS[item.name as keyof typeof SECTOR_COLOURS] || "#000";
-      
-      return (
-        <ChartTooltip
-          label={label}
-          name={item.name}
-          value={`${item.value?.toLocaleString() ?? 'N/A'} kt`}
-          color={sectorColor}
-          indicatorType="circle"
-        />
-      );
-    }
-    return null;
-  };
   return (
     <div className="w-full flex flex-col">
       <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">
@@ -85,7 +87,7 @@ export default function SectorAreaChart({ activeStep }: { activeStep?: number })
               tickFormatter={(v) => `${(v / 1000).toFixed(0)}Mt`}
               width={isMobile ? 28 : undefined}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={(props) => <SectorTooltip {...props} hoveredSector={hoveredSector} />} />
             {/* Direct labels on the right — desktop only */}
             {!isMobile && SECTORS.map((sector) => (
               <ReferenceLine

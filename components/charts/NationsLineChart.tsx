@@ -49,6 +49,18 @@ const agricultureIndexed = (
   "Wales":            parseFloat(((row["Wales"]            / AGRI_1990["Wales"])            * 100).toFixed(2)),
 }));
 
+type NEntry = { value: number; name: string; color: string };
+
+function NationsTooltip({ active, payload, label }: { active?: boolean; payload?: readonly NEntry[]; label?: string | number }) {
+  if (!active || !payload?.length) return null;
+  const items = [...payload]
+    .filter((p) => p.value != null)
+    .sort((a, b) => b.value - a.value)
+    .map((p) => ({ name: p.name, value: p.value.toFixed(1), color: p.color, indicatorType: "circle" as const }));
+  if (!items.length) return null;
+  return <ChartTooltip label={String(label)} items={items} />;
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function NationsLineChart() {
@@ -58,16 +70,6 @@ export default function NationsLineChart() {
   const isAgri   = tab === "agriculture";
   const chartData = isAgri ? agricultureIndexed : nationsData.by_year_indexed;
   const yDomain   = isAgri ? AGRI_Y_DOMAIN : TOTAL_Y_DOMAIN;
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload?.length) return null;
-    const items = payload
-      .filter((p: any) => p.value != null)
-      .sort((a: any, b: any) => b.value - a.value)
-      .map((p: any) => ({ name: p.name, value: p.value.toFixed(1), color: p.color, indicatorType: "circle" as const }));
-    if (!items.length) return null;
-    return <ChartTooltip label={String(label)} items={items} />;
-  };
 
   return (
     <div className="w-full flex flex-col">
@@ -133,7 +135,7 @@ export default function NationsLineChart() {
             strokeDasharray="4 4"
             label={{ value: "1990 baseline", position: "right", fontSize: 11, fill: "#9ca3af" }}
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={NationsTooltip} />
           {Object.entries(NATION_COLOURS).map(([nation, colour]) => (
             <Line
               key={nation}

@@ -14,6 +14,24 @@ import projectionsData from "@/public/data/ni_projections.json";
 import { useIsMobile } from "@/lib/useIsMobile";
 import ChartTooltip from "./ChartTooltip";
 
+const SERIES = [
+  { keys: ["actual"],                    label: "Actual (NAEI)",    color: "#334155" },
+  { keys: ["daera_solid", "daera_dash"], label: "DAERA projection", color: "#f97316" },
+  { keys: ["ccc_solid",   "ccc_dash"],   label: "CCC pathway",      color: "#16a34a" },
+];
+
+type AEntry = { dataKey: string; value: number };
+
+function AgriculturePathwayTooltip({ active, payload, label }: { active?: boolean; payload?: readonly AEntry[]; label?: string | number }) {
+  if (!active || !payload?.length) return null;
+  const items = SERIES.flatMap(({ keys, label: name, color }) => {
+    const hit = payload.find((p) => keys.includes(p.dataKey) && p.value != null);
+    return hit ? [{ name, value: `${(hit.value / 1000).toFixed(2)} Mt`, color, indicatorType: "line" as const }] : [];
+  });
+  if (!items.length) return null;
+  return <ChartTooltip label={String(label)} items={items} />;
+}
+
 function linearRegression(points: Array<{ x: number; y: number }>) {
   const n = points.length;
   const sumX = points.reduce((s, p) => s + p.x, 0);
@@ -94,21 +112,6 @@ export default function AgriculturePathwayChart() {
     });
   }
 
-  const SERIES = [
-    { keys: ["actual"],                    label: "Actual (NAEI)",        color: "#334155" },
-    { keys: ["daera_solid", "daera_dash"], label: "DAERA projection",     color: "#f97316" },
-    { keys: ["ccc_solid",   "ccc_dash"],   label: "CCC pathway",          color: "#16a34a" },
-  ];
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload?.length) return null;
-    const items = SERIES.flatMap(({ keys, label: name, color }) => {
-      const hit = payload.find((p: any) => keys.includes(p.dataKey) && p.value != null);
-      return hit ? [{ name, value: `${(hit.value / 1000).toFixed(2)} Mt`, color, indicatorType: "line" as const }] : [];
-    });
-    if (!items.length) return null;
-    return <ChartTooltip label={String(label)} items={items} />;
-  };
 
   return (
     <div className="w-full flex flex-col">
@@ -136,7 +139,7 @@ export default function AgriculturePathwayChart() {
             domain={[4000, 7000]}
             width={isMobile ? 30 : undefined}
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={AgriculturePathwayTooltip} />
 
           {/* Vertical ref line at 2027 */}
             <ReferenceLine
