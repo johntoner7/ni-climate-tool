@@ -5,7 +5,7 @@ import "./globals.css";
 
 const TITLE = "Northern Ireland Emissions Gap";
 const DESCRIPTION =
-  "Northern Ireland has cut greenhouse gas emissions by 31.5% since 1990. Almost none of it was driven by the sectors Stormont controls. An interactive scrollytelling piece.";
+  "Northern Ireland has cut greenhouse gas emissions by 31.5% since 1990. But agricultural emissions are not decreasing at the same rate. An interactive scrollytelling piece.";
 
 export const metadata: Metadata = {
   title: TITLE,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ComposedChart,
   Line,
@@ -11,24 +11,29 @@ import {
   Tooltip,
   ResponsiveContainer,
   ReferenceLine,
+  ReferenceDot,
 } from "recharts";
+import { ZoomIn, ZoomOut, Share2 } from "lucide-react";
 import projectionsData from "@/public/data/ni_projections.json";
+import { SliderHelpTooltip } from "@/components/ui/SliderHelpTooltip";
 
 // ── Module-level constants ────────────────────────────────────────────────────
 
 const AGRI_2023            = 5615;    // kt CO₂e — DAERA/NISRA GHG inventory 2023
 const AGRI_TARGET_2030     = 4490;    // kt CO₂e — CCC Stretch Ambition (-21% from 2020 baseline)
 const AGRI_BASELINE_2030   = 5615;    // kt CO₂e — flat projection (agriculture broadly flat 2020-2023)
-const AGRI_GAP             = 1125;     // kt CO₂e — AGRI_BASELINE_2030 - AGRI_TARGET_2030
+const AGRI_GAP             = 1125;    // kt CO₂e — AGRI_BASELINE_2030 - AGRI_TARGET_2030
 
-const ENTERIC_KT           = 3200;    // kt CO₂e — total enteric fermentation 2023
-const DAIRY_ENTERIC_KT     = 1760;    // kt CO₂e — dairy enteric portion (methodology §07)
-const NON_DAIRY_ENTERIC_KT = 1440;    // kt CO₂e — non-dairy (3200 - 1760)
-const SLURRY_METHANE_KT    = 630;     // kt CO₂e — liquid slurry methane
-const SOIL_FERTILISER_KT   = 59;      // kt CO₂e — ceiling for fertiliser switch savings (44 kt at 75% → scaled to 100%)
-const BOVAER_EFFICACY      = 0.12;    // 12% — Teagasc pasture trials
-const PEATLAND_RATE        = 11;      // t CO₂e/ha/yr — UK CEH NI-specific analysis (methodology §07)
+const ENTERIC_KT           = 3157;   // kt CO₂e — cattle enteric fermentation 2023 (NAEI: 1098 dairy + 2059 non-dairy)
+const DAIRY_ENTERIC_KT     = 1098;   // kt CO₂e — dairy cattle enteric 2023 (NAEI)
+const NON_DAIRY_ENTERIC_KT = 2059;   // kt CO₂e — non-dairy cattle enteric 2023 (NAEI)
+const SLURRY_METHANE_KT    = 630;    // kt CO₂e — liquid slurry methane
+const SOIL_FERTILISER_KT   = 59;     // kt CO₂e — ceiling for fertiliser switch savings (44 kt at 75% → scaled to 100%)
+const BOVAER_EFFICACY      = 0.12;   // 12% — Teagasc pasture trials
+const PEATLAND_RATE        = 11;     // t CO₂e/ha/yr — UK CEH NI-specific analysis (methodology §07)
 const TOTAL_CATTLE         = 1673345; // DAERA census 2023
+const GENETICS_REDUCTION_KT = 17;   // kt CO₂e — ruminant genetics programme (methodology §07)
+const AD_POTENTIAL_KT       = 21;   // kt CO₂e — anaerobic digestion (nominal, before slurry pool constraint)
 
 // Committed policy baseline — Draft NI CAP 2023-2027, livestock productivity improvements (methodology §07)
 const COMMITTED_BASELINE_KT = 242;
@@ -36,8 +41,19 @@ const COMMITTED_BASELINE_KT = 242;
 // Adjusted gap after committed policies (1125 - 242 = 883 kt)
 const ADJUSTED_GAP = AGRI_GAP - COMMITTED_BASELINE_KT;
 
-// Herd reduction % that closes the adjusted gap alone (883/3200 ≈ 28%)
+// Herd reduction % that closes the adjusted gap alone (883/3157 ≈ 28%)
 const GAP_CLOSING_HERD_PCT = Math.ceil((ADJUSTED_GAP / ENTERIC_KT) * 100);
+
+// Max achievable reductions per column (used in column headers)
+const MAX_ENTERIC_KT      = Math.round(
+  0.9 * DAIRY_ENTERIC_KT * BOVAER_EFFICACY +
+  0.9 * NON_DAIRY_ENTERIC_KT * BOVAER_EFFICACY +
+  0.5 * ENTERIC_KT +
+  GENETICS_REDUCTION_KT
+);
+const MAX_SLURRY_SOILS_KT = Math.round(0.8 * SLURRY_METHANE_KT * 0.40 + SOIL_FERTILISER_KT);
+const MAX_LAND_USE_KT     = Math.round(10000 * PEATLAND_RATE / 1000);
+
 
 // ── Chart base data ───────────────────────────────────────────────────────────
 
@@ -46,6 +62,66 @@ const BASE_DATA = projectionsData.chart3_agriculture as Array<{
   actual: number | null;
   projected: number | null;
 }>;
+
+// ── Sub-components ────────────────────────────────────────────────────────────
+
+function RightEdgeReferenceLabel({
+  viewBox,
+  value,
+  fill,
+  dy = 0,
+}: {
+  viewBox?: { x?: number; y?: number };
+  value: string;
+  fill: string;
+  dy?: number;
+}) {
+  if (typeof viewBox?.x !== "number" || typeof viewBox?.y !== "number") {
+    return null;
+  }
+
+  return (
+    <text
+      x={viewBox.x + 10}
+      y={viewBox.y + dy}
+      fill={fill}
+      fontSize={9}
+      textAnchor="start"
+      dominantBaseline="middle"
+    >
+      {value}
+    </text>
+  );
+}
+
+// ── Pure helpers ──────────────────────────────────────────────────────────────
+
+function pctOfGap(kt: number) {
+  return Math.round((kt / AGRI_GAP) * 100);
+}
+
+function sliderBg(value: number, max: number) {
+  const valuePct = (value / max) * 100;
+  return `linear-gradient(to right, #c1440e 0%, #c1440e ${valuePct}%, #e8e0d8 ${valuePct}%, #e8e0d8 100%)`;
+}
+
+function sliderBgMuted(value: number, max: number) {
+  const valuePct = (value / max) * 100;
+  return `linear-gradient(to right, #8a7060 0%, #8a7060 ${valuePct}%, #e8e0d8 ${valuePct}%, #e8e0d8 100%)`;
+}
+
+function CustomTooltip({ active, payload, label }: any) {
+  if (!active || !payload?.length) return null;
+  const year = Number(label);
+  const key = year < 2024 ? "actual" : "scenario";
+  const item = payload.find((p: any) => p.value != null && p.dataKey === key);
+  if (!item) return null;
+  return (
+    <div className="bg-white/80 backdrop-blur-sm px-2 py-1 rounded text-[10px]">
+      <p className="text-gray-700">{year}: {Math.round(item.value).toLocaleString()} kt</p>
+    </div>
+  );
+}
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -60,6 +136,49 @@ export default function ScenarioModeller() {
   // Toggle states
   const [geneticsOn,  setGeneticsOn]  = useState(false);
   const [adOn,        setAdOn]        = useState(false);
+  // Copy link state
+  const [copied,      setCopied]      = useState(false);
+  // Zoom state
+  const [zoomed,      setZoomed]      = useState(false);
+
+  // ── URL state: initialise from query params on mount ────────────────────────
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+    const setNum = (key: string, setter: (v: number) => void, min: number, max: number) => {
+      const raw = Number(p.get(key));
+      if (p.has(key) && !isNaN(raw)) setter(clamp(raw, min, max));
+    };
+    setNum("bovaer",   setBovaerPct,   0, 90);
+    setNum("nondairy", setNonDairyPct, 0, 90);
+    setNum("slurry",   setSlurryPct,   0, 80);
+    setNum("fert",     setFertPct,     0, 100);
+    setNum("peat",     setPeatlandHa,  0, 10000);
+    setNum("herd",     setHerdPct,     0, 50);
+    if (p.has("genetics")) setGeneticsOn(p.get("genetics") === "1");
+    if (p.has("ad"))       setAdOn(p.get("ad") === "1");
+  }, []);
+
+  // ── URL state: sync params on every state change (debounced 150ms) ──────────
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const p = new URLSearchParams();
+      if (bovaerPct)   p.set("bovaer",   String(bovaerPct));
+      if (nonDairyPct) p.set("nondairy", String(nonDairyPct));
+      if (slurryPct)   p.set("slurry",   String(slurryPct));
+      if (fertPct)     p.set("fert",     String(fertPct));
+      if (peatlandHa)  p.set("peat",     String(peatlandHa));
+      if (herdPct)     p.set("herd",     String(herdPct));
+      if (geneticsOn)  p.set("genetics", "1");
+      if (adOn)        p.set("ad",       "1");
+      const qs = p.toString();
+      const newUrl = qs
+        ? `?${qs}${window.location.hash}`
+        : window.location.pathname + window.location.hash;
+      window.history.replaceState(null, "", newUrl);
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [bovaerPct, nonDairyPct, slurryPct, fertPct, peatlandHa, herdPct, geneticsOn, adOn]);
 
   const applyPreset = (preset: "techOnly" | "mixed" | "reset") => {
     if (preset === "techOnly") {
@@ -95,15 +214,14 @@ export default function ScenarioModeller() {
   const peatlandReduction = peatlandRaw;
   const herdReduction     = Math.min(herdRaw, ENTERIC_KT);
 
-  const geneticsReduction = geneticsOn ? 17 : 0;
-  const adReduction       = adOn       ? 21 : 0;
+  const geneticsReduction = geneticsOn ? GENETICS_REDUCTION_KT : 0;
 
   // AD draws from the same slurry pool as aeration — apply to residual pool (methodology §07)
   const slurryResidualPool = Math.max(0, SLURRY_METHANE_KT - slurryReduction);
   const effectiveAd = adOn ? Math.round(0.06 * 0.55 * slurryResidualPool) : 0;
 
-  // Amount by which AD's nominal 21 kt overstates its real contribution (due to slurry aeration reducing the pool)
-  const adOverstatement = adOn && slurryPct > 0 ? Math.max(0, adReduction - effectiveAd) : 0;
+  // Amount by which AD's nominal value overstates its real contribution (due to slurry aeration reducing the pool)
+  const adOverstatement = adOn && slurryPct > 0 ? Math.max(0, AD_POTENTIAL_KT - effectiveAd) : 0;
 
   const userReduction  = bovaerReduction + nonDairyReduction + slurryReduction
                        + fertReduction + peatlandReduction + herdReduction
@@ -119,14 +237,26 @@ export default function ScenarioModeller() {
 
   const statusMessage =
     gapClosedPct >= 100
-      ? `Gap closed. That requires ${animalsRemoved.toLocaleString()} fewer cattle. No current NI policy commits to that.`
+      ? `Gap closed. Herd reduction is doing the work that technology cannot. This scenario removes ${animalsRemoved.toLocaleString()} cattle. No current NI policy proposes that.`
+      : gapClosedPct >= 88 && herdPct === 0
+      ? `At maximum deployment of every available technology, 88% of the gap closes. The remaining ~136 kt cannot be reached without reducing herd size. No current NI policy commits to that.`
+      : gapClosedPct >= 40 && herdPct === 0
+      ? `Significant progress. At these adoption rates, closing the gap entirely requires either pushing every measure to its ceiling or some reduction in herd size.`
       : gapClosedPct >= 40
-      ? `Significant progress, but a gap remains. Closing it requires either near-maximum deployment of every remaining measure or herd reduction.`
+      ? `Significant progress, but a gap remains. Closing it requires either near-maximum deployment of every remaining measure or further herd reduction.`
       : `Current interventions fall well short. Even the full government programme leaves a substantial gap without structural change to the herd.`;
 
   // ── Chart data ────────────────────────────────────────────────────────────
 
   const committedProjected2030 = AGRI_BASELINE_2030 - COMMITTED_BASELINE_KT; // = 5373
+
+  // ── Zoom-dependent chart parameters ──────────────────────────────────────
+  const xDomain: [number, number]  = zoomed ? [2016, 2030] : [1990, 2030];
+  const xTickCount                 = zoomed ? 8 : 5;
+  const zoomVisibleValues = [AGRI_TARGET_2030, newProjected2030, committedProjected2030, AGRI_BASELINE_2030];
+  const yMin = zoomed ? Math.floor((Math.min(...zoomVisibleValues) - 200) / 500) * 500 : 4000;
+  const yMax = zoomed ? Math.ceil((Math.max(...zoomVisibleValues) + 200) / 500) * 500 : 6500;
+  const yDomain: [number, number]  = [yMin, yMax];
 
   const chartData = BASE_DATA.map((point) => {
     if (point.year < 2023) {
@@ -157,38 +287,11 @@ export default function ScenarioModeller() {
     }
   });
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-
-  const pctOfGap = (kt: number) => Math.round((kt / AGRI_GAP) * 100);
-
-  const sliderBg = (value: number, max: number) =>
-    `linear-gradient(to right, #c1440e 0%, #c1440e ${(value / max) * 100}%, #e5e7eb ${(value / max) * 100}%, #e5e7eb 100%)`;
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload?.length) return null;
-    const item = payload.find(
-      (p: any) =>
-        p.value != null &&
-        (p.dataKey === "actual" || p.dataKey === "scenario") &&
-        p.type !== "area"
-    );
-    if (!item) return null;
-    return (
-      <div className="bg-white p-2.5 border border-gray-200 rounded shadow text-xs">
-        <p className="font-semibold text-gray-700 mb-0.5">{label}</p>
-        <p className="text-gray-600">
-          {item.dataKey === "actual" ? "Actual" : "Scenario"}:{" "}
-          <span className="font-medium">{Math.round(item.value).toLocaleString()} kt</span>
-        </p>
-      </div>
-    );
-  };
-
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <section id="scenario" className="bg-[#FFF9F5] border-t border-[#e8e0d8] px-8 lg:px-16 py-14 lg:py-20">
-      <div className="max-w-6xl mx-auto">
+    <section id="scenario" className="bg-[#FFF9F5] border-t border-[#e8e0d8] px-6 lg:px-8 xl:px-10 py-14 lg:py-20">
+      <div className="mx-auto w-full max-w-[1500px]">
 
         {/* Section header */}
         <div className="mb-10 lg:mb-14 max-w-2xl">
@@ -209,559 +312,597 @@ export default function ScenarioModeller() {
           </p>
         </div>
 
-        {/* Two-column interactive area
-            DOM order: output panel first (top on mobile), controls second.
-            Desktop reverses via lg:order-1 / lg:order-2. */}
-        <div className="flex flex-col lg:flex-row lg:gap-0 gap-8">
-
-          {/* ── Output panel — top on mobile, right on desktop ──────── */}
-          <div className="w-full lg:w-[55%] lg:pl-10 lg:order-2 flex flex-col gap-4">
-
-            {/* Projected 2030 */}
+        <div className="w-full py-6 mb-2">
+          <div className="grid grid-cols-3">
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-1">
-                Projected 2030 (kt CO₂e)
-              </p>
-              <p className={`text-4xl lg:text-3xl font-bold tabular-nums leading-none ${targetMet ? "text-green-600" : "text-[#c1440e]"}`}>
-                {newProjected2030.toLocaleString()}
-              </p>
-              <p className="text-sm lg:text-xs text-gray-400 mt-0.5">
-                Target: {AGRI_TARGET_2030.toLocaleString()} kt
-              </p>
+              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Current Projection</p>
+              <p className="text-3xl font-bold tabular-nums text-gray-900">{newProjected2030.toLocaleString()} kt</p>
             </div>
-
-            {/* Gap progress bar */}
-            <div>
-              <div className="flex justify-between text-[10px] text-gray-400 mb-1">
-                <span>Gap closed</span>
-                <span>{gapClosedPct}% of {AGRI_GAP} kt</span>
-              </div>
-              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all duration-300 ${targetMet ? "bg-green-500" : "bg-[#c1440e]"}`}
-                  style={{ width: `${gapClosedPct}%` }}
-                />
-              </div>
-              <p className="text-[10px] text-gray-400 mt-1">
-                Committed: {COMMITTED_BASELINE_KT} kt · User: {Math.round(userReduction)} kt ·{" "}
-                {totalReduction > AGRI_GAP
-                  ? <span className="text-green-600">Surplus: {Math.round(totalReduction - AGRI_GAP)} kt</span>
-                  : <>Remaining: {Math.round(remainingGap)} kt</>
-                }
-              </p>
+            <div className="border-l border-[#e8e0d8] pl-4">
+              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Target</p>
+              <p className="text-3xl font-bold tabular-nums text-gray-900">{AGRI_TARGET_2030.toLocaleString()} kt</p>
             </div>
+            <div className="border-l border-[#e8e0d8] pl-4">
+              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Gap</p>
+              <p className={`text-3xl font-bold tabular-nums ${targetMet ? "text-green-600" : "text-[#c1440e]"}`}>{remainingGap.toLocaleString()} kt</p>
+            </div>
+          </div>
+        </div>
 
-            {/* Status */}
-            <p className="text-sm lg:text-xs text-gray-600 leading-snug">
-              {statusMessage}
-            </p>
+        <p className="w-full text-[11px] text-gray-400 mb-4">Includes 242 kt already committed under Draft CAP 2023–27 livestock productivity improvements. The remaining gap is 883 kt.</p>
 
-            {/* Chart */}
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-2">
-                Agricultural emissions trajectory
-              </p>
-              <ResponsiveContainer width="100%" height={220}>
-                <ComposedChart
-                  data={chartData}
-                  margin={{ top: 5, right: 60, left: 0, bottom: 0 }}
+        <div className="w-full rounded-lg bg-white/70 border border-[#e8e0d8] px-4 py-3 mb-4">
+          <div className="flex justify-between text-[10px] text-gray-400 mb-1">
+            <span className="uppercase tracking-widest">Gap closed</span>
+            <span>{gapClosedPct}% of {AGRI_GAP.toLocaleString()} kt</span>
+          </div>
+          <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all duration-300 ${targetMet ? "bg-green-500" : "bg-[#c1440e]"}`}
+              style={{ width: `${gapClosedPct}%` }}
+            />
+          </div>
+          <p className="text-[10px] text-gray-400 mt-1">
+            Committed: {COMMITTED_BASELINE_KT} kt · User: {Math.round(userReduction)} kt ·{" "}
+            {totalReduction > AGRI_GAP
+              ? <span className="text-green-600">Surplus: {Math.round(totalReduction - AGRI_GAP)} kt</span>
+              : <>Remaining: {Math.round(remainingGap)} kt</>
+            }
+          </p>
+        </div>
+
+        {/* Chart-first layout */}
+        <div className="w-full">
+          <div className="relative w-full">
+            <div className="flex justify-end mb-2">
+              <div className="relative group">
+                <button
+                  onClick={() => setZoomed(v => !v)}
+                  className={`transition-colors ${zoomed ? "text-sky-500 hover:text-sky-700" : "text-sky-400 hover:text-sky-600"}`}
                 >
-                  <CartesianGrid vertical={false} stroke="#e5e7eb" />
-                  <XAxis
-                    dataKey="year"
-                    type="number"
-                    domain={[1990, 2030]}
-                    tickCount={5}
-                    tickLine={false}
-                    tick={{ fontSize: 10, fill: "#6b7280" }}
-                  />
-                  <YAxis
-                    tickLine={false}
-                    tick={{ fontSize: 10, fill: "#6b7280" }}
-                    tickFormatter={(v) => `${(v / 1000).toFixed(1)}Mt`}
-                    domain={[3000, 7000]}
-                    width={32}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <ReferenceLine
-                    y={AGRI_TARGET_2030}
-                    stroke="#16a34a"
-                    strokeWidth={1}
-                    strokeDasharray="6 3"
-                    label={{ value: "CCC target", position: "right", fontSize: 9, fill: "#16a34a" }}
-                  />
-                  <ReferenceLine
-                    y={AGRI_2023}
-                    stroke="#d1d5db"
-                    strokeWidth={1}
-                    strokeDasharray="2 2"
-                    label={{ value: "2023 actual", position: "right", fontSize: 9, fill: "#9ca3af" }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="scenario"
-                    baseValue={AGRI_TARGET_2030}
-                    fill={targetMet ? "#bbf7d0" : "#fca5a5"}
-                    fillOpacity={0.35}
-                    stroke="none"
-                    legendType="none"
-                    connectNulls={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="actual"
-                    stroke="#1e3a5f"
-                    strokeWidth={2}
-                    dot={false}
-                    connectNulls
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="baseline"
-                    stroke="#d1d5db"
-                    strokeWidth={1.5}
-                    strokeDasharray="4 3"
-                    dot={false}
-                    connectNulls
-                    legendType="none"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="committed"
-                    stroke="#9ca3af"
-                    strokeWidth={1.5}
-                    strokeDasharray="4 2"
-                    dot={false}
-                    connectNulls
-                    legendType="none"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="scenario"
-                    stroke={scenarioColour}
-                    strokeWidth={2}
-                    strokeDasharray="6 4"
-                    dot={false}
-                    connectNulls
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
+                  {zoomed ? <ZoomOut size={22} /> : <ZoomIn size={22} />}
+                </button>
+                <span className="pointer-events-none absolute right-0 bottom-full mb-1.5 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-[10px] text-white opacity-0 group-hover:opacity-100 transition-opacity duration-100">
+                  {zoomed ? "Show full history" : "Zoom to 2016–2030"}
+                </span>
+              </div>
             </div>
+
+            <ResponsiveContainer width="100%" height={460}>
+              <ComposedChart
+                data={zoomed ? chartData.filter(d => d.year >= 2016) : chartData}
+                margin={{ top: 5, right: 92, left: 4, bottom: 0 }}
+              >
+                <CartesianGrid vertical={false} stroke="#e5e7eb" />
+                <XAxis
+                  dataKey="year"
+                  type="number"
+                  domain={xDomain}
+                  tickCount={xTickCount}
+                  tickLine={false}
+                  tick={{ fontSize: 10, fill: "#4b5563" }}
+                />
+                <YAxis
+                  tickLine={false}
+                  tick={{ fontSize: 10, fill: "#4b5563" }}
+                  tickFormatter={(v) => `${(v / 1000).toFixed(1)}Mt`}
+                  domain={yDomain}
+                  width={44}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <ReferenceLine
+                  y={AGRI_TARGET_2030}
+                  stroke="#15803d"
+                  strokeWidth={2}
+                  strokeDasharray="6 3"
+                  label={{ value: "CCC target", position: "right", fontSize: 10, fill: "#15803d" }}
+                />
+                <ReferenceLine
+                  y={AGRI_2023}
+                  stroke="#d1d5db"
+                  strokeWidth={1}
+                  strokeDasharray="2 2"
+                  label={{ value: "2023 actual", position: "right", fontSize: 9, fill: "#9ca3af" }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="scenario"
+                  baseValue={AGRI_TARGET_2030}
+                  fill={targetMet ? "#bbf7d0" : "#fca5a5"}
+                  fillOpacity={0.5}
+                  stroke="none"
+                  legendType="none"
+                  connectNulls={false}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="actual"
+                  stroke="#1e3a5f"
+                  strokeWidth={2}
+                  isAnimationActive={false}
+                  dot={false}
+                  connectNulls
+                />
+                <Line
+                  type="monotone"
+                  dataKey="committed"
+                  stroke="#9ca3af"
+                  strokeWidth={2}
+                  strokeDasharray="4 2"
+                  isAnimationActive={false}
+                  dot={false}
+                  connectNulls
+                  legendType="none"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="scenario"
+                  stroke={scenarioColour}
+                  strokeWidth={2}
+                  strokeDasharray="6 4"
+                  isAnimationActive={true}
+                  animationDuration={400}
+                  dot={false}
+                  connectNulls
+                />
+                <ReferenceDot
+                  x={2030}
+                  y={committedProjected2030}
+                  r={0}
+                  label={<RightEdgeReferenceLabel value="Draft CAP" fill="#9ca3af" dy={10} />}
+                />
+                <ReferenceDot
+                  x={2030}
+                  y={newProjected2030}
+                  r={0}
+                  label={<RightEdgeReferenceLabel value="Your scenario" fill={scenarioColour} dy={-10} />}
+                />
+                <ReferenceDot
+                  x={2005}
+                  y={chartData.find((d) => d.year === 2005)?.actual ?? AGRI_2023}
+                  r={0}
+                  label={{ value: "Historical", position: "top", fontSize: 9, fill: "#1e3a5f" }}
+                />
+
+                {!targetMet && (
+                  <ReferenceDot
+                    x={2028.85}
+                    y={(newProjected2030 + AGRI_TARGET_2030) / 2}
+                    r={0}
+                    label={{
+                      value: `Gap: ${remainingGap.toLocaleString()} kt`,
+                      position: "left",
+                      fontSize: 10,
+                      fill: "#c1440e",
+                    }}
+                  />
+                )}
+              </ComposedChart>
+            </ResponsiveContainer>
+
+            {zoomed && (
+              <p className="text-[10px] text-gray-300 mt-1 text-right">
+                Showing 2016–2030. Toggle above to restore full history.
+              </p>
+            )}
 
           </div>
 
-          {/* ── Controls — bottom on mobile, left on desktop ─────────── */}
-          <div className="w-full lg:w-[45%] lg:pr-10 lg:border-r border-[#e8e0d8] lg:order-1 flex flex-col gap-5">
+          <p className="text-xs text-gray-600 leading-snug mt-3">
+            {statusMessage}
+          </p>
 
-            {/* Committed policy baseline */}
-            <div className="rounded-lg bg-white border-l-2 border-gray-300 px-3 py-2.5">
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-1">
-                Committed policy baseline (already applied)
-              </p>
-              <p className="text-sm lg:text-xs text-gray-600 font-medium">
-                Livestock productivity improvements (Draft CAP 2023–27): −242 kt
-              </p>
-              <p className="text-[11px] text-gray-400 mt-0.5">
-                Reduces gap from 1,125 kt to 883 kt before any additional action
-              </p>
+          <div className="flex items-center justify-between pt-6 mt-2">
+            <div className="flex gap-2">
+              <button
+                onClick={() => applyPreset("techOnly")}
+                className="rounded border border-gray-200 px-2 py-1 md:px-3 md:py-1.5 text-left transition-colors hover:bg-gray-50"
+              >
+                <span className="text-[10px] md:text-[11px] font-medium text-gray-700">Tech only</span>
+                <span className="hidden md:inline ml-1.5 text-[10px] text-gray-400">No herd reduction</span>
+              </button>
+              <button
+                onClick={() => applyPreset("mixed")}
+                className="rounded border border-[#c1440e]/40 bg-[#c1440e]/5 px-2 py-1 md:px-3 md:py-1.5 text-left transition-colors hover:bg-[#c1440e]/10"
+              >
+                <span className="text-[10px] md:text-[11px] font-medium text-gray-700">Mixed</span>
+                <span className="hidden md:inline ml-1.5 text-[10px] text-gray-400">Closes the gap</span>
+              </button>
+              <button
+                onClick={() => applyPreset("reset")}
+                className="rounded border border-gray-200 px-2 py-1 md:px-3 md:py-1.5 text-left transition-colors hover:bg-gray-50"
+              >
+                <span className="text-[10px] md:text-[11px] font-medium text-gray-700">Reset</span>
+              </button>
             </div>
+            <div className="relative group">
+              <button
+                onClick={() => {
+                  const url = window.location.href;
+                  if (navigator.share) {
+                    navigator.share({ title: "NI Climate Scenario Modeller", url }).catch(() => {});
+                  } else {
+                    navigator.clipboard.writeText(url)
+                      .then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); })
+                      .catch(() => {});
+                  }
+                }}
+                className={`transition-colors ${copied ? "text-green-500" : "text-[#c1440e]/50 hover:text-[#c1440e]"}`}
+              >
+                <Share2 size={20} />
+              </button>
+              <span className="pointer-events-none absolute right-0 top-full mt-1.5 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-[10px] text-white opacity-0 group-hover:opacity-100 transition-opacity duration-100">
+                {copied ? "Copied!" : "Share"}
+              </span>
+            </div>
+          </div>
 
-            {/* Quick scenarios — mobile only */}
-            <div className="lg:hidden rounded-lg bg-white border border-gray-200 p-3">
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-2">
-                Quick scenarios
-              </p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => applyPreset("techOnly")}
-                  className="flex-1 rounded border border-gray-200 px-2 py-2 text-left transition-colors active:bg-gray-50"
-                >
-                  <p className="text-[11px] font-medium text-gray-700">Tech only</p>
-                  <p className="text-[10px] text-gray-400">No herd reduction</p>
-                </button>
-                <button
-                  onClick={() => applyPreset("mixed")}
-                  className="flex-1 rounded border border-[#c1440e]/40 bg-[#c1440e]/5 px-2 py-2 text-left transition-colors active:bg-[#c1440e]/10"
-                >
-                  <p className="text-[11px] font-medium text-gray-700">Mixed</p>
-                  <p className="text-[10px] text-gray-400">Closes the gap</p>
-                </button>
-                <button
-                  onClick={() => applyPreset("reset")}
-                  className="flex-1 rounded border border-gray-200 px-2 py-2 text-left transition-colors active:bg-gray-50"
-                >
-                  <p className="text-[11px] font-medium text-gray-700">Reset</p>
-                  <p className="text-[10px] text-gray-400">Clear all</p>
-                </button>
+          <div className="pt-8 mt-2 border-t border-[#e8e0d8] flex flex-col gap-6 md:grid md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-0">
+
+            <div className="w-full pr-0 md:pr-6 lg:pr-8">
+              <div className="flex justify-between items-baseline mb-4">
+                <p className="text-[10px] uppercase tracking-widest text-gray-400">Enteric emissions</p>
+                <span className="text-[10px] uppercase tracking-widest text-gray-400 text-right">up to {MAX_ENTERIC_KT.toLocaleString()} kt</span>
               </div>
-            </div>
-
-            {/* Additional interventions */}
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-3">
-                Additional interventions
-              </p>
               <div className="flex flex-col gap-5">
 
-                {/* Feed additives — dairy (Bovaer) */}
-                <div>
-                  <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-sm lg:text-xs text-gray-500">
-                      Feed additives — dairy (Bovaer)
-                    </span>
-                    <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
-                      {bovaerPct}%
-                    </span>
-                  </div>
-                  <input
-                    type="range" min="0" max="90" step="5"
-                    value={bovaerPct}
-                    onChange={(e) => setBovaerPct(Number(e.target.value))}
-                    className="w-full h-3 lg:h-auto cursor-pointer"
-                    style={{
-                      WebkitAppearance: "none", appearance: "none",
-                      background: sliderBg(bovaerPct, 90),
-                      borderRadius: "9999px", outline: "none",
-                    }}
-                    aria-label="Bovaer adoption percentage"
-                  />
-                  <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
-                    <span>0%</span>
-                    <span>90%</span>
-                  </div>
-                  {bovaerPct === 90 && (
-                    <p className="text-[10px] text-gray-400 mt-0.5">
-                      Maximum realistic deployment by 2030
-                    </p>
-                  )}
-                  <p className="text-sm lg:text-[11px] text-gray-400 mt-1">
-                    Saves <span className="font-medium text-gray-600">{Math.round(bovaerReduction)} kt</span>
-                    {bovaerReduction > 0 && (
-                      <span className="text-green-600"> ({pctOfGap(bovaerReduction)}% of gap)</span>
-                    )}
-                  </p>
-                </div>
-
-                {/* Feed additives — non-dairy cattle */}
-                <div>
-                  <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-sm lg:text-xs text-gray-500">
-                      Feed additives — non-dairy cattle
-                    </span>
-                    <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
-                      {nonDairyPct}%
-                    </span>
-                  </div>
-                  <input
-                    type="range" min="0" max="90" step="5"
-                    value={nonDairyPct}
-                    onChange={(e) => setNonDairyPct(Number(e.target.value))}
-                    className="w-full h-3 lg:h-auto cursor-pointer"
-                    style={{
-                      WebkitAppearance: "none", appearance: "none",
-                      background: sliderBg(nonDairyPct, 90),
-                      borderRadius: "9999px", outline: "none",
-                    }}
-                    aria-label="Non-dairy feed additive adoption percentage"
-                  />
-                  <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
-                    <span>0%</span>
-                    <span>90%</span>
-                  </div>
-                  {nonDairyPct === 90 && (
-                    <p className="text-[10px] text-gray-400 mt-0.5">
-                      CAP Central Scenario assumes 35% uptake
-                    </p>
-                  )}
-                  <p className="text-sm lg:text-[11px] text-gray-400 mt-1">
-                    Saves <span className="font-medium text-gray-600">{Math.round(nonDairyReduction)} kt</span>
-                    {nonDairyReduction > 0 && (
-                      <span className="text-green-600"> ({pctOfGap(nonDairyReduction)}% of gap)</span>
-                    )}
-                  </p>
-                </div>
-
-                {/* Slurry aeration */}
-                <div>
-                  <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-sm lg:text-xs text-gray-500">
-                      Slurry aeration
-                    </span>
-                    <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
-                      {slurryPct}%
-                    </span>
-                  </div>
-                  <input
-                    type="range" min="0" max="80" step="5"
-                    value={slurryPct}
-                    onChange={(e) => setSlurryPct(Number(e.target.value))}
-                    className="w-full h-3 lg:h-auto cursor-pointer"
-                    style={{
-                      WebkitAppearance: "none", appearance: "none",
-                      background: sliderBg(slurryPct, 80),
-                      borderRadius: "9999px", outline: "none",
-                    }}
-                    aria-label="Slurry aeration adoption percentage"
-                  />
-                  <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
-                    <span>0%</span>
-                    <span>80%</span>
-                  </div>
-                  {slurryPct >= 50 && (
-                    <p className="text-[10px] text-gray-400 mt-0.5">
-                      Capital-intensive; 50% by 2027 is CAP target
-                    </p>
-                  )}
-                  <p className="text-sm lg:text-[11px] text-gray-400 mt-1">
-                    Saves <span className="font-medium text-gray-600">{Math.round(slurryReduction)} kt</span>
-                    {slurryReduction > 0 && (
-                      <span className="text-green-600"> ({pctOfGap(slurryReduction)}% of gap)</span>
-                    )}
-                  </p>
-                </div>
-
-                {/* Fertiliser switch — protected urea */}
-                <div>
-                  <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-sm lg:text-xs text-gray-500">
-                      Switch to protected urea fertiliser
-                    </span>
-                    <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
-                      {fertPct}%
-                    </span>
-                  </div>
-                  <input
-                    type="range" min="0" max="100" step="5"
-                    value={fertPct}
-                    onChange={(e) => setFertPct(Number(e.target.value))}
-                    className="w-full h-3 lg:h-auto cursor-pointer"
-                    style={{
-                      WebkitAppearance: "none", appearance: "none",
-                      background: sliderBg(fertPct, 100),
-                      borderRadius: "9999px", outline: "none",
-                    }}
-                    aria-label="Protected urea fertiliser adoption percentage"
-                  />
-                  <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
-                    <span>0%</span>
-                    <span>100%</span>
-                  </div>
-                  {fertPct >= 75 && (
-                    <p className="text-[10px] text-gray-400 mt-0.5">
-                      CAP target by 2027
-                    </p>
-                  )}
-                  <p className="text-sm lg:text-[11px] text-gray-400 mt-1">
-                    Saves <span className="font-medium text-gray-600">{Math.round(fertReduction)} kt</span>
-                    {fertReduction > 0 && (
-                      <span className="text-green-600"> ({pctOfGap(fertReduction)}% of gap)</span>
-                    )}
-                  </p>
-                </div>
-
-                {/* Peatland restoration */}
-                <div>
-                  <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-sm lg:text-xs text-gray-500">Peatland restoration</span>
-                    <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
-                      {peatlandHa.toLocaleString()} ha
-                    </span>
-                  </div>
-                  <input
-                    type="range" min="0" max="10000" step="500"
-                    value={peatlandHa}
-                    onChange={(e) => setPeatlandHa(Number(e.target.value))}
-                    className="w-full h-3 lg:h-auto cursor-pointer"
-                    style={{
-                      WebkitAppearance: "none", appearance: "none",
-                      background: sliderBg(peatlandHa, 10000),
-                      borderRadius: "9999px", outline: "none",
-                    }}
-                    aria-label="Peatland restoration hectares"
-                  />
-                  <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
-                    <span>0</span>
-                    <span>10,000 ha</span>
-                  </div>
-                  {peatlandHa === 10000 && (
-                    <p className="text-[10px] text-gray-400 mt-0.5">
-                      Ambitious under NI Peatland Strategy
-                    </p>
-                  )}
-                  <p className="text-sm lg:text-[11px] text-gray-400 mt-1">
-                    Saves <span className="font-medium text-gray-600">{Math.round(peatlandReduction)} kt</span>
-                    {peatlandReduction > 0 && (
-                      <span className="text-green-600"> ({pctOfGap(peatlandReduction)}% of gap)</span>
-                    )}
-                  </p>
-                </div>
-
-                {/* Cattle herd reduction */}
-                <div>
-                  <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-sm lg:text-xs text-gray-500">Cattle herd reduction</span>
-                    <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
-                      {herdPct}%
-                    </span>
-                  </div>
-                  <div className="relative">
+                  {/* Feed additives — dairy (Bovaer) */}
+                  <div>
+                    <div className="flex justify-between items-baseline mb-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm lg:text-xs text-gray-500">
+                          Feed additives — dairy (Bovaer)
+                        </span>
+                        <SliderHelpTooltip tooltipKey="bovaerDairy" />
+                      </div>
+                      <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
+                        {bovaerPct}%
+                      </span>
+                    </div>
                     <input
-                      type="range" min="0" max="50" step="1"
-                      value={herdPct}
-                      onChange={(e) => setHerdPct(Number(e.target.value))}
+                      type="range" min="0" max="90" step="5"
+                      value={bovaerPct}
+                      onChange={(e) => setBovaerPct(Number(e.target.value))}
                       className="w-full h-3 lg:h-auto cursor-pointer"
                       style={{
                         WebkitAppearance: "none", appearance: "none",
-                        background: sliderBg(herdPct, 50),
+                        background: sliderBg(bovaerPct, 90),
                         borderRadius: "9999px", outline: "none",
                       }}
-                      aria-label="Cattle herd reduction percentage"
+                      title="Proportion of dairy cattle receiving Bovaer feed additive, reducing enteric methane by 12% per animal"
+                      aria-label="Bovaer adoption percentage"
                     />
-                    <div
-                      className="absolute top-0 pointer-events-none flex flex-col items-center"
-                      style={{ left: `${(GAP_CLOSING_HERD_PCT / 50) * 100}%` }}
-                    >
-                      <div className="w-px h-2.5 mt-2 bg-gray-300" />
+                    <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
+                      <span>0%</span>
+                      <span>90%</span>
                     </div>
-                  </div>
-                  <div className="flex justify-between text-[10px] text-gray-300 mt-0.5 relative">
-                    <span>0%</span>
-                    <span
-                      className="absolute text-gray-400"
-                      style={{
-                        left: `${(GAP_CLOSING_HERD_PCT / 50) * 100}%`,
-                        transform: "translateX(-50%)",
-                      }}
-                    >
-                      closes gap
-                    </span>
-                    <span>50%</span>
-                  </div>
-                  <p className="text-sm lg:text-[11px] text-gray-400 mt-1">
-                    Saves <span className="font-medium text-gray-600">{Math.round(herdReduction)} kt</span>
-                    {herdReduction > 0 && (
-                      <span className="text-green-600"> ({pctOfGap(herdReduction)}% of gap)</span>
+                    {bovaerPct === 90 && (
+                      <p className="text-[10px] text-gray-400 mt-0.5">
+                        Maximum realistic deployment by 2030
+                      </p>
                     )}
-                  </p>
-                  {herdPct >= GAP_CLOSING_HERD_PCT && (
-                    <p className="text-sm lg:text-[11px] text-[#c1440e] mt-1 font-medium">
-                      {herdPct}% = {animalsRemoved.toLocaleString()} fewer cattle
-                    </p>
-                  )}
+                    {bovaerReduction > 0 && (
+                      <p className="text-sm lg:text-[11px] text-gray-400 mt-1 transition-all">
+                        Saves <span className="text-[11px] font-medium text-gray-700">{Math.round(bovaerReduction)} kt</span>{" "}
+                        <span className="text-green-600">({pctOfGap(bovaerReduction)}% of gap)</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Feed additives — non-dairy cattle */}
+                  <div>
+                    <div className="flex justify-between items-baseline mb-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm lg:text-xs text-gray-500">
+                          Feed additives — non-dairy cattle
+                        </span>
+                        <SliderHelpTooltip tooltipKey="bovaerNonDairy" />
+                      </div>
+                      <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
+                        {nonDairyPct}%
+                      </span>
+                    </div>
+                    <input
+                      type="range" min="0" max="90" step="5"
+                      value={nonDairyPct}
+                      onChange={(e) => setNonDairyPct(Number(e.target.value))}
+                      className="w-full h-3 lg:h-auto cursor-pointer"
+                      style={{
+                        WebkitAppearance: "none", appearance: "none",
+                        background: sliderBg(nonDairyPct, 90),
+                        borderRadius: "9999px", outline: "none",
+                      }}
+                      title="Proportion of beef and other cattle receiving Bovaer, reducing enteric methane by 12% per animal"
+                      aria-label="Non-dairy feed additive adoption percentage"
+                    />
+                    <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
+                      <span>0%</span>
+                      <span>90%</span>
+                    </div>
+                    {nonDairyPct === 90 && (
+                      <p className="text-[10px] text-gray-400 mt-0.5">
+                        CAP Central Scenario assumes 35% uptake
+                      </p>
+                    )}
+                    {nonDairyReduction > 0 && (
+                      <p className="text-sm lg:text-[11px] text-gray-400 mt-1 transition-all">
+                        Saves <span className="text-[11px] font-medium text-gray-700">{Math.round(nonDairyReduction)} kt</span>{" "}
+                        <span className="text-green-600">({pctOfGap(nonDairyReduction)}% of gap)</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Cattle herd reduction — same emission pool, structural lever */}
+                  <div className="border-t border-[#e8e0d8] pt-4 mt-3">
+                    <div className="flex justify-between items-baseline mb-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm lg:text-xs text-gray-500">Cattle herd reduction</span>
+                        <SliderHelpTooltip tooltipKey="herdReduction" />
+                      </div>
+                      <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
+                        {herdPct}%
+                      </span>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="range" min="0" max="50" step="1"
+                        value={herdPct}
+                        onChange={(e) => setHerdPct(Number(e.target.value))}
+                        className="w-full h-3 lg:h-auto cursor-pointer"
+                        style={{
+                          WebkitAppearance: "none", appearance: "none",
+                          background: sliderBgMuted(herdPct, 50),
+                          borderRadius: "9999px", outline: "none",
+                        }}
+                        title="Percentage reduction in total cattle numbers, linearly reducing enteric fermentation emissions"
+                        aria-label="Cattle herd reduction percentage"
+                      />
+                      <div
+                        className="absolute top-0 pointer-events-none flex flex-col items-center"
+                        style={{ left: `${(GAP_CLOSING_HERD_PCT / 50) * 100}%` }}
+                      >
+                        <div className="w-px h-2.5 mt-2 bg-gray-300" />
+                      </div>
+                    </div>
+                    <div className="flex justify-between text-[10px] text-gray-300 mt-0.5 relative">
+                      <span>0%</span>
+                      <span
+                        className="absolute text-gray-400"
+                        style={{
+                          left: `${(GAP_CLOSING_HERD_PCT / 50) * 100}%`,
+                          transform: "translateX(-50%)",
+                        }}
+                      >
+                        closes gap
+                      </span>
+                      <span>50%</span>
+                    </div>
+                    {herdReduction > 0 && (
+                      <p className="text-sm lg:text-[11px] text-gray-400 mt-1 transition-all">
+                        Saves <span className="text-[11px] font-medium text-gray-700">{Math.round(herdReduction)} kt</span>{" "}
+                        <span className="text-green-600">({pctOfGap(herdReduction)}% of gap)</span>
+                      </p>
+                    )}
+                    {herdPct >= GAP_CLOSING_HERD_PCT && (
+                      <p className="text-sm lg:text-[11px] text-[#c1440e] mt-1 font-medium">
+                        {herdPct}% = {animalsRemoved.toLocaleString()} fewer cattle
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="mt-3 flex flex-col gap-2">
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setGeneticsOn((v) => !v)}
+                        className={`flex-1 rounded-lg border px-3 py-2 text-left transition-colors ${
+                          geneticsOn
+                            ? "border-[#c1440e] bg-white text-gray-700"
+                            : "border-gray-200 bg-white text-gray-400"
+                        }`}
+                      >
+                        <span className="text-[11px] font-medium leading-tight block">
+                          {geneticsOn && <span className="mr-1">✓</span>}Ruminant genetics
+                        </span>
+                        <span className="text-[10px] tabular-nums">
+                          {geneticsOn ? `+${GENETICS_REDUCTION_KT} kt` : `${GENETICS_REDUCTION_KT} kt potential`}
+                        </span>
+                      </button>
+                      <SliderHelpTooltip tooltipKey="ruminantGenetics" />
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setAdOn((v) => !v)}
+                        className={`flex-1 rounded-lg border px-3 py-2 text-left transition-colors ${
+                          adOn
+                            ? "border-[#c1440e] bg-white text-gray-700"
+                            : "border-gray-200 bg-white text-gray-400"
+                        }`}
+                      >
+                        <span className="text-[11px] font-medium leading-tight block">
+                          {adOn && <span className="mr-1">✓</span>}Anaerobic digestion
+                        </span>
+                        <span className="text-[10px] tabular-nums">
+                          {adOn ? `+${effectiveAd} kt` : `${AD_POTENTIAL_KT} kt potential`}
+                        </span>
+                      </button>
+                      <SliderHelpTooltip tooltipKey="anaerobicDigestion" />
+                    </div>
+                    {adOverstatement > 0 && (
+                      <p className="text-[10px] text-amber-600">
+                        Note: AD and slurry aeration draw from the same pool. At current adoption, combined reduction may overstate by ~{adOverstatement} kt.
+                      </p>
+                    )}
+                  </div>
+
+                </div>
+              </div>
+
+            <div className="w-full px-0 md:px-6 lg:px-8 lg:border-l border-[#e8e0d8]">
+                <div className="flex justify-between items-baseline mb-4">
+                  <p className="text-[10px] uppercase tracking-widest text-gray-400">Slurry & soils</p>
+                  <span className="text-[10px] uppercase tracking-widest text-gray-400 text-right">up to {MAX_SLURRY_SOILS_KT.toLocaleString()} kt</span>
+                </div>
+                <div className="flex flex-col gap-5">
+
+                  {/* Slurry aeration */}
+                  <div>
+                    <div className="flex justify-between items-baseline mb-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm lg:text-xs text-gray-500">
+                          Slurry aeration
+                        </span>
+                        <SliderHelpTooltip tooltipKey="slurryAeration" />
+                      </div>
+                      <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
+                        {slurryPct}%
+                      </span>
+                    </div>
+                    <input
+                      type="range" min="0" max="80" step="5"
+                      value={slurryPct}
+                      onChange={(e) => setSlurryPct(Number(e.target.value))}
+                      className="w-full h-3 lg:h-auto cursor-pointer"
+                      style={{
+                        WebkitAppearance: "none", appearance: "none",
+                        background: sliderBg(slurryPct, 80),
+                        borderRadius: "9999px", outline: "none",
+                      }}
+                      title="Proportion of liquid slurry storage units fitted with aeration, reducing methane emissions by 40% per unit"
+                      aria-label="Slurry aeration adoption percentage"
+                    />
+                    <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
+                      <span>0%</span>
+                      <span>80%</span>
+                    </div>
+                    {slurryPct >= 50 && (
+                      <p className="text-[10px] text-gray-400 mt-0.5">
+                        Capital-intensive; 50% by 2027 is CAP target
+                      </p>
+                    )}
+                    {slurryReduction > 0 && (
+                      <p className="text-sm lg:text-[11px] text-gray-400 mt-1 transition-all">
+                        Saves <span className="text-[11px] font-medium text-gray-700">{Math.round(slurryReduction)} kt</span>{" "}
+                        <span className="text-green-600">({pctOfGap(slurryReduction)}% of gap)</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Fertiliser switch — protected urea */}
+                  <div>
+                    <div className="flex justify-between items-baseline mb-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm lg:text-xs text-gray-500">
+                          Switch to protected urea fertiliser
+                        </span>
+                        <SliderHelpTooltip tooltipKey="protectedUrea" />
+                      </div>
+                      <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
+                        {fertPct}%
+                      </span>
+                    </div>
+                    <input
+                      type="range" min="0" max="100" step="5"
+                      value={fertPct}
+                      onChange={(e) => setFertPct(Number(e.target.value))}
+                      className="w-full h-3 lg:h-auto cursor-pointer"
+                      style={{
+                        WebkitAppearance: "none", appearance: "none",
+                        background: sliderBg(fertPct, 100),
+                        borderRadius: "9999px", outline: "none",
+                      }}
+                      title="Proportion of synthetic fertiliser use switched to protected urea, reducing nitrous oxide emissions"
+                      aria-label="Protected urea fertiliser adoption percentage"
+                    />
+                    <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
+                      <span>0%</span>
+                      <span>100%</span>
+                    </div>
+                    {fertPct >= 75 && (
+                      <p className="text-[10px] text-gray-400 mt-0.5">
+                        CAP target by 2027
+                      </p>
+                    )}
+                    {fertReduction > 0 && (
+                      <p className="text-sm lg:text-[11px] text-gray-400 mt-1 transition-all">
+                        Saves <span className="text-[11px] font-medium text-gray-700">{Math.round(fertReduction)} kt</span>{" "}
+                        <span className="text-green-600">({pctOfGap(fertReduction)}% of gap)</span>
+                      </p>
+                    )}
+                  </div>
+
                 </div>
 
-              </div>
             </div>
 
-            {/* Minor interventions (toggles) */}
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-2">
-                Minor interventions
-              </p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setGeneticsOn((v) => !v)}
-                  className={`flex-1 rounded-lg border px-3 py-2 text-left transition-colors ${
-                    geneticsOn
-                      ? "border-[#c1440e] bg-white text-gray-700"
-                      : "border-gray-200 bg-white text-gray-400"
-                  }`}
-                >
-                  <span className="text-[11px] font-medium block leading-tight">
-                    {geneticsOn && <span className="mr-1">✓</span>}Ruminant genetics
-                  </span>
-                  <span className="text-[10px] tabular-nums">
-                    {geneticsOn ? "+17 kt" : "17 kt potential"}
-                  </span>
-                </button>
-                <button
-                  onClick={() => setAdOn((v) => !v)}
-                  className={`flex-1 rounded-lg border px-3 py-2 text-left transition-colors ${
-                    adOn
-                      ? "border-[#c1440e] bg-white text-gray-700"
-                      : "border-gray-200 bg-white text-gray-400"
-                  }`}
-                >
-                  <span className="text-[11px] font-medium block leading-tight">
-                    {adOn && <span className="mr-1">✓</span>}Anaerobic digestion
-                  </span>
-                  <span className="text-[10px] tabular-nums">
-                    {adOn ? `+${effectiveAd} kt` : "21 kt potential"}
-                  </span>
-                </button>
-              </div>
-              {adOverstatement > 0 && (
-                <p className="text-[10px] text-amber-600 mt-2">
-                  Note: AD and slurry aeration draw from the same pool. At current adoption, combined reduction may overstate by ~{adOverstatement} kt.
-                </p>
-              )}
-            </div>
+            <div className="w-full px-0 md:px-6 lg:px-8 lg:border-l border-[#e8e0d8]">
+                <div className="flex justify-between items-baseline mb-4">
+                  <p className="text-[10px] uppercase tracking-widest text-gray-400">Land use</p>
+                  <span className="text-[10px] uppercase tracking-widest text-gray-400 text-right">up to {MAX_LAND_USE_KT.toLocaleString()} kt</span>
+                </div>
+                <div className="flex flex-col gap-5">
 
-            {/* Methodology */}
-            <details className="border border-gray-200 rounded-lg bg-white">
-              <summary className="px-3 py-2 cursor-pointer select-none text-sm lg:text-[11px] text-gray-600 hover:text-gray-800 font-medium">
-                Methodology
-              </summary>
-              <div className="px-3 pb-3 pt-2 text-sm lg:text-[11px] text-gray-500 leading-relaxed space-y-4 border-t border-gray-100">
-                <div>
-                  <p className="font-semibold text-gray-600 mb-1">Data source</p>
-                  <p>All emissions figures come from the National Atmospheric Emissions Inventory (NAEI), published annually by the UK government. The NAEI is the legally-defined measurement basis for Northern Ireland&apos;s carbon budgets under the Climate Change (Northern Ireland) Act 2022. Historical figures cover 1990–2023.</p>
+                  {/* Peatland restoration */}
+                  <div>
+                    <div className="flex justify-between items-baseline mb-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm lg:text-xs text-gray-500">Peatland restoration</span>
+                        <SliderHelpTooltip tooltipKey="peatland" />
+                      </div>
+                      <span className="text-2xl lg:text-xs font-mono font-bold lg:font-medium text-gray-700 tabular-nums">
+                        {peatlandHa.toLocaleString()} ha
+                      </span>
+                    </div>
+                    <input
+                      type="range" min="0" max="10000" step="500"
+                      value={peatlandHa}
+                      onChange={(e) => setPeatlandHa(Number(e.target.value))}
+                      className="w-full h-3 lg:h-auto cursor-pointer"
+                      style={{
+                        WebkitAppearance: "none", appearance: "none",
+                        background: sliderBg(peatlandHa, 10000),
+                        borderRadius: "9999px", outline: "none",
+                      }}
+                      title="Hectares of degraded peatland restored, avoiding 11 tonnes CO₂e per hectare per year"
+                      aria-label="Peatland restoration hectares"
+                    />
+                    <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
+                      <span>0</span>
+                      <span>10,000 ha</span>
+                    </div>
+                    {peatlandHa === 10000 && (
+                      <p className="text-[10px] text-gray-400 mt-0.5">
+                        Ambitious under NI Peatland Strategy
+                      </p>
+                    )}
+                    {peatlandReduction > 0 && (
+                      <p className="text-sm lg:text-[11px] text-gray-400 mt-1 transition-all">
+                        Saves <span className="text-[11px] font-medium text-gray-700">{Math.round(peatlandReduction)} kt</span>{" "}
+                        <span className="text-green-600">({pctOfGap(peatlandReduction)}% of gap)</span>
+                      </p>
+                    )}
+                  </div>
+
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-600 mb-1">Projections</p>
-                  <p>No official projection of Northern Ireland&apos;s total emissions to 2030 exists — the draft Climate Action Plan covers only to 2027. To estimate the 2030 gap, this tool applies a linear trend to NAEI figures from 2018–2023. This is an indicative central estimate, not a forecast. The actual gap could be larger or smaller depending on policy delivery and economic conditions.</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-600 mb-1">The agriculture gap</p>
-                  <p>The scenario modeller focuses specifically on agricultural emissions, which is where the gap between Northern Ireland&apos;s current trajectory and its 2030 target is most acute.</p>
-                  <p className="mt-2">The modeller measures progress against the Climate Change Committee&apos;s recommended pathway for Northern Ireland&apos;s agriculture sector, which implies a target of around 4,490 kt CO₂e by 2030. This is an advisory recommendation from the UK&apos;s independent climate advisers — it is not a statutory sectoral limit. It represents what the CCC calculates is needed from agriculture for Northern Ireland to meet its legally binding overall 2030 target.</p>
-                  <p className="mt-2">The gap between Northern Ireland&apos;s current agricultural emissions (5,615 kt in 2023) and this recommended level is 1,125,000 tonnes. This is different from the total emissions gap of 1.73 million tonnes shown in the narrative, because the modeller isolates agriculture specifically, and uses a flat baseline rather than a projected one. Both figures are explained in the full methodology.</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-600 mb-1">Measuring methane</p>
-                  <p>Agricultural emissions are dominated by methane and nitrous oxide. This tool uses AR5 Global Warming Potential values throughout — the current international standard. DAERA&apos;s draft Climate Action Plan uses an older standard (AR4), which produces slightly different absolute figures. Where DAERA projections appear in the charts, they have been adjusted to the same measurement basis as the NAEI data.</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-600 mb-1">Intervention estimates</p>
-                  <p>The scenario modeller draws on published trial data and official sources for each intervention:</p>
-                  <ul className="mt-2 space-y-1.5 list-disc pl-4">
-                    <li><strong className="text-gray-600">Feed additives (Bovaer):</strong> 12% reduction in enteric methane per animal at the specified adoption rate. This reflects pasture-system trial results, which are lower than reductions reported in housed systems, because consistent supplement delivery is harder to achieve in grazing herds.</li>
-                    <li><strong className="text-gray-600">Slurry aeration:</strong> 40% methane reduction per treated unit, consistent with AFBI/Teagasc field trial data and the figure used in DAERA&apos;s own draft Climate Action Plan.</li>
-                    <li><strong className="text-gray-600">Protected urea:</strong> Up to 59 kt CO₂e reduction at full adoption, derived by scaling the Draft CAP&apos;s 44 kt saving at 75% adoption linearly to 100%.</li>
-                    <li><strong className="text-gray-600">Peatland restoration:</strong> 11 tonnes CO₂e avoided per hectare per year, from UK Centre for Ecology and Hydrology NI-specific analysis for the Draft CAP. This affects land use emissions, not agriculture directly.</li>
-                    <li><strong className="text-gray-600">Herd reduction:</strong> Applied linearly to enteric fermentation emissions. A 1% reduction in cattle numbers avoids approximately 32 kt CO₂e per year.</li>
-                    <li><strong className="text-gray-600">Ruminant genetics and anaerobic digestion</strong> are modelled as fixed toggles based on CCC pathway estimates and draft CAP projections respectively.</li>
-                  </ul>
-                  <p className="mt-2">All intervention estimates carry uncertainty. The modeller is designed to illustrate the scale and combination of changes required, not to produce precise forecasts.</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-600 mb-1">Committed baseline</p>
-                  <p>The modeller pre-applies 242 kt of reductions already committed in the draft Climate Action Plan — primarily livestock productivity improvements. The gap you are adjusting with the sliders is the remaining 883 kt not yet accounted for by current policy.</p>
-                </div>
-                <p>
-                  For detailed sourcing, assumptions, and technical notes on each figure, see the{" "}
-                  <a href="/methodology" className="underline hover:text-gray-700">full methodology</a>.
-                </p>
-              </div>
-            </details>
+
+            </div>
 
           </div>
-
         </div>
 
         {/* Concluding text — THE ARITHMETIC */}
-        <div className="mt-14 pt-10 border-t border-[#e8e0d8] max-w-2xl">
+        <div className="mt-14 pt-10 border-t border-[#e8e0d8]">
           <p className="text-[11px] uppercase tracking-widest text-[#666666] mb-4">
             The Arithmetic
           </p>
           <p className="text-[15px] leading-[1.9] text-gray-600 mb-3">
-            Technology-only deployment, even at maximum adoption across every available measure, falls short of closing the gap. Some reduction in cattle numbers is required regardless. The modeller above shows the scale of what that means.
+            Even at maximum adoption across every available productivity improvement measure, the gap to the 2030 CCC Stretch Ambition Target is not closed. Some reduction in cattle numbers is required regardless.
           </p>
           <p className="text-[15px] leading-[1.9] text-gray-600 mb-3">
-            Technology-only scenarios depend on near-universal adoption across thousands of farms by 2030. Bovaer requires twice-daily concentrate delivery at 90% uptake. Slurry aeration requires capital grants that do not yet exist at scale. Protected urea requires changing fertiliser habits across an entire industry. The question is not whether the arithmetic works. It is whether the conditions for that arithmetic exist.
+            Technology-only scenarios depend on near-universal adoption across thousands of farms by 2030. Bovaer requires twice-daily concentrate delivery at 90% uptake. Slurry aeration requires capital grants that do not yet exist at scale. Protected urea requires changing fertiliser habits across the entire industry.
           </p>
           <p className="text-[15px] leading-[1.9] text-gray-600">
-            Since 1990, Northern Ireland's emissions fell by nearly a third, but agriculture's share grew. The legal target for 2030 cannot be met unless that changes. The draft Climate Action Plan does not say how it will.
+            Since 1990, Northern Ireland&apos;s total emissions fell by nearly a third, but agriculture&apos;s share has grown. The modeller above shows what closing the gap requires. On current trends, agriculture will not fall fast enough to meet the 2030 target. With it accounting for 30.8% of all emissions, the legally binding target cannot be met unless the rate of reduction accelerates significantly. The draft Climate Action Plan does not say how it will.
           </p>
         </div>
       </div>

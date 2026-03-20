@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import nationsData from "@/public/data/nations_comparison.json";
 import { useIsMobile } from "@/lib/useIsMobile";
+import ChartTooltip from "./ChartTooltip";
 
 const NATION_COLOURS: Record<string, string> = {
   "Northern Ireland": "#c1440e",
@@ -24,7 +25,7 @@ const NATION_COLOURS: Record<string, string> = {
 const TOTAL_Y_DOMAIN: [number, number] = [40, 110];
 const AGRI_Y_DOMAIN:  [number, number] = [75, 120];
 
-const CHART_HEIGHT   = 420;
+const CHART_HEIGHT   = 540;
 const MARGIN_TOP     = 10;
 const MARGIN_BOTTOM  = 0;
 
@@ -60,31 +61,16 @@ export default function NationsLineChart() {
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (!active || !payload?.length) return null;
-
     const items = payload
       .filter((p: any) => p.value != null)
-      .sort((a: any, b: any) => b.value - a.value);
-
+      .sort((a: any, b: any) => b.value - a.value)
+      .map((p: any) => ({ name: p.name, value: p.value.toFixed(1), color: p.color, indicatorType: "circle" as const }));
     if (!items.length) return null;
-
-    return (
-      <div className="bg-white dark:bg-gray-800 p-3 border border-gray-300 dark:border-gray-600 rounded shadow-lg min-w-[160px]">
-        <p className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">{label}</p>
-        {items.map((p: any) => (
-          <div key={p.name} className="flex items-center justify-between gap-4 py-0.5">
-            <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: p.color }} />
-              <span className="text-xs text-gray-600 dark:text-gray-300">{p.name}</span>
-            </div>
-            <span className="text-xs font-semibold text-gray-800 dark:text-gray-100 tabular-nums">{p.value.toFixed(1)}</span>
-          </div>
-        ))}
-      </div>
-    );
+    return <ChartTooltip label={String(label)} items={items} />;
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center">
+    <div className="w-full flex flex-col">
 
       {/* Tab row */}
       <div className="flex items-center justify-between mb-4">
@@ -118,7 +104,7 @@ export default function NationsLineChart() {
       <ResponsiveContainer width="100%" height={isMobile ? 260 : CHART_HEIGHT}>
         <LineChart
           data={chartData}
-          margin={{ top: MARGIN_TOP, right: isMobile ? 10 : 20, left: isMobile ? 0 : 20, bottom: MARGIN_BOTTOM }}
+          margin={{ top: MARGIN_TOP, right: isMobile ? 10 : 30, left: isMobile ? 0 : 20, bottom: MARGIN_BOTTOM }}
         >
           <CartesianGrid vertical={false} stroke="#e5e7eb" />
           <XAxis
@@ -126,6 +112,7 @@ export default function NationsLineChart() {
             tickLine={false}
             tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
             ticks={isMobile ? [1990, 2000, 2010, 2023] : [1990, 1995, 2000, 2005, 2010, 2015, 2020, 2023]}
+            padding={{ left: 8, right: 8 }}
           />
           <YAxis
             tickLine={false}

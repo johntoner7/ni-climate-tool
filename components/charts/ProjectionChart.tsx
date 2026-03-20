@@ -13,10 +13,11 @@ import {
 } from "recharts";
 import projectionsData from "@/public/data/ni_projections.json";
 import { useIsMobile } from "@/lib/useIsMobile";
+import ChartTooltip from "./ChartTooltip";
 
 const TARGET = projectionsData.metadata.target_2030_kt;
 
-const OLS_COLOUR   = "#6b7280";
+const OLS_COLOUR    = "#6b7280";
 const ACTUAL_COLOUR = "#1e3a5f";
 
 export default function ProjectionChart({ activeStep }: { activeStep?: number }) {
@@ -25,45 +26,22 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (!active || !payload?.length) return null;
-
     const actual = payload.find((p: any) => p.dataKey === "actual" && p.value != null);
     const ols    = payload.find((p: any) => p.dataKey === "ols"    && p.value != null);
-
     if (!actual && !ols) return null;
-
     return (
-      <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-600 rounded shadow-lg text-xs min-w-[160px]">
-        <p className="font-semibold text-gray-700 dark:text-gray-200 mb-2">{label}</p>
-        {actual && (
-          <div className="flex items-center gap-2 mb-1.5">
-            <div className="w-5 h-[2px] rounded flex-shrink-0" style={{ backgroundColor: ACTUAL_COLOUR }} />
-            <span className="text-gray-600 dark:text-gray-300">
-              <span className="font-medium">Actual:</span>{" "}
-              {actual.value.toLocaleString()} kt
-            </span>
-          </div>
-        )}
-        {ols && (
-          <div className="flex items-center gap-2">
-            <div
-              className="w-5 flex-shrink-0"
-              style={{
-                height: 1,
-                backgroundImage: `repeating-linear-gradient(to right, ${OLS_COLOUR} 0, ${OLS_COLOUR} 4px, transparent 4px, transparent 7px)`,
-              }}
-            />
-            <span className="text-gray-600 dark:text-gray-300">
-              <span className="font-medium">OLS trend:</span>{" "}
-              {ols.value.toLocaleString()} kt
-            </span>
-          </div>
-        )}
-      </div>
+      <ChartTooltip
+        label={String(label)}
+        items={[
+          ...(actual ? [{ name: "Actual",    value: `${actual.value.toLocaleString()} kt`, color: ACTUAL_COLOUR, indicatorType: "line"   as const }] : []),
+          ...(ols    ? [{ name: "OLS trend", value: `${ols.value.toLocaleString()} kt`,    color: OLS_COLOUR,    indicatorType: "dashed" as const }] : []),
+        ]}
+      />
     );
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center">
+    <div className="w-full flex flex-col">
       <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">
         Mt CO₂e · Source: NAEI
       </p>
@@ -86,7 +64,7 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
             tickFormatter={(v) => `${(v / 1000).toFixed(0)}Mt`}
             domain={[10000, 28000]}
-            width={isMobile ? 28 : 40}
+            width={isMobile ? 32 : 40}
           />
           <Tooltip content={<CustomTooltip />} />
 
@@ -98,7 +76,7 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             strokeDasharray="6 3"
             label={isMobile ? undefined : {
               value: `2030 target: ${(TARGET / 1000).toFixed(1)}Mt`,
-              position: "right",
+              position: "bottom",
               fontSize: 11,
               fill: "#16a34a",
             }}

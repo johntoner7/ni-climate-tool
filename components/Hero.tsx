@@ -24,8 +24,8 @@ const HERO_STATS = [
   },
   {
     label: "Emissions to Cut by 2030",
-    value: "4,399kt CO₂e",
-    description: " from 18.2 million tonnes to 13.8 million tonnes",
+    value: "4.4 million tonnes CO₂e",
+    description: "from 18.2 million tonnes to 13.8 million tonnes",
     isHighlight: false,
   },
 ];

@@ -23,7 +23,7 @@ function renderChartForStep(chartId: ChartId, stepId: number) {
     case 2: return <NationsLineChart />;
     case 3: return <ProjectionChart activeStep={stepId} />;
     case 4: return <SectorGrid activeStep={stepId} />;
-    case 5: return <GasCompositionChart className="w-full h-full flex flex-col justify-center items-center overflow-y-auto" />;
+    case 5: return <GasCompositionChart className="w-full flex flex-col items-center" />;
     case 6: return <AgriculturePathwayChart />;
   }
 }
@@ -66,23 +66,6 @@ export default function Home() {
     };
   }, []);
 
-  const renderChart = () => {
-    switch (activeChart) {
-      case 1:
-        return <SectorAreaChart activeStep={activeStep} />;
-      case 2:
-        return <NationsLineChart />;
-      case 3:
-        return <ProjectionChart activeStep={activeStep} />;
-      case 4:
-        return <SectorGrid activeStep={activeStep} />;
-      case 6:
-        return <AgriculturePathwayChart />;
-      case 5:
-        return <GasCompositionChart className="w-full h-full flex flex-col justify-center items-center overflow-y-auto" />;
-    }
-  };
-
   return (
     <div className="bg-white text-gray-900">
       <Hero />
@@ -92,9 +75,9 @@ export default function Home() {
         {STEPS.map((step) => (
           <div
             key={step.id}
-            className="min-h-screen flex flex-col border-b border-gray-100"
+            className="flex flex-col border-b border-gray-100 pb-6"
           >
-            <div className="shrink-0 px-5 pt-4 pb-2 flex justify-between items-center">
+            <div className="px-5 pt-4 pb-2 flex justify-between items-center">
               <p className="text-[10px] uppercase tracking-widest text-gray-400">
                 {CHART_LABELS[step.chart]}
               </p>
@@ -102,10 +85,10 @@ export default function Home() {
                 {String(step.id).padStart(2, "0")}&thinsp;/&thinsp;{TOTAL_STEPS}
               </span>
             </div>
-            <div className="shrink-0 h-[45vh] px-2 overflow-hidden">
+            <div className="px-2 overflow-hidden">
               {renderChartForStep(step.chart, step.id)}
             </div>
-            <div className="flex-1 px-6 py-5">
+            <div className="px-6 py-5">
               <p className="text-[10px] uppercase tracking-widest text-[#666666] mb-3">
                 {step.eyebrow}
               </p>
@@ -138,7 +121,7 @@ export default function Home() {
             key={activeStep}
             className="flex-1 min-h-0 flex items-center justify-center chart-fade-in"
           >
-            <div className="w-full h-full">{renderChart()}</div>
+            <div className="w-full">{renderChartForStep(activeChart, activeStep)}</div>
           </div>
           <div className="shrink-0 flex items-center justify-between mt-4">
             <span className="text-[10px] font-mono text-gray-300 tabular-nums">

@@ -14,16 +14,7 @@ import {
 import { niSectorData } from "@/lib/data";
 import ChartTooltip from "./ChartTooltip";
 import { useIsMobile } from "@/lib/useIsMobile";
-
-// Improved color palette with distinct, differentiated hues
-const SECTOR_COLOURS = {
-  Agriculture: "#c1440e",  // Warm red
-  Transport:   "#f4a259",  // Warm orange/yellow
-  Buildings:   "#5b8bd6",  // Clear blue
-  Industry:    "#7c3f9f",  // Purple
-  Waste:       "#2d9f6c",  // Green
-  Electricity: "#1a5f7a",  // Dark teal
-};
+import { SECTOR_COLOURS } from "@/lib/constants";
 
 const SECTORS = Object.keys(SECTOR_COLOURS) as Array<keyof typeof SECTOR_COLOURS>;
 
@@ -71,11 +62,11 @@ export default function SectorAreaChart({ activeStep }: { activeStep?: number })
     return null;
   };
   return (
-    <div className="w-full h-full flex flex-col justify-center">
+    <div className="w-full flex flex-col">
       <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">
         kt CO₂e · Source: NAEI
       </p>
-      <ResponsiveContainer width="100%" height={isMobile ? 260 : 420}>
+      <ResponsiveContainer width="100%" height={isMobile ? 260 : 540}>
           <AreaChart
             data={niSectorData}
             margin={{ top: 10, right: isMobile ? 20 : 110, left: isMobile ? 0 : 20, bottom: 0 }}
@@ -86,6 +77,7 @@ export default function SectorAreaChart({ activeStep }: { activeStep?: number })
               tickLine={false}
               tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
               ticks={isMobile ? [1990, 2000, 2010, 2023] : [1990, 1995, 2000, 2005, 2010, 2015, 2020, 2023]}
+              padding={{ left: 8, right: 8 }}
             />
             <YAxis
               tickLine={false}

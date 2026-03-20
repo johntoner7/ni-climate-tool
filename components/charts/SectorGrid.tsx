@@ -1,15 +1,14 @@
 import SectorMiniChart from "./SectorMiniChart";
 import projectionsData from "@/public/data/ni_projections.json";
+import { SECTOR_COLOURS } from "@/lib/constants";
 
-// Sector target allocations and colors matching the main area chart
-// Updated with improved distinct colors
 const SECTOR_CONFIG: Record<string, { colour: string; target: number }> = {
-  Agriculture: { colour: "#c1440e", target: 2700 }, // Warm red
-  Transport: { colour: "#f4a259", target: 1900 },   // Warm orange/yellow
-  Buildings: { colour: "#5b8bd6", target: 1300 },   // Clear blue
-  Electricity: { colour: "#1a5f7a", target: 700 },  // Dark teal
-  Industry: { colour: "#7c3f9f", target: 550 },     // Purple
-  Waste: { colour: "#2d9f6c", target: 380 },        // Green
+  Agriculture: { colour: SECTOR_COLOURS.Agriculture, target: 2700 },
+  Transport:   { colour: SECTOR_COLOURS.Transport,   target: 1900 },
+  Buildings:   { colour: SECTOR_COLOURS.Buildings,   target: 1300 },
+  Electricity: { colour: SECTOR_COLOURS.Electricity, target: 700  },
+  Industry:    { colour: SECTOR_COLOURS.Industry,    target: 550  },
+  Waste:       { colour: SECTOR_COLOURS.Waste,       target: 380  },
 };
 
 export default function SectorGrid({ activeStep }: { activeStep?: number }) {

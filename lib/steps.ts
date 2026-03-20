@@ -60,9 +60,9 @@ export const STEPS: Step[] = [
   },
   {
     id: 9,
-    chart: 6,
+    chart: 5,
     eyebrow: "WHAT COULD CHANGE THIS",
-    copy: "The emissions gap is 1.73 million tonnes. The modeller below focuses specifically on agriculture, the sector where the gap is hardest to close. Its emissions drive the largest share of the overall shortfall and are the least amenable to the technological solutions available elsewhere in the economy.\n\nThe interventions exist: feed \nadditives, slurry aeration, protected urea, peatland restoration, genetics \nprogrammes, herd reduction. Some are already in the draft plan at modest scale.\n\nThe scenario modeller below lets you test each intervention individually or \ncombine them. Technology can close most of the gap. The question is what closes the rest.",
+    copy: "Agriculture accounts for the largest share of Northern Ireland's emissions gap and is the hardest sector to close. Its emissions are largely biological rather than technological, as they come from what cattle eat and how manure decomposes, rather than from machinery that can be switched out. \n\nThe interventions exist: feed \nadditives, slurry aeration, protected urea, peatland restoration, genetics \nprogrammes, herd reduction. Some are already in the draft plan at modest scale.\n\nThe scenario modeller below lets you test each intervention individually or \ncombine them.",
     cta: "#scenario",
   },
 ];

@@ -3,7 +3,6 @@
 import {
   ComposedChart,
   Line,
-  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -13,6 +12,7 @@ import {
 } from "recharts";
 import projectionsData from "@/public/data/ni_projections.json";
 import { useIsMobile } from "@/lib/useIsMobile";
+import ChartTooltip from "./ChartTooltip";
 
 function linearRegression(points: Array<{ x: number; y: number }>) {
   const n = points.length;
@@ -102,33 +102,20 @@ export default function AgriculturePathwayChart() {
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (!active || !payload?.length) return null;
-    const rows = SERIES.flatMap(({ keys, label: name, color }) => {
+    const items = SERIES.flatMap(({ keys, label: name, color }) => {
       const hit = payload.find((p: any) => keys.includes(p.dataKey) && p.value != null);
-      return hit ? [{ name, value: hit.value, color }] : [];
+      return hit ? [{ name, value: `${(hit.value / 1000).toFixed(2)} Mt`, color, indicatorType: "line" as const }] : [];
     });
-    if (!rows.length) return null;
-    return (
-      <div className="bg-white p-2.5 border border-gray-200 rounded shadow text-xs">
-        <p className="font-semibold text-gray-700 mb-1.5">{label}</p>
-        {rows.map((r) => (
-          <div key={r.name} className="flex items-center gap-2 mb-1 last:mb-0">
-            <div className="w-4 h-0.5 rounded flex-shrink-0" style={{ backgroundColor: r.color }} />
-            <span className="text-gray-600">
-              {r.name}:{" "}
-              <span className="font-medium text-gray-800">
-                {(r.value / 1000).toFixed(2)} Mt
-              </span>
-            </span>
-          </div>
-        ))}
-      </div>
-    );
+    if (!items.length) return null;
+    return <ChartTooltip label={String(label)} items={items} />;
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center">
-      <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">Mt CO₂e · Sources: NAEI (historical), DAERA Draft CAP / CCC (Table 21, rebased to NAEI 2023)</p>
-      <ResponsiveContainer width="100%" height={isMobile ? 300 : 460}>
+    <div className="w-full flex flex-col">
+      <p className="text-xs text-gray-400 dark:text-gray-500 mb-2">
+        {isMobile ? "Mt CO₂e · NAEI / DAERA / CCC" : "Mt CO₂e · Sources: NAEI (historical), DAERA Draft CAP / CCC (Table 21, rebased to NAEI 2023)"}
+      </p>
+      <ResponsiveContainer width="100%" height={isMobile ? 240 : 520}>
         <ComposedChart
           data={data}
           margin={{ top: 20, right: isMobile ? 10 : 60, left: isMobile ? 0 : 20, bottom: 0 }}
@@ -147,36 +134,17 @@ export default function AgriculturePathwayChart() {
             tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
             tickFormatter={(v) => `${(v / 1000).toFixed(0)}Mt`}
             domain={[4000, 7000]}
-            width={isMobile ? 28 : undefined}
+            width={isMobile ? 30 : undefined}
           />
           <Tooltip content={<CustomTooltip />} />
 
           {/* Vertical ref line at 2027 */}
-          <ReferenceLine
+            <ReferenceLine
             x={2027}
             stroke="#9ca3af"
             strokeWidth={1}
-            label={{ value: "End of first carbon budget period", position: "top", fontSize: 11, fill: "#6b7280" }}
-          />
-
-          {/* Gap fill between DAERA and CCC - use stacking: base = ccc, top = gap */}
-          <Area
-            type="monotone"
-            dataKey="ccc"
-            stackId="gap"
-            stroke="transparent"
-            fill="transparent"
-            connectNulls={false}
-          />
-          <Area
-            type="monotone"
-            dataKey="gap"
-            stackId="gap"
-            fill="#fca5a5"
-            fillOpacity={0.45}
-            stroke="none"
-            connectNulls={false}
-          />
+            label={{ value: "End of first carbon budget period", position: "top", fontSize: isMobile ? 8 : 12, fill: "#6b7280"}}
+            />
 
           {/* Historical actuals */}
           <Line type="monotone" dataKey="actual" stroke="#334155" strokeWidth={2.5} dot={false} connectNulls name="Actual" />
@@ -204,19 +172,17 @@ export default function AgriculturePathwayChart() {
           <div className="w-5 rounded" style={{ height: 3, backgroundColor: "#16a34a" }} />
           <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>CCC pathway</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-5 h-3 rounded-sm" style={{ backgroundColor: "#fca5a5", opacity: 0.8 }} />
-          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>Gap between projections</span>
-        </div>
       </div>
 
-      <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-        Methodology: Table 21 provides DAERA and CCC values to 2027; 2028–2030 are linear extrapolations
-        from the 2023–2027 trend. Both projection series are rebased by the same offset to the NAEI 2023
-        actual (5.615 Mt), preserving each pathway's rate of change while keeping the gap between the
-        trajectories consistent. DAERA's raw 2023 figure (6.03 Mt) reflects a different inventory basis
-        (2022 data, AR4 GWP) than the NAEI series used here.
-      </p>
+      {!isMobile && (
+        <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+          Methodology: Table 21 provides DAERA and CCC values to 2027; 2028–2030 are linear extrapolations
+          from the 2023–2027 trend. Both projection series are rebased by the same offset to the NAEI 2023
+          actual (5.615 Mt), preserving each pathway's rate of change while keeping the gap between the
+          trajectories consistent. DAERA's raw 2023 figure (6.03 Mt) reflects a different inventory basis
+          (2022 data, AR4 GWP) than the NAEI series used here.
+        </p>
+      )}
     </div>
   );
 }
