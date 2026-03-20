@@ -161,7 +161,7 @@ export default function NationsLineChart() {
                 height: nation === "Northern Ireland" ? 3 : 2,
               }}
             />
-            <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>{nation}</span>
+            <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>{nation}</span>
           </div>
         ))}
       </div>

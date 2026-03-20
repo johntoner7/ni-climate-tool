@@ -139,7 +139,7 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
       <div className={`flex flex-wrap gap-y-1 mt-4 justify-center ${isMobile ? "gap-x-3" : "gap-x-6"}`}>
         <div className="flex items-center gap-1.5">
           <div className="w-5 rounded" style={{ height: 3, backgroundColor: ACTUAL_COLOUR }} />
-          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>Actual</span>
+          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>Actual</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div
@@ -149,13 +149,13 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
               backgroundImage: `repeating-linear-gradient(to right, ${OLS_COLOUR} 0, ${OLS_COLOUR} 5px, transparent 5px, transparent 9px)`,
             }}
           />
-          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>
+          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>
             {isMobile ? "OLS trend" : "Linear trend (OLS, 2018–2030)"}
           </span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-5 h-3 rounded-sm" style={{ backgroundColor: "#fca5a5", opacity: 0.7 }} />
-          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>
+          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>
             {isMobile ? "Gap" : "Gap to 2030 target"}
           </span>
         </div>

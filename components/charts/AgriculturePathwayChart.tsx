@@ -165,15 +165,15 @@ export default function AgriculturePathwayChart() {
       <div className={`flex flex-wrap gap-y-1 mt-4 justify-center ${isMobile ? "gap-x-3" : "gap-x-6"}`}>
         <div className="flex items-center gap-1.5">
           <div className="w-5 rounded" style={{ height: 3, backgroundColor: "#334155" }} />
-          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>Historical actual</span>
+          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>Historical actual</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-5 rounded" style={{ height: 3, backgroundColor: "#f97316" }} />
-          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>DAERA projection</span>
+          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>DAERA projection</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-5 rounded" style={{ height: 3, backgroundColor: "#16a34a" }} />
-          <span className={`text-gray-600 dark:text-gray-300 ${isMobile ? "text-[10px]" : "text-xs"}`}>CCC pathway</span>
+          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>CCC pathway</span>
         </div>
       </div>
 

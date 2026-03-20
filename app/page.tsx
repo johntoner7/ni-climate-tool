@@ -78,10 +78,10 @@ export default function Home() {
             className="flex flex-col border-b border-gray-100 pb-6"
           >
             <div className="px-5 pt-4 pb-2 flex justify-between items-center">
-              <p className="text-[10px] uppercase tracking-widest text-gray-400">
+              <p className="text-[10px] uppercase tracking-widest text-gray-600">
                 {CHART_LABELS[step.chart]}
               </p>
-              <span className="text-[10px] font-mono text-gray-300 tabular-nums">
+              <span className="text-[10px] font-mono text-gray-500 tabular-nums">
                 {String(step.id).padStart(2, "0")}&thinsp;/&thinsp;{TOTAL_STEPS}
               </span>
             </div>
@@ -114,7 +114,7 @@ export default function Home() {
       <div className="hidden lg:flex lg:flex-row">
         <StepsColumn totalSteps={TOTAL_STEPS} />
         <div className="w-[65%] sticky top-0 h-screen flex flex-col justify-center px-16 py-6 border-l border-gray-100 bg-white z-10 overflow-hidden">
-          <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-4 shrink-0">
+          <p className="text-[10px] uppercase tracking-widest text-gray-600 mb-4 shrink-0">
             {CHART_LABELS[activeChart]}
           </p>
           <div
@@ -124,7 +124,7 @@ export default function Home() {
             <div className="w-full">{renderChartForStep(activeChart, activeStep)}</div>
           </div>
           <div className="shrink-0 flex items-center justify-between mt-4">
-            <span className="text-[10px] font-mono text-gray-300 tabular-nums">
+            <span className="text-[10px] font-mono text-gray-500 tabular-nums">
               {String(activeStep).padStart(2, "0")}&thinsp;/&thinsp;{TOTAL_STEPS}
             </span>
             <div className="flex gap-1.5">

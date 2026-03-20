@@ -76,10 +76,11 @@ export default function SectorAreaChart({ activeStep }: { activeStep?: number })
             <CartesianGrid vertical={false} stroke="#e5e7eb" />
             <XAxis
               dataKey="year"
+              type="number"
+              domain={[1990, 2023]}
               tickLine={false}
               tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
               ticks={isMobile ? [1990, 2000, 2010, 2023] : [1990, 1995, 2000, 2005, 2010, 2015, 2020, 2023]}
-              padding={{ left: 8, right: 8 }}
             />
             <YAxis
               tickLine={false}
