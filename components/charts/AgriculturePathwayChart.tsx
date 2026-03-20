@@ -181,8 +181,8 @@ export default function AgriculturePathwayChart() {
         <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
           Methodology: Table 21 provides DAERA and CCC values to 2027; 2028–2030 are linear extrapolations
           from the 2023–2027 trend. Both projection series are rebased by the same offset to the NAEI 2023
-          actual (5.615 Mt), preserving each pathway's rate of change while keeping the gap between the
-          trajectories consistent. DAERA's raw 2023 figure (6.03 Mt) reflects a different inventory basis
+          actual (5.615 Mt), preserving each pathway&apos;s rate of change while keeping the gap between the
+          trajectories consistent. DAERA&apos;s raw 2023 figure (6.03 Mt) reflects a different inventory basis
           (2022 data, AR4 GWP) than the NAEI series used here.
         </p>
       )}
