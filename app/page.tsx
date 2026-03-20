@@ -13,9 +13,7 @@ import { CHART_LABELS } from "@/lib/chartLabels";
 import Hero from "@/components/Hero";
 import StepsColumn from "@/components/StepsColumn";
 import Footer from "@/components/Footer";
-
-type ChartId = 1 | 2 | 3 | 4 | 5 | 6;
-
+import { ChartId } from "@/lib/steps";
 
 function renderChartForStep(chartId: ChartId, stepId: number) {
   switch (chartId) {
@@ -25,6 +23,11 @@ function renderChartForStep(chartId: ChartId, stepId: number) {
     case 4: return <SectorGrid activeStep={stepId} />;
     case 5: return <GasCompositionChart className="w-full flex flex-col items-center" />;
     case 6: return <AgriculturePathwayChart />;
+    case 7: return (
+      <p className="text-4xl lg:text-5xl font-light text-gray-500 leading-snug text-center">
+        How can we close the emissions gap?
+      </p>
+    );
   }
 }
 
@@ -114,9 +117,11 @@ export default function Home() {
       <div className="hidden lg:flex lg:flex-row">
         <StepsColumn totalSteps={TOTAL_STEPS} />
         <div className="w-[65%] sticky top-0 h-screen flex flex-col justify-center px-16 py-6 border-l border-gray-100 bg-white z-10 overflow-hidden">
-          <p className="text-[10px] uppercase tracking-widest text-gray-600 mb-4 shrink-0">
-            {CHART_LABELS[activeChart]}
-          </p>
+          {CHART_LABELS[activeChart] && (
+            <p className="text-[10px] uppercase tracking-widest text-gray-600 mb-4 shrink-0">
+              {CHART_LABELS[activeChart]}
+            </p>
+          )}
           <div
             key={activeStep}
             className="flex-1 min-h-0 flex items-center justify-center chart-fade-in"

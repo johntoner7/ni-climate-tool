@@ -1,10 +1,12 @@
 export type Step = {
   id: number;
-  chart: 1 | 2 | 3 | 4 | 5 | 6;
+  chart: ChartId;
   eyebrow: string;
   copy: string;
   cta?: string;
 };
+
+export type ChartId = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 import { UK_AGRI_SHARE_AVERAGE } from "./constants";
 
@@ -60,7 +62,7 @@ export const STEPS: Step[] = [
   },
   {
     id: 9,
-    chart: 5,
+    chart: 7,
     eyebrow: "WHAT COULD CHANGE THIS",
     copy: "Agriculture accounts for the largest share of Northern Ireland's emissions gap and is the hardest sector to close. Its emissions are largely biological rather than technological, as they come from what cattle eat and how manure decomposes, rather than from machinery that can be switched out. \n\nThe interventions exist: feed \nadditives, slurry aeration, protected urea, peatland restoration, genetics \nprogrammes, herd reduction. Some are already in the draft plan at modest scale.\n\nThe scenario modeller below lets you test each intervention individually or \ncombine them.",
     cta: "#scenario",
