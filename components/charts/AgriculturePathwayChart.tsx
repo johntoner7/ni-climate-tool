@@ -13,6 +13,7 @@ import {
 import projectionsData from "@/public/data/ni_projections.json";
 import { useIsMobile } from "@/lib/useIsMobile";
 import ChartTooltip from "./ChartTooltip";
+import { NAEI_AGRI_2023 } from "@/lib/constants";
 
 const SERIES = [
   { keys: ["actual"],                    label: "Actual (NAEI)",    color: "#334155" },
@@ -45,73 +46,53 @@ function linearRegression(points: Array<{ x: number; y: number }>) {
   return { m, b };
 }
 
-export default function AgriculturePathwayChart() {
-  const isMobile = useIsMobile();
+// DAERA/CCC use a different inventory basis (2022 base, AR4 GWP) so their 2023
+// starting point (~6.03 Mt) sits above the NAEI 2023 actual (5.615 Mt).
+// We rebase both series by the same offset to the NAEI 2023 actual, preserving
+// each pathway's rate of change while keeping the relative gap consistent.
+const daeraTableMt = [6.03, 5.97, 5.88, 5.67, 5.44];
+const cccTableMt   = [5.98, 5.74, 5.60, 5.45, 5.29];
+const yearsTable   = [2023, 2024, 2025, 2026, 2027];
+const sharedOffset = NAEI_AGRI_2023 - Math.round(daeraTableMt[0] * 1000);
 
-  // DAERA and CCC Table 21 values (MtCO2e) for 2023-2027, convert to kt
-  const daeraTableMt = [6.03, 5.97, 5.88, 5.67, 5.44];
-  const cccTableMt = [5.98, 5.74, 5.60, 5.45, 5.29];
-  const yearsTable = [2023, 2024, 2025, 2026, 2027];
+const daeraPoints = yearsTable.map((y, i) => ({ x: y, y: Math.round(daeraTableMt[i] * 1000 + sharedOffset) }));
+const cccPoints   = yearsTable.map((y, i) => ({ x: y, y: Math.round(cccTableMt[i]   * 1000 + sharedOffset) }));
+const daeraLR     = linearRegression(daeraPoints);
+const cccLR       = linearRegression(cccPoints);
 
-  // DAERA/CCC use a different inventory basis (2022 base, AR4 GWP) so their 2023
-  // starting point (~6.03 Mt) sits above the NAEI 2023 actual (5.615 Mt).
-  // We rebase both series by the same offset to the NAEI 2023 actual, preserving
-  // each pathway's rate of change while keeping the relative gap consistent.
-  const NAEI_2023 = 5615.2;
-  const sharedOffset = NAEI_2023 - Math.round(daeraTableMt[0] * 1000);
+const hist = (projectionsData as any).chart4_sectors?.Agriculture || [];
 
-  const daeraPoints = yearsTable.map((y, i) => ({ x: y, y: Math.round(daeraTableMt[i] * 1000 + sharedOffset) }));
-  const cccPoints   = yearsTable.map((y, i) => ({ x: y, y: Math.round(cccTableMt[i]   * 1000 + sharedOffset)   }));
+const chartData: Array<any> = [];
+for (let y = 1990; y <= 2030; y++) {
+  const histEntry = hist.find((d: any) => d.year === y);
+  const actual = histEntry ? histEntry.actual ?? null : null;
 
-  const daeraLR = linearRegression(daeraPoints);
-  const cccLR   = linearRegression(cccPoints);
+  let daeraVal: number | null = null;
+  let cccVal: number | null = null;
 
-  // Source historical agriculture data from projectionsData
-  // The JSON uses kt units
-  const hist = (projectionsData as any).chart4_sectors?.Agriculture || [];
-
-  const data: Array<any> = [];
-  for (let y = 1990; y <= 2030; y++) {
-    const histEntry = hist.find((d: any) => d.year === y);
-    const actual = histEntry ? histEntry.actual ?? null : null;
-
-    // DAERA / CCC values: use table for 2023-2027, extrapolate for 2028-2030
-    let daeraVal: number | null = null;
-    let cccVal: number | null = null;
-
-    if (y >= 2023) {
-      // use regression to extrapolate or table value
-      const inTableIndex = yearsTable.indexOf(y);
-      if (inTableIndex >= 0) {
-        daeraVal = daeraPoints[inTableIndex].y;
-        cccVal = cccPoints[inTableIndex].y;
-      } else {
-        daeraVal = Math.round(daeraLR.m * y + daeraLR.b);
-        cccVal = Math.round(cccLR.m * y + cccLR.b);
-      }
+  if (y >= 2023) {
+    const inTableIndex = yearsTable.indexOf(y);
+    if (inTableIndex >= 0) {
+      daeraVal = daeraPoints[inTableIndex].y;
+      cccVal   = cccPoints[inTableIndex].y;
+    } else {
+      daeraVal = Math.round(daeraLR.m * y + daeraLR.b);
+      cccVal   = Math.round(cccLR.m * y + cccLR.b);
     }
-
-    // create split series for solid (<=2027) and dashed (>=2027) lines
-    const daera_solid = daeraVal != null && y <= 2027 ? daeraVal : null;
-    const daera_dash = daeraVal != null && y >= 2027 ? daeraVal : null;
-    const ccc_solid = cccVal != null && y <= 2027 ? cccVal : null;
-    const ccc_dash = cccVal != null && y >= 2027 ? cccVal : null;
-
-    const gap = (daeraVal != null && cccVal != null) ? Math.max(0, daeraVal - cccVal) : null;
-
-    data.push({
-      year: y,
-      actual,
-      daera: daeraVal,
-      ccc: cccVal,
-      daera_solid,
-      daera_dash,
-      ccc_solid,
-      ccc_dash,
-      gap,
-    });
   }
 
+  chartData.push({
+    year: y,
+    actual,
+    daera_solid: daeraVal != null && y <= 2027 ? daeraVal : null,
+    daera_dash:  daeraVal != null && y >= 2027 ? daeraVal : null,
+    ccc_solid:   cccVal   != null && y <= 2027 ? cccVal   : null,
+    ccc_dash:    cccVal   != null && y >= 2027 ? cccVal   : null,
+  });
+}
+
+export default function AgriculturePathwayChart() {
+  const isMobile = useIsMobile();
 
   return (
     <div className="w-full flex flex-col">
@@ -120,7 +101,7 @@ export default function AgriculturePathwayChart() {
       </p>
       <ResponsiveContainer width="100%" height={isMobile ? 240 : 520}>
         <ComposedChart
-          data={data}
+          data={chartData}
           margin={{ top: 20, right: isMobile ? 10 : 60, left: isMobile ? 0 : 20, bottom: 0 }}
         >
           <CartesianGrid vertical={false} stroke="#e5e7eb" />
@@ -141,22 +122,18 @@ export default function AgriculturePathwayChart() {
           />
           <Tooltip content={AgriculturePathwayTooltip} />
 
-          {/* Vertical ref line at 2027 */}
-            <ReferenceLine
+          <ReferenceLine
             x={2027}
             stroke="#9ca3af"
             strokeWidth={1}
             label={{ value: "End of first carbon budget period", position: "top", fontSize: isMobile ? 8 : 12, fill: "#6b7280"}}
             />
 
-          {/* Historical actuals */}
           <Line type="monotone" dataKey="actual" stroke="#334155" strokeWidth={2.5} dot={false} connectNulls name="Actual" />
 
-          {/* DAERA: solid then dashed */}
           <Line type="monotone" dataKey="daera_solid" stroke="#f97316" strokeWidth={2} dot={false} connectNulls name="DAERA (solid)" />
           <Line type="monotone" dataKey="daera_dash" stroke="#f97316" strokeWidth={2} strokeDasharray="6 4" dot={false} connectNulls name="DAERA (dashed)" />
 
-          {/* CCC: solid then dashed */}
           <Line type="monotone" dataKey="ccc_solid" stroke="#16a34a" strokeWidth={2} dot={false} connectNulls name="CCC (solid)" />
           <Line type="monotone" dataKey="ccc_dash" stroke="#16a34a" strokeWidth={2} strokeDasharray="6 4" dot={false} connectNulls name="CCC (dashed)" />
         </ComposedChart>
@@ -165,15 +142,15 @@ export default function AgriculturePathwayChart() {
       <div className={`flex flex-wrap gap-y-1 mt-4 justify-center ${isMobile ? "gap-x-3" : "gap-x-6"}`}>
         <div className="flex items-center gap-1.5">
           <div className="w-5 rounded" style={{ height: 3, backgroundColor: "#334155" }} />
-          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>Historical actual</span>
+          <span className={`text-black dark:text-gray-500 font-medium ${isMobile ? "text-xs" : "text-sm"}`}>Historical actual</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-5 rounded" style={{ height: 3, backgroundColor: "#f97316" }} />
-          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>DAERA projection</span>
+          <span className={`text-black dark:text-gray-500 font-medium ${isMobile ? "text-xs" : "text-sm"}`}>DAERA projection</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-5 rounded" style={{ height: 3, backgroundColor: "#16a34a" }} />
-          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>CCC pathway</span>
+          <span className={`text-black dark:text-gray-500 font-medium ${isMobile ? "text-xs" : "text-sm"}`}>CCC pathway</span>
         </div>
       </div>
 

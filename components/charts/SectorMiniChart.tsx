@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import ChartTooltip from "./ChartTooltip";
 import {
   ComposedChart,
   Line,
@@ -38,16 +38,7 @@ export default function SectorMiniChart({
   activeStep,
 }: Props) {
   const isMobile = useIsMobile();
-  const [isDark, setIsDark] = useState(false);
   const dimmed = activeStep === 9 && !HIGHLIGHTED_AT_9.has(sector);
-
-  useEffect(() => {
-    const checkDark = () => setIsDark(document.documentElement.classList.contains("dark"));
-    checkDark();
-    const observer = new MutationObserver(checkDark);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <div className={`bg-white dark:bg-gray-800 border rounded p-4 transition-opacity duration-300 ${dimmed ? "border-gray-100 dark:border-gray-800 opacity-30" : "border-gray-200 dark:border-gray-700 opacity-100"}`}>
@@ -78,15 +69,18 @@ export default function SectorMiniChart({
           />
           <YAxis hide />
           <Tooltip
-            formatter={(value: number | undefined) => [
-              `${value?.toLocaleString() ?? 'N/A'} kt`,
-            ]}
-            contentStyle={{
-              fontSize: 11,
-              backgroundColor: isDark ? "rgba(31, 41, 55, 0.95)" : "rgba(255, 255, 255, 0.95)",
-              color: isDark ? "#f3f4f6" : "#111827",
-              border: isDark ? "1px solid #4b5563" : "1px solid #e5e7eb",
-              borderRadius: "4px",
+            content={({ active, payload, label }) => {
+              if (!active || !payload?.length) return null;
+              const value = payload[0]?.value as number | undefined;
+              return (
+                <ChartTooltip
+                  label={String(label)}
+                  name={sector}
+                  value={`${value?.toLocaleString() ?? "N/A"} kt`}
+                  color={colour}
+                  indicatorType="circle"
+                />
+              );
             }}
           />
           <ReferenceLine

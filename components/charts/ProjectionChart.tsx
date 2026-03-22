@@ -70,7 +70,6 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
           />
           <Tooltip content={ProjectionTooltip} />
 
-          {/* 2030 target line */}
           <ReferenceLine
             y={TARGET}
             stroke="#16a34a"
@@ -84,7 +83,6 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             }}
           />
 
-          {/* 2023 boundary — separates actuals from projection */}
           <ReferenceLine
             x={2023}
             stroke="#d1d5db"
@@ -97,7 +95,6 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             }}
           />
 
-          {/* Gap fill — only shown at step 7+ */}
           <Area
             type="monotone"
             dataKey="projected"
@@ -110,7 +107,6 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             connectNulls={false}
           />
 
-          {/* Historical actuals */}
           <Line
             type="monotone"
             dataKey="actual"
@@ -121,7 +117,6 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
             name="actual"
           />
 
-          {/* OLS trend — regression window (2018–2023) + projection to 2030 */}
           <Line
             type="monotone"
             dataKey="ols"
@@ -135,11 +130,10 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
         </ComposedChart>
       </ResponsiveContainer>
 
-      {/* Legend */}
       <div className={`flex flex-wrap gap-y-1 mt-4 justify-center ${isMobile ? "gap-x-3" : "gap-x-6"}`}>
         <div className="flex items-center gap-1.5">
           <div className="w-5 rounded" style={{ height: 3, backgroundColor: ACTUAL_COLOUR }} />
-          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>Actual</span>
+          <span className={`text-black dark:text-gray-500 font-medium ${isMobile ? "text-xs" : "text-sm"}`}>Actual</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div
@@ -149,13 +143,13 @@ export default function ProjectionChart({ activeStep }: { activeStep?: number })
               backgroundImage: `repeating-linear-gradient(to right, ${OLS_COLOUR} 0, ${OLS_COLOUR} 5px, transparent 5px, transparent 9px)`,
             }}
           />
-          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>
+          <span className={`text-black dark:text-gray-500 font-medium ${isMobile ? "text-xs" : "text-sm"}`}>
             {isMobile ? "OLS trend" : "Linear trend (OLS, 2018–2030)"}
           </span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-5 h-3 rounded-sm" style={{ backgroundColor: "#fca5a5", opacity: 0.7 }} />
-          <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>
+          <span className={`text-black dark:text-gray-500 font-medium ${isMobile ? "text-xs" : "text-sm"}`}>
             {isMobile ? "Gap" : "Gap to 2030 target"}
           </span>
         </div>

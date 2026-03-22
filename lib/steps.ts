@@ -8,27 +8,27 @@ export type Step = {
 
 export type ChartId = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-import { UK_AGRI_SHARE_AVERAGE } from "./constants";
+import { UK_AGRI_SHARE_AVERAGE, SCENARIO_SECTION_ID } from "./constants";
 
 export const STEPS: Step[] = [
   {
     id: 1,
     chart: 1,
     eyebrow: "THE HEADLINE",
-    copy: "Northern Ireland has cut greenhouse gas emissions by 31.5% since 1990, from 26.6 million tonnes to 18.2 million tonnes of CO₂ equivalent.\n\nThat looks like meaningful progress, but not all sectors have reduced their emissions at the same rate.",
+    copy: "Northern Ireland has cut greenhouse gas emissions by 31.5% since 1990, from 26.6 million tonnes to 18.2 million tonnes of CO₂ equivalent.\n\nThat is meaningful progress for many industries, but not all sectors have reduced their emissions at the same rate.",
   },
   {
     id: 2,
     chart: 1,
     eyebrow: "WHERE THE REDUCTION CAME FROM",
-    copy: "Almost all of the reduction came from electricity. The conversion of Ballylumford and Coolkeeragh power stations from oil to gas, the growth of onshore wind under the Northern Ireland Renewables Obligation, and the end of coal-fired generation at Kilroot in 2023 together drove a 60% reduction in the electricity sector since 1990.\n\nThe electricity transition has been important. But it was not something Stormont could easily repeat in other sectors. Northern Ireland also entered 1990 with less heavy industry than England or Scotland, meaning the one-time reductions other nations gained from closing coal mines and steelworks were never available here."
+    copy: "Almost all of the reduction came from electricity. The conversion of Ballylumford and Coolkeeragh power stations from oil to gas, the growth of onshore wind under the Northern Ireland Renewables Obligation, and the end of coal-fired generation at Kilroot in 2023 together drove a 60% reduction in the electricity sector since 1990.\n\nThe electricity transition has been important, but Stormont have not replicated this level of reduction in other sectors. While other UK nations gained one-time reductions from the closing of coal mines and steelworks, Northern Ireland had less heavy industry as of 1990 so could not benefit from their closure."
 
   },
   {
     id: 3,
     chart: 1,
     eyebrow: "THE EXCEPTION",
-    copy: `Several sectors have reduced only modestly. Buildings has barely changed. Two sectors have gone in the wrong direction entirely.\n\nTransport emissions have increased by around 5% since 1990. Agriculture has increased by 8%, reaching 5.6 million tonnes per year. Agriculture now accounts for 30.8% of everything Northern Ireland emits. The UK average is ${UK_AGRI_SHARE_AVERAGE}%.`,
+    copy: `Several sectors have reduced only modestly. Buildings (the grouping covering homes, offices, and other heated spaces) has barely changed. Two sectors have gone in the wrong direction entirely.\n\nTransport emissions have increased by around 5% since 1990. Agriculture has increased by 8%, reaching 5.6 million tonnes per year. Agriculture now accounts for 30.8% of Northern Ireland's emissions. The UK average is ${UK_AGRI_SHARE_AVERAGE}%.`,
   },
   {
     id: 4,
@@ -52,7 +52,7 @@ export const STEPS: Step[] = [
     id: 7,
     chart: 3,
     eyebrow: "THE GAP",
-    copy: "On current trends, Northern Ireland will miss that target by approximately 1.73 million tonnes.\n\n No current policy sets out a credible plan to close the gap.",
+    copy: "On current trends, Northern Ireland will miss that target by approximately 1.73 million tonnes.\n\nNo current policy sets out a credible plan to close the gap.",
   },
   {
     id: 8,
@@ -64,7 +64,7 @@ export const STEPS: Step[] = [
     id: 9,
     chart: 7,
     eyebrow: "WHAT COULD CHANGE THIS",
-    copy: "Agriculture accounts for the largest share of Northern Ireland's emissions gap and is the hardest sector to close. Its emissions are largely biological rather than technological, as they come from what cattle eat and how manure decomposes, rather than from machinery that can be switched out. \n\nThe interventions exist: feed \nadditives, slurry aeration, protected urea, peatland restoration, genetics \nprogrammes, herd reduction. Some are already in the draft plan at modest scale.\n\nThe scenario modeller below lets you test each intervention individually or \ncombine them.",
-    cta: "#scenario",
+    copy: "Agriculture accounts for the largest share of Northern Ireland's emissions gap and is the hardest sector to close. Its emissions are largely biological rather than technological, as they come from what cattle eat and how manure decomposes, rather than from machinery that can be switched out.\n\nThe interventions exist: feed additives, slurry aeration, protected urea, peatland restoration, genetics programmes, herd reduction. Some interventions are already in the draft plan at modest scale.\n\nThe scenario modeller below lets you test each intervention individually or combine them.",
+    cta: `#${SCENARIO_SECTION_ID}`,
   },
 ];

@@ -16,35 +16,26 @@ import {
 import { ZoomIn, ZoomOut, Share2 } from "lucide-react";
 import projectionsData from "@/public/data/ni_projections.json";
 import { SliderHelpTooltip } from "@/components/ui/SliderHelpTooltip";
+import {
+  NAEI_AGRI_2023,
+  AGRI_TARGET_2030,
+  AGRI_GAP,
+  ENTERIC_KT,
+  DAIRY_ENTERIC_KT,
+  NON_DAIRY_ENTERIC_KT,
+  SLURRY_METHANE_KT,
+  SOIL_FERTILISER_KT,
+  BOVAER_EFFICACY,
+  PEATLAND_RATE,
+  TOTAL_CATTLE,
+  GENETICS_REDUCTION_KT,
+  AD_POTENTIAL_KT,
+  COMMITTED_BASELINE_KT,
+  SCENARIO_SECTION_ID,
+} from "@/lib/constants";
+const ADJUSTED_GAP          = AGRI_GAP - COMMITTED_BASELINE_KT;
+const GAP_CLOSING_HERD_PCT  = Math.ceil((ADJUSTED_GAP / ENTERIC_KT) * 100);
 
-// ── Module-level constants ────────────────────────────────────────────────────
-
-const AGRI_2023            = 5615;    // kt CO₂e — DAERA/NISRA GHG inventory 2023
-const AGRI_TARGET_2030     = 4490;    // kt CO₂e — CCC Stretch Ambition (-21% from 2020 baseline)
-const AGRI_BASELINE_2030   = 5615;    // kt CO₂e — flat projection (agriculture broadly flat 2020-2023)
-const AGRI_GAP             = 1125;    // kt CO₂e — AGRI_BASELINE_2030 - AGRI_TARGET_2030
-
-const ENTERIC_KT           = 3157;   // kt CO₂e — cattle enteric fermentation 2023 (NAEI: 1098 dairy + 2059 non-dairy)
-const DAIRY_ENTERIC_KT     = 1098;   // kt CO₂e — dairy cattle enteric 2023 (NAEI)
-const NON_DAIRY_ENTERIC_KT = 2059;   // kt CO₂e — non-dairy cattle enteric 2023 (NAEI)
-const SLURRY_METHANE_KT    = 630;    // kt CO₂e — liquid slurry methane
-const SOIL_FERTILISER_KT   = 59;     // kt CO₂e — ceiling for fertiliser switch savings (44 kt at 75% → scaled to 100%)
-const BOVAER_EFFICACY      = 0.12;   // 12% — Teagasc pasture trials
-const PEATLAND_RATE        = 11;     // t CO₂e/ha/yr — UK CEH NI-specific analysis (methodology §07)
-const TOTAL_CATTLE         = 1673345; // DAERA census 2023
-const GENETICS_REDUCTION_KT = 17;   // kt CO₂e — ruminant genetics programme (methodology §07)
-const AD_POTENTIAL_KT       = 21;   // kt CO₂e — anaerobic digestion (nominal, before slurry pool constraint)
-
-// Committed policy baseline — Draft NI CAP 2023-2027, livestock productivity improvements (methodology §07)
-const COMMITTED_BASELINE_KT = 242;
-
-// Adjusted gap after committed policies (1125 - 242 = 883 kt)
-const ADJUSTED_GAP = AGRI_GAP - COMMITTED_BASELINE_KT;
-
-// Herd reduction % that closes the adjusted gap alone (883/3157 ≈ 28%)
-const GAP_CLOSING_HERD_PCT = Math.ceil((ADJUSTED_GAP / ENTERIC_KT) * 100);
-
-// Max achievable reductions per column (used in column headers)
 const MAX_ENTERIC_KT      = Math.round(
   0.9 * DAIRY_ENTERIC_KT * BOVAER_EFFICACY +
   0.9 * NON_DAIRY_ENTERIC_KT * BOVAER_EFFICACY +
@@ -55,15 +46,11 @@ const MAX_SLURRY_SOILS_KT = Math.round(0.8 * SLURRY_METHANE_KT * 0.40 + SOIL_FER
 const MAX_LAND_USE_KT     = Math.round(10000 * PEATLAND_RATE / 1000);
 
 
-// ── Chart base data ───────────────────────────────────────────────────────────
-
 const BASE_DATA = projectionsData.chart3_agriculture as Array<{
   year: number;
   actual: number | null;
   projected: number | null;
 }>;
-
-// ── Sub-components ────────────────────────────────────────────────────────────
 
 function RightEdgeReferenceLabel({
   viewBox,
@@ -94,8 +81,6 @@ function RightEdgeReferenceLabel({
   );
 }
 
-// ── Pure helpers ──────────────────────────────────────────────────────────────
-
 function pctOfGap(kt: number) {
   return Math.round((kt / AGRI_GAP) * 100);
 }
@@ -123,25 +108,18 @@ function CustomTooltip({ active, payload, label }: any) {
   );
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
 export default function ScenarioModeller() {
-  // Slider states
   const [bovaerPct,   setBovaerPct]   = useState(0);
   const [nonDairyPct, setNonDairyPct] = useState(0);
   const [slurryPct,   setSlurryPct]   = useState(0);
   const [fertPct,     setFertPct]     = useState(0);
   const [peatlandHa,  setPeatlandHa]  = useState(0);
   const [herdPct,     setHerdPct]     = useState(0);
-  // Toggle states
   const [geneticsOn,  setGeneticsOn]  = useState(false);
   const [adOn,        setAdOn]        = useState(false);
-  // Copy link state
   const [copied,      setCopied]      = useState(false);
-  // Zoom state
   const [zoomed,      setZoomed]      = useState(false);
 
-  // ── URL state: initialise from query params on mount ────────────────────────
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
     const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
@@ -159,7 +137,6 @@ export default function ScenarioModeller() {
     if (p.has("ad"))       setAdOn(p.get("ad") === "1");
   }, []);
 
-  // ── URL state: sync params on every state change (debounced 150ms) ──────────
   useEffect(() => {
     const timer = setTimeout(() => {
       const p = new URLSearchParams();
@@ -196,8 +173,6 @@ export default function ScenarioModeller() {
     }
   };
 
-  // ── Derived calculations ──────────────────────────────────────────────────
-
   // Raw reductions (before clamping to physical source pools)
   const bovaerRaw         = (bovaerPct   / 100) * DAIRY_ENTERIC_KT     * BOVAER_EFFICACY;
   const nonDairyRaw       = (nonDairyPct / 100) * NON_DAIRY_ENTERIC_KT * BOVAER_EFFICACY;
@@ -206,7 +181,6 @@ export default function ScenarioModeller() {
   const peatlandRaw       = (peatlandHa  * PEATLAND_RATE) / 1000;
   const herdRaw           = (herdPct     / 100) * ENTERIC_KT;
 
-  // Clamp reductions so they cannot exceed the physical emission pools
   const bovaerReduction   = Math.min(bovaerRaw, DAIRY_ENTERIC_KT);
   const nonDairyReduction = Math.min(nonDairyRaw, NON_DAIRY_ENTERIC_KT);
   const slurryReduction   = Math.min(slurryRaw, SLURRY_METHANE_KT);
@@ -220,7 +194,6 @@ export default function ScenarioModeller() {
   const slurryResidualPool = Math.max(0, SLURRY_METHANE_KT - slurryReduction);
   const effectiveAd = adOn ? Math.round(0.06 * 0.55 * slurryResidualPool) : 0;
 
-  // Amount by which AD's nominal value overstates its real contribution (due to slurry aeration reducing the pool)
   const adOverstatement = adOn && slurryPct > 0 ? Math.max(0, AD_POTENTIAL_KT - effectiveAd) : 0;
 
   const userReduction  = bovaerReduction + nonDairyReduction + slurryReduction
@@ -230,7 +203,7 @@ export default function ScenarioModeller() {
   const totalReduction   = COMMITTED_BASELINE_KT + userReduction;
   const remainingGap     = Math.max(0, AGRI_GAP - totalReduction);
   const gapClosedPct     = Math.min(100, Math.round((totalReduction / AGRI_GAP) * 100));
-  const newProjected2030 = Math.round(AGRI_BASELINE_2030 - totalReduction);
+  const newProjected2030 = Math.round(NAEI_AGRI_2023 - totalReduction);
   const targetMet        = newProjected2030 <= AGRI_TARGET_2030;
   const animalsRemoved   = Math.round((herdPct / 100) * TOTAL_CATTLE);
   const scenarioColour   = targetMet ? "#16a34a" : "#c1440e";
@@ -246,14 +219,11 @@ export default function ScenarioModeller() {
       ? `Significant progress, but a gap remains. Closing it requires either near-maximum deployment of every remaining measure or further herd reduction.`
       : `Current interventions fall well short. Even the full government programme leaves a substantial gap without structural change to the herd.`;
 
-  // ── Chart data ────────────────────────────────────────────────────────────
+  const committedProjected2030 = NAEI_AGRI_2023 - COMMITTED_BASELINE_KT;
 
-  const committedProjected2030 = AGRI_BASELINE_2030 - COMMITTED_BASELINE_KT; // = 5373
-
-  // ── Zoom-dependent chart parameters ──────────────────────────────────────
   const xDomain: [number, number]  = zoomed ? [2016, 2030] : [1990, 2030];
   const xTickCount                 = zoomed ? 8 : 5;
-  const zoomVisibleValues = [AGRI_TARGET_2030, newProjected2030, committedProjected2030, AGRI_BASELINE_2030];
+  const zoomVisibleValues = [AGRI_TARGET_2030, newProjected2030, committedProjected2030, NAEI_AGRI_2023];
   const yMin = zoomed ? Math.floor((Math.min(...zoomVisibleValues) - 200) / 500) * 500 : 4000;
   const yMax = zoomed ? Math.ceil((Math.max(...zoomVisibleValues) + 200) / 500) * 500 : 6500;
   const yDomain: [number, number]  = [yMin, yMax];
@@ -271,29 +241,26 @@ export default function ScenarioModeller() {
       return {
         year:      point.year,
         actual:    point.actual,
-        baseline:  AGRI_2023,
-        committed: AGRI_2023,
-        scenario:  AGRI_2023,
+        baseline:  NAEI_AGRI_2023,
+        committed: NAEI_AGRI_2023,
+        scenario:  NAEI_AGRI_2023,
       };
     } else {
       const t = (point.year - 2023) / 7;
       return {
         year:      point.year,
         actual:    null as number | null,
-        baseline:  AGRI_BASELINE_2030,
-        committed: Math.round(AGRI_2023 + t * (committedProjected2030 - AGRI_2023)),
-        scenario:  Math.round(AGRI_2023 + t * (newProjected2030 - AGRI_2023)),
+        baseline:  NAEI_AGRI_2023,
+        committed: Math.round(NAEI_AGRI_2023 + t * (committedProjected2030 - NAEI_AGRI_2023)),
+        scenario:  Math.round(NAEI_AGRI_2023 + t * (newProjected2030 - NAEI_AGRI_2023)),
       };
     }
   });
 
-  // ── Render ────────────────────────────────────────────────────────────────
-
   return (
-    <section id="scenario" className="bg-[#FFF9F5] border-t border-[#e8e0d8] px-6 lg:px-8 xl:px-10 py-14 lg:py-20">
+    <section id={SCENARIO_SECTION_ID} className="bg-[#FFF9F5] border-t border-[#e8e0d8] px-6 lg:px-8 xl:px-10 py-14 lg:py-20">
       <div className="mx-auto w-full max-w-[1500px]">
 
-        {/* Section header */}
         <div className="mb-10 lg:mb-14 w-full">
           <p className="text-xs uppercase tracking-widest text-[#666666] mb-4">
             What would it take
@@ -351,7 +318,6 @@ export default function ScenarioModeller() {
           </p>
         </div>
 
-        {/* Chart-first layout */}
         <div className="w-full">
           <div className="relative w-full">
             <div className="flex justify-end mb-2">
@@ -398,7 +364,7 @@ export default function ScenarioModeller() {
                   label={{ value: "CCC target", position: "right", fontSize: 10, fill: "#15803d" }}
                 />
                 <ReferenceLine
-                  y={AGRI_2023}
+                  y={NAEI_AGRI_2023}
                   stroke="#d1d5db"
                   strokeWidth={1}
                   strokeDasharray="2 2"
@@ -459,7 +425,7 @@ export default function ScenarioModeller() {
                 />
                 <ReferenceDot
                   x={2005}
-                  y={chartData.find((d) => d.year === 2005)?.actual ?? AGRI_2023}
+                  y={chartData.find((d) => d.year === 2005)?.actual ?? NAEI_AGRI_2023}
                   r={0}
                   label={{ value: "Historical", position: "top", fontSize: 9, fill: "#1e3a5f" }}
                 />
@@ -520,7 +486,7 @@ export default function ScenarioModeller() {
                 onClick={() => {
                   const url = window.location.href;
                   if (navigator.share) {
-                    navigator.share({ title: "NI Climate Scenario Modeller", url }).catch(() => {});
+                    navigator.share({ title: "Climate Gap NI", url }).catch(() => {});
                   } else {
                     navigator.clipboard.writeText(url)
                       .then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); })
@@ -546,7 +512,6 @@ export default function ScenarioModeller() {
               </div>
               <div className="flex flex-col gap-5">
 
-                  {/* Feed additives — dairy (Bovaer) */}
                   <div>
                     <div className="flex justify-between items-baseline mb-2">
                       <div className="flex items-center gap-1.5">
@@ -589,7 +554,6 @@ export default function ScenarioModeller() {
                     )}
                   </div>
 
-                  {/* Feed additives — non-dairy cattle */}
                   <div>
                     <div className="flex justify-between items-baseline mb-2">
                       <div className="flex items-center gap-1.5">
@@ -632,7 +596,6 @@ export default function ScenarioModeller() {
                     )}
                   </div>
 
-                  {/* Cattle herd reduction — same emission pool, structural lever */}
                   <div className="border-t border-[#e8e0d8] pt-4 mt-3">
                     <div className="flex justify-between items-baseline mb-2">
                       <div className="flex items-center gap-1.5">
@@ -745,7 +708,6 @@ export default function ScenarioModeller() {
                 </div>
                 <div className="flex flex-col gap-5">
 
-                  {/* Slurry aeration */}
                   <div>
                     <div className="flex justify-between items-baseline mb-2">
                       <div className="flex items-center gap-1.5">
@@ -788,7 +750,6 @@ export default function ScenarioModeller() {
                     )}
                   </div>
 
-                  {/* Fertiliser switch — protected urea */}
                   <div>
                     <div className="flex justify-between items-baseline mb-2">
                       <div className="flex items-center gap-1.5">
@@ -842,7 +803,6 @@ export default function ScenarioModeller() {
                 </div>
                 <div className="flex flex-col gap-5">
 
-                  {/* Peatland restoration */}
                   <div>
                     <div className="flex justify-between items-baseline mb-2">
                       <div className="flex items-center gap-1.5">
@@ -890,7 +850,6 @@ export default function ScenarioModeller() {
           </div>
         </div>
 
-        {/* Concluding text — THE ARITHMETIC */}
         <div className="mt-14 pt-10 border-t border-[#e8e0d8]">
           <p className="text-[11px] uppercase tracking-widest text-[#666666] mb-4">
             The Arithmetic
@@ -899,7 +858,7 @@ export default function ScenarioModeller() {
             Even at maximum adoption across every available productivity improvement measure, the gap to the 2030 CCC Stretch Ambition Target is not closed. Some reduction in cattle numbers is required regardless.
           </p>
           <p className="text-[15px] leading-[1.9] text-gray-600 mb-3">
-            Technology-only scenarios depend on near-universal adoption across thousands of farms by 2030. Bovaer requires twice-daily concentrate delivery at 90% uptake. Slurry aeration requires capital grants that do not yet exist at scale. Protected urea requires changing fertiliser habits across the entire industry.
+            Technology-only scenarios depend on near-universal adoption across thousands of farms by 2030. Bovaer works by adding a supplement to cattle feed concentrate, but because this must be given twice daily, achieving 90% uptake across NI's farms is a significant logistical challenge. Slurry aeration requires capital grants that do not yet exist at scale. Protected urea requires changing fertiliser habits across the entire industry.
           </p>
           <p className="text-[15px] leading-[1.9] text-gray-600">
             Since 1990, Northern Ireland&apos;s total emissions fell by nearly a third, but agriculture&apos;s share has grown. The modeller above shows what closing the gap requires. On current trends, agriculture will not fall fast enough to meet the 2030 target. With it accounting for 30.8% of all emissions, the legally binding target cannot be met unless the rate of reduction accelerates significantly. The draft Climate Action Plan does not say how it will.

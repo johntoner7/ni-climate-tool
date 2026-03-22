@@ -30,8 +30,6 @@ const MARGIN_TOP     = 10;
 const MARGIN_BOTTOM  = 0;
 
 
-// ── Pre-compute agriculture indexed (1990 = 100) ─────────────────────────────
-
 const AGRI_1990: Record<string, number> = {
   "Northern Ireland": 5198.7,
   "England":          34657.4,
@@ -60,8 +58,6 @@ function NationsTooltip({ active, payload, label }: { active?: boolean; payload?
   if (!items.length) return null;
   return <ChartTooltip label={String(label)} items={items} />;
 }
-
-// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function NationsLineChart() {
   const isMobile = useIsMobile();
@@ -161,7 +157,7 @@ export default function NationsLineChart() {
                 height: nation === "Northern Ireland" ? 3 : 2,
               }}
             />
-            <span className={`text-gray-800 dark:text-gray-100 ${isMobile ? "text-[10px]" : "text-xs"}`}>{nation}</span>
+            <span className={`text-black dark:text-gray-500 font-medium ${isMobile ? "text-xs" : "text-sm"}`}>{nation}</span>
           </div>
         ))}
       </div>

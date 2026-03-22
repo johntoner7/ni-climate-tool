@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 export const metadata = {
-  title: "Methodology — Northern Ireland Emissions Gap",
+  title: "Methodology — Climate Gap NI",
 };
 
 export default async function MethodologyPage() {

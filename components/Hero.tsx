@@ -11,7 +11,7 @@ const HERO_STATS = [
     isHighlight: true,
   },
   {
-    label: "Share of NI Emissions",
+    label: "Agriculture's Share of NI Emissions",
     value: "30.8%",
     description: `2.5× the UK average of ${UK_AGRI_SHARE_AVERAGE}%`,
     isHighlight: true,
@@ -38,7 +38,7 @@ export default function Hero() {
         <div className="lg:w-[55%] lg:pr-16 flex flex-col justify-between gap-8 lg:gap-0">
           <div>
             <p className="text-xs tracking-widest uppercase text-[#666666] mb-4">
-              Northern Ireland Emissions Gap
+              Climate Gap NI
             </p>
             <h1 className="text-[28px] lg:text-[42px] font-bold leading-tight text-[#1a1a1a] max-w-[520px]">
               Northern Ireland is the only UK nation whose agricultural emissions have grown since 1990.

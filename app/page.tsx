@@ -33,8 +33,6 @@ function renderChartForStep(chartId: ChartId, stepId: number) {
 
 
 
-const TOTAL_STEPS = 9;
-
 export default function Home() {
   const [activeChart, setActiveChart] = useState<ChartId>(1);
   const [activeStep, setActiveStep] = useState<number>(1);
@@ -85,7 +83,7 @@ export default function Home() {
                 {CHART_LABELS[step.chart]}
               </p>
               <span className="text-[10px] font-mono text-gray-500 tabular-nums">
-                {String(step.id).padStart(2, "0")}&thinsp;/&thinsp;{TOTAL_STEPS}
+                {String(step.id).padStart(2, "0")}&thinsp;/&thinsp;{STEPS.length}
               </span>
             </div>
             <div className="px-2 overflow-hidden">
@@ -115,7 +113,7 @@ export default function Home() {
 
       {/* Desktop: sticky chart + scrolling text */}
       <div className="hidden lg:flex lg:flex-row">
-        <StepsColumn totalSteps={TOTAL_STEPS} />
+        <StepsColumn totalSteps={STEPS.length} />
         <div className="w-[65%] sticky top-0 h-screen flex flex-col justify-center px-16 py-6 border-l border-gray-100 bg-white z-10 overflow-hidden">
           {CHART_LABELS[activeChart] && (
             <p className="text-[10px] uppercase tracking-widest text-gray-600 mb-4 shrink-0">
@@ -130,10 +128,10 @@ export default function Home() {
           </div>
           <div className="shrink-0 flex items-center justify-between mt-4">
             <span className="text-[10px] font-mono text-gray-500 tabular-nums">
-              {String(activeStep).padStart(2, "0")}&thinsp;/&thinsp;{TOTAL_STEPS}
+              {String(activeStep).padStart(2, "0")}&thinsp;/&thinsp;{STEPS.length}
             </span>
             <div className="flex gap-1.5">
-              {Array.from({ length: TOTAL_STEPS }, (_, i) => (
+              {Array.from({ length: STEPS.length }, (_, i) => (
                 <div
                   key={i}
                   className={`w-1 h-1 rounded-full transition-colors duration-300 ${

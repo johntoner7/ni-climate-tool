@@ -69,69 +69,67 @@ export default function SectorAreaChart({ activeStep }: { activeStep?: number })
         kt CO₂e · Source: NAEI
       </p>
       <ResponsiveContainer width="100%" height={isMobile ? 260 : 540}>
-          <AreaChart
-            data={niSectorData}
-            margin={{ top: 10, right: isMobile ? 20 : 110, left: isMobile ? 0 : 20, bottom: 0 }}
-          >
-            <CartesianGrid vertical={false} stroke="#e5e7eb" />
-            <XAxis
-              dataKey="year"
-              type="number"
-              domain={[1990, 2023]}
-              tickLine={false}
-              tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
-              ticks={isMobile ? [1990, 2000, 2010, 2023] : [1990, 1995, 2000, 2005, 2010, 2015, 2020, 2023]}
+        <AreaChart
+          data={niSectorData}
+          margin={{ top: 10, right: isMobile ? 20 : 110, left: isMobile ? 0 : 20, bottom: 0 }}
+        >
+          <CartesianGrid vertical={false} stroke="#e5e7eb" />
+          <XAxis
+            dataKey="year"
+            type="number"
+            domain={[1990, 2023]}
+            tickLine={false}
+            tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
+            ticks={isMobile ? [1990, 2000, 2010, 2023] : [1990, 1995, 2000, 2005, 2010, 2015, 2020, 2023]}
+          />
+          <YAxis
+            tickLine={false}
+            tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
+            tickFormatter={(v) => `${(v / 1000).toFixed(0)}Mt`}
+            width={isMobile ? 28 : undefined}
+          />
+          <Tooltip content={(props) => <SectorTooltip {...props} hoveredSector={hoveredSector} />} />
+          {!isMobile && SECTORS.map((sector) => (
+            <ReferenceLine
+              key={`label-${sector}`}
+              y={labelYPositions[sector]}
+              stroke="none"
+              label={{
+                value: sector === "Electricity" && activeStep === 2
+                  ? "Electricity −60%"
+                  : sector,
+                position: "right",
+                fill: highlightedSector === null || sector === highlightedSector
+                  ? SECTOR_COLOURS[sector]
+                  : "#d1d5db",
+                fontSize: 12,
+                fontWeight: 600,
+                offset: 8,
+              }}
+              ifOverflow="extendDomain"
             />
-            <YAxis
-              tickLine={false}
-              tick={{ fontSize: isMobile ? 10 : 12, fill: "#6b7280" }}
-              tickFormatter={(v) => `${(v / 1000).toFixed(0)}Mt`}
-              width={isMobile ? 28 : undefined}
+          ))}
+          {SECTORS.map((sector) => (
+            <Area
+              key={sector}
+              type="monotone"
+              dataKey={sector}
+              stackId="1"
+              stroke={SECTOR_COLOURS[sector]}
+              fill={SECTOR_COLOURS[sector]}
+              fillOpacity={
+                highlightedSector === null
+                  ? 0.85
+                  : sector === highlightedSector
+                  ? 0.9
+                  : 0.12
+              }
+              strokeWidth={0}
+              onMouseEnter={() => setHoveredSector(sector)}
             />
-            <Tooltip content={(props) => <SectorTooltip {...props} hoveredSector={hoveredSector} />} />
-            {/* Direct labels on the right — desktop only */}
-            {!isMobile && SECTORS.map((sector) => (
-              <ReferenceLine
-                key={`label-${sector}`}
-                y={labelYPositions[sector]}
-                stroke="none"
-                label={{
-                  value: sector === "Electricity" && activeStep === 2
-                    ? "Electricity −60%"
-                    : sector,
-                  position: "right",
-                  fill: highlightedSector === null || sector === highlightedSector
-                    ? SECTOR_COLOURS[sector]
-                    : "#d1d5db",
-                  fontSize: 12,
-                  fontWeight: 600,
-                  offset: 8,
-                }}
-                ifOverflow="extendDomain"
-              />
-            ))}
-            {SECTORS.map((sector) => (
-              <Area
-                key={sector}
-                type="monotone"
-                dataKey={sector}
-                stackId="1"
-                stroke={SECTOR_COLOURS[sector]}
-                fill={SECTOR_COLOURS[sector]}
-                fillOpacity={
-                  highlightedSector === null
-                    ? 0.85
-                    : sector === highlightedSector
-                    ? 0.9
-                    : 0.12
-                }
-                strokeWidth={0}
-                onMouseEnter={() => setHoveredSector(sector)}
-              />
-            ))}
-          </AreaChart>
-        </ResponsiveContainer>
-      {/* Compact legend — mobile only */}
+          ))}
+        </AreaChart>
+      </ResponsiveContainer>
       {isMobile && (
         <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 px-1">
           {SECTORS.map((sector) => (

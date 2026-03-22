@@ -88,6 +88,22 @@ function CenterLabel({ innerRadius, isMobile }: { innerRadius: number; isMobile:
   );
 }
 
+function CompositionTooltip({ active, payload }: any) {
+  if (!active || !payload?.length) return null;
+  const item = payload[0].payload as CompositionDatum;
+  return (
+    <ChartTooltip
+      name={item.label}
+      value={`${item.value.toLocaleString("en-GB", {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      })} kt CO₂e (${item.share.toFixed(1)}%)`}
+      color={item.color}
+      indicatorType="circle"
+    />
+  );
+}
+
 export default function GasCompositionChart({
   className,
 }: {
@@ -97,23 +113,6 @@ export default function GasCompositionChart({
   const chartSize   = isMobile ? 220 : 300;
   const innerRadius = isMobile ? 52  : 70;
   const outerRadius = isMobile ? 86  : 112;
-
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (!active || !payload?.length) return null;
-    const item = payload[0].payload as CompositionDatum;
-
-    return (
-      <ChartTooltip
-        name={item.label}
-        value={`${item.value.toLocaleString("en-GB", {
-          minimumFractionDigits: 1,
-          maximumFractionDigits: 1,
-        })} kt CO₂e (${item.share.toFixed(1)}%)`}
-        color={item.color}
-        indicatorType="circle"
-      />
-    );
-  };
 
   return (
     <div className={className}>
@@ -142,7 +141,7 @@ export default function GasCompositionChart({
                 <Cell key={entry.key} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CompositionTooltip />} />
             <CenterLabel innerRadius={innerRadius} isMobile={isMobile} />
           </PieChart>
         </div>
