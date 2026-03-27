@@ -34,7 +34,7 @@ export const STEPS: Step[] = [
     id: 4,
     chart: 2,
     eyebrow: "NORTHERN IRELAND IS THE OUTLIER",
-    copy: "Every other UK nation has reduced agricultural emissions since 1990. England has reduced by 18%, Scotland by 13%, and Wales by 13%.\n\nNorthern Ireland is up 8%.\n\nThe other nations faced similar pressures and still reduced. Northern Ireland's agriculture is more heavily weighted toward livestock than any other UK nation, a consequence of its climate, soils, and land use. Livestock farming generates the emissions that matter here: methane from digestion, not combustion.",
+    copy: "Every other UK nation has reduced agricultural emissions since 1990. England has reduced by 18%, Scotland by 13%, and Wales by 13%.\n\nNorthern Ireland is up 8%.\n\nThe other nations faced similar pressures and still reduced. Northern Ireland's agriculture is more heavily weighted toward livestock than any other UK nation, a consequence of its climate, soils, and land use. Livestock farming primarily generates emissions from digestion, not combustion.\n\nEmissions per kilogram of milk produced fell by around 37% between 1990 and 2021, but over the same period, total milk production expanded by 85%. The efficiency gains were cancelled out by the rise in production to lead to higher overall emissions.",
   },
   {
     id: 5,
