@@ -1,4 +1,4 @@
-# NI Climate Tool - Methodology
+# Climate Gap NI — Methodology
 
 ## 01 - Primary Data Source
 
