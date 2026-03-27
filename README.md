@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NI Climate Tool
 
-## Getting Started
+A scrollytelling data tool that explains Northern Ireland's emissions gap and lets users model the interventions available to close it.
 
-First, run the development server:
+The tool covers:
+- Historical emissions by sector (1990–2023), sourced from the NAEI Devolved GHG Inventory
+- A comparison of agricultural emissions across UK nations
+- Northern Ireland's trajectory against its legally binding 2030 target
+- An interactive scenario modeller for agricultural interventions (Bovaer, slurry aeration, herd reduction, etc.)
+
+A full methodology, including data sources, GWP basis, and intervention estimates, is available at `/methodology`.
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Key files
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Path | Purpose |
+|---|---|
+| `lib/steps.ts` | Scrollytelling copy and chart assignments |
+| `lib/sliderTooltipContent.ts` | Tooltip text for each scenario modeller intervention |
+| `components/ScenarioModeller.tsx` | Interactive modeller logic and UI |
+| `components/Hero.tsx` | Hero stat cards |
+| `public/data/ni_sectors.json` | Historical emissions data (NAEI 1990–2023) |
+| `content/methodology.md` | Full methodology notes |
 
-## Learn More
+## Data
 
-To learn more about Next.js, take a look at the following resources:
+All historical figures use NAEI AR5 GWP100 values. The DAERA Draft Climate Action Plan uses AR4 values; where DAERA pathway data appears, it is rebased to the shared 2023 NAEI anchor to eliminate the GWP discrepancy. See `/methodology` for detail.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js 16, React 19, Recharts, Tailwind CSS, Scrollama.
