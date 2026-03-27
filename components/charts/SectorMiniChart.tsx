@@ -63,7 +63,7 @@ export default function SectorMiniChart({
         >
           <XAxis
             dataKey="year"
-            tick={{ fontSize: isMobile ? 10 : 9, fill: isDark ? "#9ca3af" : "#6b7280" }}
+            tick={{ fontSize: isMobile ? 10 : 9, fill: "#6b7280" }}
             tickLine={false}
             ticks={isMobile ? [1990, 2023, 2030] : [1990, 2000, 2010, 2023, 2030]}
           />
