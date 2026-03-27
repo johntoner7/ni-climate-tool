@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import {
   ComposedChart,
   Line,
@@ -16,7 +16,6 @@ import {
 import nationsData from "@/public/data/nations_comparison.json";
 import { useIsMobile } from "@/lib/useIsMobile";
 import ChartTooltip from "./ChartTooltip";
-import { Download } from "lucide-react";
 
 const NATION_COLOURS: Record<string, string> = {
   "Northern Ireland": "#c1440e",
@@ -102,39 +101,15 @@ function LineEndLabel({ viewBox, value, color, bold }: { viewBox?: { x?: number;
   );
 }
 
-const SHOW_EXPORT_BUTTON = false;
-
-const SHARE_TITLE = "Northern Ireland's agricultural emissions are higher today than in 1990, while the other UK nations have cut theirs.";
-
 export default function NationsLineChart() {
   const isMobile = useIsMobile();
   const [tab, setTab] = useState<"total" | "agriculture">("agriculture");
-  const [isExporting, setIsExporting] = useState(false);
-  const chartRef = useRef<HTMLDivElement>(null);
 
-  const isAgri        = tab === "agriculture";
-  const chartData     = isAgri ? agricultureIndexed : nationsData.by_year_indexed;
-  const yDomain       = isAgri ? AGRI_Y_DOMAIN : TOTAL_Y_DOMAIN;
-  const endpoint      = chartData[chartData.length - 1] as Record<string, number>;
+  const isAgri         = tab === "agriculture";
+  const chartData      = isAgri ? agricultureIndexed : nationsData.by_year_indexed;
+  const yDomain        = isAgri ? AGRI_Y_DOMAIN : TOTAL_Y_DOMAIN;
+  const endpoint       = chartData[chartData.length - 1] as Record<string, number>;
   const labelPositions = deconflictLabels(endpoint, Object.keys(NATION_COLOURS));
-
-  async function handleExport() {
-    if (!chartRef.current) return;
-    setIsExporting(true);
-    await new Promise((r) => setTimeout(r, 80));
-    const { toPng } = await import("html-to-image");
-    const dataUrl = await toPng(chartRef.current, {
-      backgroundColor: "#ffffff",
-      pixelRatio: 2,
-    });
-    const link = document.createElement("a");
-    link.download = "ni-agriculture-emissions.png";
-    link.href = dataUrl;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setIsExporting(false);
-  }
 
   return (
     <div className="w-full flex flex-col">
@@ -142,51 +117,29 @@ export default function NationsLineChart() {
         <p className="text-xs text-gray-400 dark:text-gray-500">
           Index (1990=100) · Source: NAEI
         </p>
-        <div className="flex items-center gap-2">
-          {SHOW_EXPORT_BUTTON && isAgri && (
-            <button
-              onClick={handleExport}
-              className="flex items-center gap-1 px-2 py-1 text-[11px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              title="Save as image"
-            >
-              <Download size={12} />
-              Save
-            </button>
-          )}
-          <div className="flex gap-1 text-[11px]">
-            <button
-              onClick={() => setTab("total")}
-              className={`px-2.5 py-1 rounded transition-colors ${
-                tab === "total"
-                  ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
-                  : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              }`}
-            >
-              All emissions
-            </button>
-            <button
-              onClick={() => setTab("agriculture")}
-              className={`px-2.5 py-1 rounded transition-colors ${
-                tab === "agriculture"
-                  ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
-                  : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              }`}
-            >
-              Agriculture only
-            </button>
-          </div>
+        <div className="flex gap-1 text-[11px]">
+          <button
+            onClick={() => setTab("total")}
+            className={`px-2.5 py-1 rounded transition-colors ${
+              tab === "total"
+                ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
+                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            }`}
+          >
+            All emissions
+          </button>
+          <button
+            onClick={() => setTab("agriculture")}
+            className={`px-2.5 py-1 rounded transition-colors ${
+              tab === "agriculture"
+                ? "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900"
+                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            }`}
+          >
+            Agriculture only
+          </button>
         </div>
       </div>
-
-      <div ref={chartRef} className="bg-white p-2">
-        {isExporting && (
-          <p className="text-base font-semibold text-gray-900 mb-4 leading-snug whitespace-nowrap">
-            {SHARE_TITLE}
-          </p>
-        )}
-        {isExporting && (
-          <p className="text-xs text-gray-400 mb-2">Index (1990=100) · Source: NAEI</p>
-        )}
 
       <ResponsiveContainer width="100%" height={isMobile ? 260 : CHART_HEIGHT}>
         <ComposedChart
@@ -274,10 +227,9 @@ export default function NationsLineChart() {
         </ComposedChart>
       </ResponsiveContainer>
 
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 italic leading-relaxed text-center">
-          Each nation starts at 100 in 1990. Above 100: emissions have risen. Below 100: emissions have fallen.
-        </p>
-      </div>
+      <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 italic leading-relaxed text-center">
+        Each nation starts at 100 in 1990. Above 100: emissions have risen. Below 100: emissions have fallen.
+      </p>
     </div>
   );
 }
