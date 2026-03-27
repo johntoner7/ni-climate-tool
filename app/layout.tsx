@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { geistSans, geistMono } from "@/lib/fonts";
 import Providers from "@/components/Providers";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const TITLE = "Climate Gap NI";
@@ -38,6 +39,7 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
