@@ -3,6 +3,7 @@ export type Step = {
   chart: 1 | 2 | 3 | 4 | 5;
   eyebrow: string;
   copy: string; // paragraphs separated by \n\n
+  cta?: string;
 };
 
 export const STEPS: Step[] = [
