@@ -23,7 +23,7 @@ export default function StepsColumn({ totalSteps }: { totalSteps?: number }) {
             </p>
             {step.copy.split("\n\n").map((paragraph, i) => (
               <p
-                key={i}
+                key={`${step.id}-p${i}`}
                 className="text-[15px] leading-[1.9] text-gray-600 mb-3 last:mb-0"
               >
                 {paragraph}
