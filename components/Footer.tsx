@@ -18,6 +18,11 @@ export default function Footer() {
         </Link>
       </p>
       <p className="text-[11px] text-gray-400 leading-relaxed max-w-[60ch] mt-3">
+        <a href="https://rivers.climategapni.com" className="hover:text-gray-600 underline">
+          Rivers Map — NI river phosphorus data
+        </a>
+      </p>
+      <p className="text-[11px] text-gray-400 leading-relaxed max-w-[60ch] mt-3">
         <a
           href="https://www.flaticon.com/free-icons/cow"
           title="cow icons"
