@@ -9,16 +9,17 @@ import {
   Tooltip,
   ResponsiveContainer,
   ReferenceLine,
+  ReferenceDot,
 } from "recharts";
 import projectionsData from "@/public/data/ni_projections.json";
 import { useIsMobile } from "@/lib/useIsMobile";
 import ChartTooltip from "./ChartTooltip";
-import { NAEI_AGRI_2023 } from "@/lib/constants";
+import { NAEI_AGRI_2023, AGRI_TARGET_2030 } from "@/lib/constants";
 
 const SERIES = [
   { keys: ["actual"],                    label: "Actual (NAEI)",    color: "#334155" },
   { keys: ["daera_solid", "daera_dash"], label: "DAERA projection", color: "#f97316" },
-  { keys: ["ccc_solid",   "ccc_dash"],   label: "CCC pathway",      color: "#16a34a" },
+  { keys: ["ccc"],                       label: "CCC pathway (adjusted)", color: "#16a34a" },
 ];
 
 type AEntry = { dataKey: string; value: number };
@@ -46,10 +47,15 @@ function linearRegression(points: Array<{ x: number; y: number }>) {
   return { m, b };
 }
 
-// DAERA/CCC use a different inventory basis (2022 base, AR4 GWP) so their 2023
-// starting point (~6.03 Mt) sits above the NAEI 2023 actual (5.615 Mt).
-// We rebase both series by the same offset to the NAEI 2023 actual, preserving
-// each pathway's rate of change while keeping the relative gap consistent.
+// Both series come from Draft CAP Table 21, which uses a different inventory basis
+// (2022 base, AR4 GWP), so DAERA's 2023 starting point (6.03 Mt) sits above the
+// NAEI 2023 actual (5.615 Mt). We rebase both series by the same offset to the
+// NAEI 2023 actual, preserving each pathway's rate of change and the gap between them.
+//
+// The CCC row is the "adjusted CCC sectoral pathway", most likely the Updated
+// Balanced Pathway (Draft CAP §2.6), not the Stretch Ambition target the scenario
+// modeller uses. So it stops at 2027, where the published values end, rather than
+// being extrapolated to 2030; the Stretch Ambition target is marked separately.
 const daeraTableMt = [6.03, 5.97, 5.88, 5.67, 5.44];
 const cccTableMt   = [5.98, 5.74, 5.60, 5.45, 5.29];
 const yearsTable   = [2023, 2024, 2025, 2026, 2027];
@@ -58,7 +64,6 @@ const sharedOffset = NAEI_AGRI_2023 - Math.round(daeraTableMt[0] * 1000);
 const daeraPoints = yearsTable.map((y, i) => ({ x: y, y: Math.round(daeraTableMt[i] * 1000 + sharedOffset) }));
 const cccPoints   = yearsTable.map((y, i) => ({ x: y, y: Math.round(cccTableMt[i]   * 1000 + sharedOffset) }));
 const daeraLR     = linearRegression(daeraPoints);
-const cccLR       = linearRegression(cccPoints);
 
 const hist = (projectionsData as any).chart4_sectors?.Agriculture || [];
 
@@ -77,7 +82,6 @@ for (let y = 1990; y <= 2030; y++) {
       cccVal   = cccPoints[inTableIndex].y;
     } else {
       daeraVal = Math.round(daeraLR.m * y + daeraLR.b);
-      cccVal   = Math.round(cccLR.m * y + cccLR.b);
     }
   }
 
@@ -86,8 +90,7 @@ for (let y = 1990; y <= 2030; y++) {
     actual,
     daera_solid: daeraVal != null && y <= 2027 ? daeraVal : null,
     daera_dash:  daeraVal != null && y >= 2027 ? daeraVal : null,
-    ccc_solid:   cccVal   != null && y <= 2027 ? cccVal   : null,
-    ccc_dash:    cccVal   != null && y >= 2027 ? cccVal   : null,
+    ccc:         cccVal,
   });
 }
 
@@ -97,7 +100,7 @@ export default function AgriculturePathwayChart() {
   return (
     <div className="w-full flex flex-col">
       <p className="text-xs text-gray-400 dark:text-gray-500 mb-2">
-        {isMobile ? "Mt CO₂e · NAEI / DAERA / CCC" : "Mt CO₂e · Sources: NAEI (historical), DAERA Draft CAP / CCC (Table 21, rebased to NAEI 2023)"}
+        {isMobile ? "Mt CO₂e · NAEI / DAERA / CCC" : "Mt CO₂e · Sources: NAEI (historical), DAERA Draft CAP Table 21 (DAERA and adjusted CCC, rebased to NAEI 2023)"}
       </p>
       <ResponsiveContainer width="100%" height={isMobile ? 240 : 520}>
         <ComposedChart
@@ -134,8 +137,23 @@ export default function AgriculturePathwayChart() {
           <Line type="monotone" dataKey="daera_solid" stroke="#f97316" strokeWidth={2} dot={false} connectNulls name="DAERA (solid)" />
           <Line type="monotone" dataKey="daera_dash" stroke="#f97316" strokeWidth={2} strokeDasharray="6 4" dot={false} connectNulls name="DAERA (dashed)" />
 
-          <Line type="monotone" dataKey="ccc_solid" stroke="#16a34a" strokeWidth={2} dot={false} connectNulls name="CCC (solid)" />
-          <Line type="monotone" dataKey="ccc_dash" stroke="#16a34a" strokeWidth={2} strokeDasharray="6 4" dot={false} connectNulls name="CCC (dashed)" />
+          <Line type="monotone" dataKey="ccc" stroke="#16a34a" strokeWidth={2} dot={false} connectNulls name="CCC" />
+
+          <ReferenceDot
+            x={2030}
+            y={AGRI_TARGET_2030}
+            r={isMobile ? 3.5 : 4.5}
+            fill="white"
+            stroke="#16a34a"
+            strokeWidth={2}
+            label={{
+              value: isMobile ? "4.49 target" : "4.49 Mt · Stretch Ambition target",
+              position: "bottom",
+              fontSize: isMobile ? 9 : 11,
+              fill: "#16a34a",
+              fontWeight: 600,
+            }}
+          />
         </ComposedChart>
       </ResponsiveContainer>
 
@@ -150,17 +168,22 @@ export default function AgriculturePathwayChart() {
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-5 rounded" style={{ height: 3, backgroundColor: "#16a34a" }} />
-          <span className={`text-black dark:text-gray-500 font-medium ${isMobile ? "text-xs" : "text-sm"}`}>CCC pathway</span>
+          <span className={`text-black dark:text-gray-500 font-medium ${isMobile ? "text-xs" : "text-sm"}`}>CCC pathway (adjusted)</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-white" style={{ boxShadow: "inset 0 0 0 2px #16a34a" }} />
+          <span className={`text-black dark:text-gray-500 font-medium ${isMobile ? "text-xs" : "text-sm"}`}>2030 target used in the modeller</span>
         </div>
       </div>
 
       {!isMobile && (
         <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-          Methodology: Table 21 provides DAERA and CCC values to 2027; 2028–2030 are linear extrapolations
-          from the 2023–2027 trend. Both projection series are rebased by the same offset to the NAEI 2023
-          actual (5.615 Mt), preserving each pathway&apos;s rate of change while keeping the gap between the
-          trajectories consistent. DAERA&apos;s raw 2023 figure (6.03 Mt) reflects a different inventory basis
-          (2022 data, AR4 GWP) than the NAEI series used here.
+          Methodology: Table 21 provides DAERA&apos;s Central Scenario and the adjusted CCC sectoral pathway to
+          2027. The DAERA line is extended to 2030 as a linear extrapolation of its 2023–2027 trend (dashed);
+          the CCC line stops at 2027. The 2030 marker is the CCC Stretch Ambition target used in the scenario
+          modeller (4.49 Mt, 21% below 2020), a different and more demanding scenario than the adjusted
+          pathway. Both lines are rebased by the same offset to the NAEI 2023 actual (5.615 Mt); DAERA&apos;s raw
+          2023 figure (6.03 Mt) reflects a different inventory basis (2022 data, AR4 GWP).
         </p>
       )}
     </div>

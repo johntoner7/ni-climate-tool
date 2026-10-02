@@ -23,7 +23,7 @@ A material discrepancy exists between the two principal sources used in this too
 This tool resolves the discrepancy as follows:
 
 - **Historical actuals (all charts):** NAEI AR5 values are used throughout. DAERA AR4 projections are not plotted directly.
-- **Agriculture Pathway Chart (Chart 6):** The DAERA and CCC pathway values sourced from Draft CAP Table 21 (2023–2027) are rebased to the NAEI 2023 actual (5,615 kt). Both series are expressed as proportional changes from this shared anchor point, preserving the relative divergence between the two pathways while eliminating the GWP-basis offset.
+- **Agriculture Pathway Chart (Chart 6):** The DAERA and CCC pathway values sourced from Draft CAP Table 21 (2023–2027) are rebased to the NAEI 2023 actual (5,615 kt). Both series are shifted by the same fixed offset (DAERA's 2023 value minus 5,615 kt), preserving each pathway's year-on-year change and the gap between them while removing the GWP-basis offset.
 - **Scenario Modeller:** All arithmetic uses the NAEI 2023 actual as the baseline. Intervention efficacy estimates are applied as proportional reductions to NAEI-basis emission pools.
 
 DAERA projections are not used as absolute figures anywhere in this tool. Where DAERA pathway data is displayed, it is always expressed relative to the shared 2023 NAEI anchor.
@@ -98,9 +98,13 @@ The 2021 spike in agriculture emissions (5,861 kt, the highest recorded value in
 
 ## 06 - Agriculture Pathway Chart (Chart 6): DAERA vs CCC
 
-Chart 6 compares two agriculture emission pathways to 2030. The DAERA pathway is derived from Draft Northern Ireland Climate Action Plan 2023–2027, Table 21 (agriculture sector projections, 2023–2027), with the 2028–2030 segment extrapolated by OLS on the 2023–2027 table values. The CCC pathway is derived from the Climate Change Committee, 'The path to a Net Zero Northern Ireland' (2023), Stretch Ambition scenario, with the 2028–2030 segment extrapolated by OLS on available CCC annual values.
+Chart 6 compares DAERA's agriculture projection with the CCC pathway. Both series come from Draft Northern Ireland Climate Action Plan 2023–2027, Table 21 (p. 167), which compares agriculture sector projections for 2023–2027 against the CCC. The DAERA pathway is the plan's Central Scenario, with the 2028–2030 segment extrapolated by OLS on the 2023–2027 table values. The CCC pathway is Table 21's "adjusted CCC sectoral pathway": the CCC's advisory pathway adjusted by DAERA for the 2022 inventory. Table 21 does not name the CCC scenario, but Section 2.6 of the plan says the CCC annual emission levels it adopts are those for the CCC's Updated Balanced Pathway, so this series most likely reflects the Balanced Pathway rather than Stretch Ambition. It is shown for 2023–2027 only and is not extrapolated.
 
-Both series are rebased to the NAEI 2023 actual (5,615 kt) to correct for the AR4/AR5 GWP mismatch (see Section 02). Solid lines indicate values sourced directly from published tables (2023–2027); dashed lines indicate extrapolated values (2028–2030). A vertical reference line marks 2027, the end of the first carbon budget period.
+A separate marker at 2030 shows the CCC Stretch Ambition target of 4,490 kt used in the Scenario Modeller (Section 08). It is a different, more demanding scenario than the adjusted pathway, and is shown as a single point rather than joined to the CCC line.
+
+Both series are rebased to the NAEI 2023 actual (5,615 kt) to correct for the AR4/AR5 GWP mismatch (see Section 02). Solid lines indicate values sourced directly from published tables (2023–2027); the dashed DAERA segment indicates extrapolated values (2028–2030). A vertical reference line marks 2027, the end of the first carbon budget period.
+
+The Central Scenario is described in the plan as the expected outcome of its policies and proposals. Extended to 2030 the DAERA line ends at about 4,643 kt. This is not the Scenario Modeller's starting projection (5,373 kt): the modeller holds agriculture flat at the 2023 actual and credits only the 242 kt from committed livestock productivity measures (Section 07).
 
 ---
 
